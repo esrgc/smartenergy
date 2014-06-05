@@ -1,0 +1,39 @@
+@import 'variables.less';
+
+.header {
+  overflow: hidden;
+  width: 100%;
+  background: @main;
+  color: @textColor;
+  border-bottom: 1px solid @alternate;
+  position: relative;
+  .logo {
+    float: left;
+    img {
+        margin: 10px 30px;
+    }
+  }
+
+  h1 {
+    margin: 0;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    color: #efefef;
+    font-size: 24px;
+  }
+
+  .version {
+    position: absolute;
+    right: 10px;
+    bottom: 0px;
+  }
+
+  .shadow {
+    height: 1px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    background: @shadow;
+  }
+}

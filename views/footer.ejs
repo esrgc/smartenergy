@@ -1,0 +1,22 @@
+</div>
+<div class="footer">
+<div class="linkback"><a href="https://github.com/esrgc/boardpress">Boardpress</a></div>
+<div class="attribution">2014 &#8226; Created by <a href="http://www.esrgc.org/">ESRGC</a></div>
+</div>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="lib/leaflet/leaflet.js"></script>
+<!--[if lt IE 9]>
+<script src="lib/geodash/geodash.ie8.min.js?v=<%= version %>" charset="utf-8"></script>
+<![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<script src="lib/geodash/geodash.min.js?v=<%= version %>"></script>
+<!--<![endif]-->
+<% if(env == 'production') { %>
+<script src="js/min/<%= name %>.min.js?v=<%= version %>"></script>
+<% } else if(env == 'development'){ %>
+<script src="js/min/<%= name %>.js?v=<%= version %>"></script>
+<% } %>
+</body>
+</html>

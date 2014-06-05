@@ -1,0 +1,30 @@
+{
+  "name": "filter-maker",
+  "version": "0.0.3",
+  "description": "filter-maker ============",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frankrowe/filter-maker"
+  },
+  "author": {
+    "name": "Frank Rowe",
+    "email": "fsrowe@gmail.com",
+    "url": "http://frankrowe.org/"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/frankrowe/filter-maker/issues"
+  },
+  "homepage": "https://github.com/frankrowe/filter-maker",
+  "readme": "filter-maker\n============\n\n* Generate where clauses and other filters for SQL queries.\n* Current supports MSSQL\n* Uses parameterized queries\n\n## Example\n\n```javascript\nvar FilterMaker = require('filter-maker')\n\nvar sql_template = [\n  'select column from table',\n  'where column is not null',\n  '{{dateFilter}}',\n  '{{countFilter}}',\n  '{{dayFilter}}'\n].join(' ')\n\nvar defaults = {}\nvar config = {\n    name: 'date',\n    filterName: 'dateFilter',\n    type: TYPES.VarChar,\n    clause: 'and create_date >= {{parameter}}'\n  },\n  {\n    name: 'count',\n    filterName: 'countFilter',\n    type: TYPES.Int,\n    clause: 'and product_count < {{parameter}}'\n  },\n  {\n    name: 'days',\n    filterName: 'dayFilter',\n    type: TYPES.VarChar,\n    clause: 'and datepart(weekday, create_date) in ({{parameter}})',\n    array: true //comma separated string\n  }\n}\n\nvar filters = new FilterMaker(defaults, config)\n\nvar query_info = filters.addFilters(sql_template, {\n  date: '2014-04-11',\n  count: 15,\n  days: '1,2,3,4,5'\n})\n\nquery_info.statement // sql statement\nquery_info.parameters // query parameters\n```",
+  "readmeFilename": "README.md",
+  "_id": "filter-maker@0.0.3",
+  "dist": {
+    "shasum": "ac7f5bdcb3bfe406d37241ee09d27565ffc9fb6f"
+  },
+  "_from": "/Users/fsrowe/Documents/projects/filter-maker/"
+}

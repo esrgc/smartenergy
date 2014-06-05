@@ -1,0 +1,29 @@
+{
+  "name": "return-data",
+  "version": "0.0.1",
+  "description": "return-data ===========",
+  "author": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/frankrowe/return-data"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/frankrowe/return-data/issues"
+  },
+  "homepage": "https://github.com/frankrowe/return-data",
+  "dependencies": {
+    "csv": "^0.3.7"
+  },
+  "readme": "return-data\n===========\n\nReturns data to client in specified format.\n\nUsed with express. If `req.query.csv == true` sends csv, else sends json.\n",
+  "readmeFilename": "README.md",
+  "_id": "return-data@0.0.1",
+  "dist": {
+    "shasum": "1277cfdd6e49fb1a8082940356de06de199ed426"
+  },
+  "_from": "/Users/fsrowe/Documents/projects/return-data/"
+}

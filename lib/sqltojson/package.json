@@ -1,0 +1,25 @@
+{
+  "name": "sqltojson",
+  "version": "0.0.0",
+  "description": "sqltojson =========",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Frank Rowe",
+    "email": "fsrowe@gmail.com",
+    "url": "http://frankrowe.org/"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "tedious": "^0.2.3"
+  },
+  "readme": "sqltojson\n=========\n\nSimple SQL to JSON converter\n* for MSSQL (and eventually PostgreSQL)\n",
+  "readmeFilename": "README.md",
+  "_id": "sqltojson@0.0.0",
+  "dist": {
+    "shasum": "4588e68d57cb6bb8a2149d8dc285a6d3329fe823"
+  },
+  "_from": "/Users/fsrowe/Documents/projects/sqltojson/"
+}

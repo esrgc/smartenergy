@@ -1,0 +1,123 @@
+@import 'variables.less';
+@import 'overrides.less';
+@import 'tableview.less';
+@import 'header.less';
+/*@import 'print.less';*/
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background: url('../img/white_wall_hash/white_wall_hash.png') repeat;
+}
+
+.dashboard {
+  padding: 20px 20px 0px 20px;
+  text-align: center;
+}
+
+.wrap {
+  min-height: 100%;
+  margin-bottom: -27px;
+  &:after {
+    content: "";
+    display: block;
+  }
+}
+
+.chart {
+  background: @alternate;
+  margin-bottom: 20px;
+  border: 1px solid darken(@alternate, 20%);
+  border-radius: 2px;
+  padding: 5px;
+  overflow: hidden;
+  color: @textColor;
+  .title {
+    height: 30px;
+    float: left;
+    overflow: hidden;
+  }
+  .title h3 {
+    margin: 0;
+  }
+
+  .chart-inner {
+    height: @chartHeight;
+    width: 100%;
+    background: #fff;
+    overflow-y: auto;
+    clear: both;
+    border: 1px solid @tableBorder;
+  }
+}
+
+.dashboard .map {
+  height: @chartHeight + 40;
+  margin-bottom: 0px;
+  background: @main;
+  border: 1px solid @main;
+}
+
+.dashboard .chart.filters .chart-inner {
+  padding: 10px;
+}
+
+.dashboard .filters .form-group {
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-bottom: 5px;
+}
+
+.dashboard .filters .radio-inline+.radio-inline, .checkbox-inline+.checkbox-inline {
+  margin-left: 2px;
+}
+
+.dashboard .filters button {
+  float: left;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.dashboard .filters button.clear {
+}
+
+
+.dashboard .chart .toolbar {
+  float: right;
+  text-align: right;
+}
+
+.dashboard .chart .toolbar .tool {
+  padding: 0px;
+}
+
+.dashboard .chart .toolbar .tool:hover {
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.footer, .wrap:after {
+  /* .push must be the same height as footer */
+  height: 27px; 
+}
+
+.footer {
+  background: @main;
+  color: #efefef;
+  padding: 3px 10px;
+  overflow: hidden;
+  border-top: 1px solid @shadow;
+  a {
+    color: #efefef;
+  }
+  .linkback {
+    float: left;
+  }
+  .attribution {
+    float: right;
+  }
+}
+

@@ -1,0 +1,42 @@
+{
+  "name": "smartenergy",
+  "version": "0.1.1",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/esrgc/smartenergy.git"
+  },
+  "author": "",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "express": "4.0.x",
+    "errorhandler": "1.0.0",
+    "body-parser": "1.0.1",
+    "morgan": "1.0.0",
+    "ejs": "~0.8.5",
+    "tedious": "~0.1.5",
+    "mustache": "~0.8.1",
+    "cors": "^2.2.0",
+    "csv": "0.3.7",
+    "underscore": "1.6.0",
+    "mustache": "0.8.1",
+    "backbone": "1.1.2"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-uglify": "~0.3.2",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-bump": "0.0.13",
+    "grunt-contrib-cssmin": "~0.8.0",
+    "assemble": "~0.4.35",
+    "browserify": "^3.38.1",
+    "grunt-browserify": "^2.0.3",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-contrib-less": "^0.11.0"
+  }
+}

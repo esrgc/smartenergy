@@ -1,0 +1,58 @@
+<script type="text/template" id="table-template">
+  <div class="chart">
+    {{> toolbar }}
+    {{> title }}
+    <div class="chart-inner">
+      <table class="table table-bordered table-striped table-condensed">
+        <thead>
+          <tr>
+          {{#data.columns}}
+            <th>{{.}}</th>
+          {{/data.columns}}
+          </tr>
+        </thead>
+        <tbody>
+        {{#data.rows}}
+          <tr>
+          {{#row}}
+            <td>{{.}}</td>
+          {{/row}}
+          </tr>
+        {{/data.rows}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="chart-template">
+  <div class="chart">
+    {{> toolbar }}
+    {{> title }}
+    <div class="chart-inner"></div>
+  </div>
+</script>
+
+<script type="text/template" id="map-template">
+  <div class="chart map">
+    {{> title }}
+    <div class="chart-inner"></div>
+  </div>
+</script>
+
+<script type="text/template" id="title-partial">
+  <div class="title"><h3>{{ title }}</h3></div>
+</script>
+
+<script type="text/template" id="toolbar-partial">
+  <div class="toolbar">
+    <i class="fa fa-table tool totable"></i>
+    <i class="fa fa-bar-chart-o tool tochart"></i>
+    <i class="fa fa-download tool download"></i>
+    <i class="fa fa-code tool code"></i>
+  </div>
+</script>
+
+<script type="text/template" id="filter-label-template">
+  <span class="label label-primary">{{name}}: {{display}} <i class="fa fa-times remove"></i></span>
+</script>
