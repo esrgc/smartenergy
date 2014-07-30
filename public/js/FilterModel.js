@@ -4,6 +4,7 @@ Backbone.$ = $
 var FilterModel = Backbone.Model.extend({
   defaults: function() {
     return {
+      active: true
     }
   },
   initialize: function(){

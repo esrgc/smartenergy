@@ -14,10 +14,23 @@ var FilterLabelView = Backbone.View.extend({
   },
   render: function() {
     this.$el.html(Mustache.render(this.template, this.model.toJSON()))
-    this.$el.find('.swatch').css('background-color', this.model.get('color'))
+    if (this.model.get('active')) {
+      this.$el.find('input').attr('checked', 'checked')
+    }
+    this.style()
     return this
   },
+  style: function() {
+
+  },
   activate: function(filter, e){
+    var active = this.model.get('active')
+    this.model.set('active', !active)
+    if (active) {
+
+    } else {
+
+    }
     console.log(this.model)
   }
 })

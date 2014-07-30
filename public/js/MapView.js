@@ -23,32 +23,25 @@ var MapView = Backbone.View.extend({
   },
   makeLayers: function() {
     var self = this
-    var style = {
+    this.style = {
       "color": "#333",
       "weight": 1,
       "opacity": 0.65,
       "fillOpacity": 0.1,
       "fillColor": "#2B4E72"
     }
+    this.selectedStyle = JSON.parse(JSON.stringify(this.style))
+    this.selectedStyle.fillOpacity = 0.9
 
     var mapbox = L.tileLayer('http://{s}.tiles.mapbox.com/v3/esrgc.map-y9awf40v/{z}/{x}/{y}.png')
     mapbox.addTo(self.map)
 
     $.when(
-      $.getJSON('../../data/maryland.json', function(json) {
-        self.stateLayer = L.geoJson(json, {
-          style: style
-        }).addTo(self.map)
-      }),
       $.getJSON('../../data/mdcnty.json', function(json) {
-        self.countyLayer = L.geoJson(json, {
-          style: style
-        })
-      }),
-      $.getJSON('../../data/maryland-legislative-districts.json', function(json) {
-        self.legislativeLayer = L.geoJson(json, {
-          style: style
-        })
+        self.geomLayer = L.geoJson(json, {
+          style: self.style,
+          onEachFeature: self.onEachFeature.bind(self)
+        }).addTo(self.map)
       })
     ).then(function() {
 
@@ -57,12 +50,27 @@ var MapView = Backbone.View.extend({
       }
 
       var overlayMaps = {
-        "State": self.stateLayer,
-        "Counties": self.countyLayer,
-        "Legislative Districts": self.legislativeLayer
+        "Counties": self.geomLayer
       }
 
       L.control.layers(baseMaps, overlayMaps).addTo(self.map)
+    })
+  },
+  onEachFeature: function(feature, layer) {
+    var self = this
+    layer.on('click', function(e){
+      var name = e.target.feature.properties.name
+      var filter = Dashboard.filterCollection.findWhere({type: 'geo', value: name})
+      if (filter) {
+        layer.setStyle(self.style)
+        filter.destroy()
+      } else {
+        layer.setStyle(self.selectedStyle)
+        Dashboard.filterCollection.add({
+          value: name,
+          type: 'geo'
+        })
+      }
     })
   },
   update: function() {

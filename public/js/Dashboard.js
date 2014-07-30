@@ -17,32 +17,36 @@ var Dashboard = Backbone.View.extend({
   colors: ['#94BA65', '#2790B0', '#2B4E72'],
   initialize: function(){
     this.filterCollection = new FilterCollection()
+    this.makeFilters()
     this.filterCollection.on('change', this.update, this)
-    //this.filterCollection.on('add', this.update, this)
+    this.filterCollection.on('add', this.update, this)
     this.filterCollection.on('remove', this.update, this)
 
     this.chartCollection = new ChartCollection()
     this.chartCollection.add([
       {title: "Number of Projects", api: 'api/getPieData', key: 'id', chart_type: 'pie'},
-      {title: "Capacity", api: 'api/getPieData', key: 'id', chart_type: 'pie'},
+      {title: "Capacity", api: 'api/getPieData2', key: 'id', chart_type: 'pie'},
       //{title: "Bar Chart", api: 'api/getBarData2', key: 'id', chart_type: 'bar'},
       {title: "MEA Contribution", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')},
       {title: "Investment Leverage", api: 'api/getLeverage', key: 'leverage', chart_type: 'stat'},
     ])
-
-    this.makeFilters()
   },
   makeFilters: function() {
     this.filterCollection.add([
-      {value: 'Solar PV', color: '#FFAA00'},
-      {value: 'Solar Hot Water', color: '#26AD6A'},
-      {value: 'Wind', color: '#C238C0'},
-      {value: 'Vehicle Fueling & Charging', color: '#FF0000'},
-      {value: 'Geothermal', color: '#AB953F'},
-      {value: 'Energy Effiency', color: '#0070FF'},
-      {value: 'Landfall Gas', color: '#00FF00'},
-      {value: 'Clean Fuel Vehicles', color: '#75ae92'},
-      {value: 'Wood Burning Stoves', color: '#ebeb00'}
+      {value: 'Solar PV', color: '#FFAA00', type: 'project'},
+      {value: 'Solar Hot Water', color: '#26AD6A', type: 'project'},
+      {value: 'Wind', color: '#C238C0', type: 'project'},
+      {value: 'Vehicle Fueling and Charging', color: '#FF0000', type: 'project'},
+      {value: 'Geothermal', color: '#AB953F', type: 'project'},
+      {value: 'Energy Effiency', color: '#0070FF', type: 'project'},
+      {value: 'Landfall Gas', color: '#00FF00', type: 'project'},
+      {value: 'Clean Fuel Vehicles', color: '#75ae92', type: 'project'},
+      {value: 'Wood Burning Stoves', color: '#ebeb00', type: 'project'},
+      {value: 'Residential', type: 'grantee'},
+      {value: 'Commercial', type: 'grantee'},
+      {value: 'Agricultural', type: 'grantee'},
+      {value: 'Local Government', type: 'grantee'},
+      {value: 'State Government', type: 'grantee'}
     ])
   },
   render: function(){
@@ -97,7 +101,6 @@ var Dashboard = Backbone.View.extend({
     return this
   },
   update: function(){
-    console.log(this)
     this.chartCollection.each(function(chart){
       chart.update()
     })

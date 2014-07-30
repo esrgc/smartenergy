@@ -46,7 +46,10 @@
   <div class="chart">
     {{> title }}
     <div class="chart-inner">
-      <div class="project-types"></div>
+      <div class="filters">
+        <div class="project-types"></div>
+        <div class="grantees"></div>
+      </div>
     </div>
   </div>
 </script>
@@ -72,6 +75,11 @@
 </script>
 
 <script type="text/template" id="filter-label-template">
+  <input type="checkbox">
+  <span>{{display}}</span>
+</script>
+
+<script type="text/template" id="project-type-filter">
   <input type="checkbox">
   <span class="swatch"></span>
   <span>{{display}}</span>
