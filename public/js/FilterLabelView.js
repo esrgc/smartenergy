@@ -6,7 +6,7 @@ var FilterLabelView = Backbone.View.extend({
   tagName: 'div',
   className: 'filter-label',
   events: {
-    'click .remove': 'removeFilter'
+    'change input': 'activate'
   },
   initialize: function() {
     this.listenTo(this.model, 'change', this.render)
@@ -14,10 +14,11 @@ var FilterLabelView = Backbone.View.extend({
   },
   render: function() {
     this.$el.html(Mustache.render(this.template, this.model.toJSON()))
+    this.$el.find('.swatch').css('background-color', this.model.get('color'))
     return this
   },
-  removeFilter: function(){
-    this.model.destroy()
+  activate: function(filter, e){
+    console.log(this.model)
   }
 })
 

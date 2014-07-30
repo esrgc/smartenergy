@@ -11,6 +11,7 @@ var PieChartView = BarChartView.extend({
       , value: 'value'
       , colors: Dashboard.colors
       , opacity: 1
+      , arclabels: true
     })
   },
   prepData: function(res) {

@@ -164,4 +164,18 @@ api.get('/getPieData', function(req, res){
   returnData(req, res, data)
 })
 
+api.get('/getContribution', function(req, res){
+  var data = {
+    'contribution': 363928
+  }
+  returnData(req, res, data)
+})
+
+api.get('/getLeverage', function(req, res){
+  var data = {
+    'leverage': 11.6
+  }
+  returnData(req, res, data)
+})
+
 module.exports = api

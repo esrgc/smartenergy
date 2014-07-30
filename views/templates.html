@@ -33,6 +33,24 @@
   </div>
 </script>
 
+<script type="text/template" id="stat-template">
+  <div class="chart">
+    {{> title }}
+    <div class="chart-inner">
+      <div class="stat"><span></span></div>
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="filter-menu-template">
+  <div class="chart">
+    {{> title }}
+    <div class="chart-inner">
+      <div class="project-types"></div>
+    </div>
+  </div>
+</script>
+
 <script type="text/template" id="map-template">
   <div class="chart map">
     {{> title }}
@@ -54,5 +72,7 @@
 </script>
 
 <script type="text/template" id="filter-label-template">
-  <span class="label label-primary">{{name}}: {{display}} <i class="fa fa-times remove"></i></span>
+  <input type="checkbox">
+  <span class="swatch"></span>
+  <span>{{display}}</span>
 </script>
