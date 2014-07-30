@@ -38,18 +38,12 @@ module.exports = function(grunt) {
       dev: {
         src: 'public/js/index.js',
         dest: 'public/js/min/<%= pkg.name %>.js'
-      },
-      deploy: {
-        options: {
-          bundleOptions: { debug: false }
-        },
-        src: 'public/js/index.js',
-        dest: 'public/js/min/<%= pkg.name %>.min.js'
       }
     },
     uglify: {
       options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+        sourceMap: true
       },
       build: {
         src: 'public/js/min/<%= pkg.name %>.js',
@@ -59,7 +53,7 @@ module.exports = function(grunt) {
     watch: {
       browserify: {
         files: ['public/js/*.js'],
-        tasks: ['bump', 'browserify:dev']
+        tasks: ['bump', 'browserify', 'uglify']
       },
       css: {
         files: 'public/css/*.less',
@@ -76,7 +70,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['bump', 'less', 'browserify:dev', 'watch']);
-  grunt.registerTask('deploy', ['bump', 'less', 'browserify:deploy']);
+  grunt.registerTask('default', ['bump', 'less', 'browserify', 'uglify', 'watch']);
+  grunt.registerTask('deploy', ['bump', 'less', 'browserify', 'uglify']);
 
 };

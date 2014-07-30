@@ -13,10 +13,8 @@
 <!--[if (gte IE 9)|!(IE)]><!-->
 <script src="lib/geodash/geodash.min.js?v=<%= version %>"></script>
 <!--<![endif]-->
-<% if(env == 'production') { %>
+
 <script src="js/min/<%= name %>.min.js?v=<%= version %>"></script>
-<% } else if(env == 'development'){ %>
-<script src="js/min/<%= name %>.js?v=<%= version %>"></script>
-<% } %>
+
 </body>
 </html>
