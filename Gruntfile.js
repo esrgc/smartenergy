@@ -71,6 +71,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('default', ['bump', 'less', 'browserify', 'uglify', 'watch']);
-  grunt.registerTask('deploy', ['bump', 'less', 'browserify', 'uglify']);
+  grunt.registerTask('deploy', ['less', 'browserify', 'uglify']);
 
 };

@@ -37,7 +37,7 @@ var MapView = Backbone.View.extend({
     mapbox.addTo(self.map)
 
     $.when(
-      $.getJSON('../../data/mdcnty.json', function(json) {
+      $.getJSON('data/mdcnty.json', function(json) {
         self.geomLayer = L.geoJson(json, {
           style: self.style,
           onEachFeature: self.onEachFeature.bind(self)
