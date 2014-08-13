@@ -1,9 +1,4 @@
-var Backbone = require('backbone')
-  , Mustache = require('mustache')
-  , _ = require('underscore')
-  , ChartView = require('./ChartView')
-
-Backbone.$ = $
+var ChartView = require('./ChartView')
 
 var TableView = ChartView.extend({
   template: $('#table-template').html(),

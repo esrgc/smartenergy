@@ -25,7 +25,6 @@ var ChartModel = Backbone.Model.extend({
         url += filter.get('type') + '=' + filter.get('value') + '&'
       }
     })
-    console.log(url)
     $.getJSON(url, function(res){
       self.set('data', res)
     })

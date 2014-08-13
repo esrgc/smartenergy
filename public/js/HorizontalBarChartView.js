@@ -1,6 +1,4 @@
-var Backbone = require('backbone')
-  , _ = require('underscore')
-  , BarChartView = require('./BarChartView')
+var BarChartView = require('./BarChartView')
 
 var HorizontalBarChartView = BarChartView.extend({
   drawChart: function() {

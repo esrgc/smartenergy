@@ -1,5 +1,3 @@
-var Backbone = require('backbone')
-Backbone.$ = $
 
 var MapView = require('./MapView')
   , ChartModel = require('./ChartModel')
@@ -15,7 +13,12 @@ var MapView = require('./MapView')
 
 var Dashboard = Backbone.View.extend({
   colors: ['#94BA65', '#2790B0', '#2B4E72'],
-  initialize: function(){
+  template: $('#dashboard-template').html(),
+  el: $(".dashboard"),
+  events: {
+    'click .tabs a': 'switchTab'
+  },
+  initialize: function() {
     this.filterCollection = new FilterCollection()
     this.makeFilters()
     this.filterCollection.on('change', this.update, this)
@@ -32,24 +35,52 @@ var Dashboard = Backbone.View.extend({
     ])
   },
   makeFilters: function() {
-    this.filterCollection.add([
-      {value: 'Solar PV', color: '#FFAA00', type: 'project'},
-      {value: 'Solar Hot Water', color: '#26AD6A', type: 'project'},
-      {value: 'Wind', color: '#C238C0', type: 'project'},
-      {value: 'Vehicle Fueling and Charging', color: '#FF0000', type: 'project'},
-      {value: 'Geothermal', color: '#AB953F', type: 'project'},
-      {value: 'Energy Effiency', color: '#0070FF', type: 'project'},
-      {value: 'Landfall Gas', color: '#00FF00', type: 'project'},
-      {value: 'Clean Fuel Vehicles', color: '#75ae92', type: 'project'},
-      {value: 'Wood Burning Stoves', color: '#ebeb00', type: 'project'},
-      {value: 'Residential', type: 'grantee'},
-      {value: 'Commercial', type: 'grantee'},
-      {value: 'Agricultural', type: 'grantee'},
-      {value: 'Local Government', type: 'grantee'},
-      {value: 'State Government', type: 'grantee'}
-    ])
+    this.effiency = []
+    this.renewables = [
+      {value: 'Solar PV', color: '#FFAA00', type: 'technology'},
+      {value: 'Solar Thermal', color: '#26AD6A', type: 'technology'},
+      {value: 'Geothermal', color: '#AB953F', type: 'technology'},
+      {value: 'Wood Burning Stoves', color: '#ebeb00', type: 'technology'},
+      {value: 'Wind', color: '#C238C0', type: 'technology'},
+      {value: 'Biomass', color: '#FF0000', type: 'technology'},
+      {value: 'Landfall Gas', color: '#00FF00', type: 'technology'},
+      {value: 'Bioheat', color: '#0070FF', type: 'technology'}
+    ]
+    this.transportation = [
+      {value: 'Electric', color: '#FFAA00', type: 'vehicle-technology'},
+      {value: 'Biodiesel', color: '#FFAA00', type: 'vehicle-technology'},
+      {value: 'E85', color: '#FFAA00', type: 'vehicle-technology'},
+      {value: 'Natural Gas (CNG)', color: '#FFAA00', type: 'vehicle-technology'},
+      {value: 'Natural Gas (LNG)', color: '#FFAA00', type: 'vehicle-technology'},
+      {value: 'Propane', color: '#FFAA00', type: 'vehicle-technology'},
+      {value: 'Hydrogen', color: '#FFAA00', type: 'vehicle-technology'},
+      {value: 'Hybrid', color: '#FFAA00', type: 'vehicle-technology'},
+      {value: 'Idle Reduction', color: '#FFAA00', type: 'vehicle-technology'},
+    ]
+    this.programtypes = [
+      {value: 'Grant', type: 'program'},
+      {value: 'Rebate/Voucher', type: 'program'},
+      {value: 'Financing', type: 'program'},
+      {value: 'Tax Credit', type: 'program'},
+      {value: 'Other', type: 'program'}
+    ]
+    this.sectors = [
+      {value: 'Residential', type: 'sector'},
+      {value: 'Commercial', type: 'sector'},
+      {value: 'Agricultural', type: 'sector'},
+      {value: 'Local Government', type: 'sector'},
+      {value: 'State Government', type: 'sector'}
+    ]
+    this.filter_hash = {
+      '#energyeffiency': this.sectors.concat(this.programtypes),
+      '#renewableenergy': this.sectors.concat(this.renewables).concat(this.programtypes),
+      '#transportation': this.sectors.concat(this.transportation).concat(this.programtypes)
+    }
+    this.filterCollection.add(this.filter_hash['#renewableenergy'])
   },
-  render: function(){
+  render: function() {
+    this.$el.html(Mustache.render(this.template))
+
     var mapView = new MapView()
     $('.block0').html(mapView.render().el)
     mapView.makeMap()
@@ -100,10 +131,14 @@ var Dashboard = Backbone.View.extend({
 
     return this
   },
-  update: function(){
+  update: function() {
     this.chartCollection.each(function(chart){
       chart.update()
     })
+  },
+  switchTab: function(e) {
+    console.log(e.target.hash)
+    this.filterCollection.reset(this.filter_hash[e.target.hash])
   }
 })
 

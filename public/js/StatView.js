@@ -1,8 +1,4 @@
-var Backbone = require('backbone')
-  , _ = require('underscore')
-  , ChartView = require('./ChartView')
-
-Backbone.$ = $
+var ChartView = require('./ChartView')
 
 var StatView = ChartView.extend({
   template: $('#stat-template').html(),

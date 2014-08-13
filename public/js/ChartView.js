@@ -1,6 +1,3 @@
-var Backbone = require('backbone')
-Backbone.$ = $
-
 var ChartView = Backbone.View.extend({
   template: $('#chart-template').html(),
   events: {

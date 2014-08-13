@@ -1,8 +1,4 @@
-var Backbone = require('backbone')
-  , _ = require('underscore')
-  , ChartView = require('./ChartView')
-
-Backbone.$ = $
+var ChartView = require('./ChartView')
 
 var BarChartView = ChartView.extend({
   events: function(){

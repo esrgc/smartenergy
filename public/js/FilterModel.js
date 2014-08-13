@@ -1,6 +1,3 @@
-var Backbone = require('backbone')
-Backbone.$ = $
-
 var FilterModel = Backbone.Model.extend({
   defaults: function() {
     return {

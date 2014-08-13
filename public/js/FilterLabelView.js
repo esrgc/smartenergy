@@ -1,6 +1,3 @@
-var Backbone = require('backbone')
-Backbone.$ = $
-
 var FilterLabelView = Backbone.View.extend({
   template: $('#filter-label-template').html(),
   tagName: 'div',

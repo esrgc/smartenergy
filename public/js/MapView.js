@@ -1,8 +1,3 @@
-var Backbone = require('backbone')
-  , _ = require('underscore')
-
-Backbone.$ = $
-
 var MapView = Backbone.View.extend({
   mapTemplate: $('#map-template').html(),
   className: 'map',
