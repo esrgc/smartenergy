@@ -1,16 +1,17 @@
 var MapView = Backbone.View.extend({
-  mapTemplate: $('#map-template').html(),
-  className: 'map',
+  template: $('#map-template').html(),
   initialize: function() {
     this.render()
     Dashboard.filterCollection.on('all', this.update, this)
   },
   render: function() {
+    this.$el.html(Mustache.render(this.template))
     return this
   },
   makeMap: function() {
     var self = this
-    this.map = L.map(this.el).setView([39, -77], 7)
+    var el = this.$el.find('.map').get(0)
+    this.map = L.map(el).setView([39, -77], 7)
     this.makeLayers()
     this.map.on('moveend', function(e){
       console.log(self.map.getCenter())

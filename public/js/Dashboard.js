@@ -26,13 +26,27 @@ var Dashboard = Backbone.View.extend({
     this.filterCollection.on('remove', this.update, this)
 
     this.chartCollection = new ChartCollection()
-    this.chartCollection.add([
-      {title: "Number of Projects", api: 'api/getPieData', key: 'id', chart_type: 'pie'},
-      {title: "Capacity", api: 'api/getPieData2', key: 'id', chart_type: 'pie'},
-      //{title: "Bar Chart", api: 'api/getBarData2', key: 'id', chart_type: 'bar'},
-      {title: "MEA Contribution", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')},
-      {title: "Investment Leverage", api: 'api/getLeverage', key: 'leverage', chart_type: 'stat'},
-    ])
+    this.chartCollection.on('add', this.renderChart, this)
+    this.chart_hash = {
+      '#energyeffiency': [
+        {title: "Electricity Savings", api: 'api/getPieData', key: 'id', chart_type: 'pie'},
+        {title: "CO2 Emissions Reductions", api: 'api/getPieData2', key: 'id', chart_type: 'pie'},
+        {title: "Program Type", api: 'api/getPieData2', key: 'id', chart_type: 'pie'},
+        {title: "MEA Contribution", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')}
+      ],
+      '#renewableenergy': [
+        {title: "Capacity", api: 'api/getPieData2', key: 'id', chart_type: 'pie'},
+        {title: "Technology Type", api: 'api/getBarData2', key: 'id', chart_type: 'bar'},
+        {title: "Program Type", api: 'api/getPieData2', key: 'id', chart_type: 'pie'},
+        {title: "MEA Contribution", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')}
+      ],
+      '#transportation': [
+        {title: "Charging/Fueling Station Technology", api: 'api/getPieData', key: 'id', chart_type: 'pie'},
+        {title: "Vehicle Technology", api: 'api/getPieData2', key: 'id', chart_type: 'pie'},
+        {title: "Program Type", api: 'api/getPieData2', key: 'id', chart_type: 'pie'},
+        {title: "MEA Contribution", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')},
+      ]
+    }
   },
   makeFilters: function() {
     this.effiency = []
@@ -76,69 +90,70 @@ var Dashboard = Backbone.View.extend({
       '#renewableenergy': this.sectors.concat(this.renewables).concat(this.programtypes),
       '#transportation': this.sectors.concat(this.transportation).concat(this.programtypes)
     }
-    this.filterCollection.add(this.filter_hash['#renewableenergy'])
+  },
+  renderChart: function(chart) {
+    var view = {}
+    switch (chart.get('chart_type')) {
+      case 'bar':
+        view = new BarChartView({
+          model: chart
+        })
+        break
+      case 'line':
+        view = new LineChartView({
+          model: chart
+        })
+        break
+      case 'pie':
+        view = new PieChartView({
+          model: chart
+        })
+        break
+      case 'hbar':
+        view = new HorizontalBarChartView({
+          model: chart
+        })
+        break
+      case 'table':
+        view = new TableView({
+          model: chart
+        })
+        break
+      case 'stat':
+        view = new StatView({
+          model: chart
+        })
+        break
+    }
+    this.$el.find('.charts .row').append(view.render().el)
+
+    chart.update()
   },
   render: function() {
     this.$el.html(Mustache.render(this.template))
-
     var mapView = new MapView()
-    $('.block0').html(mapView.render().el)
+
+    this.$el.find('.charts .row').append(mapView.render().el)
     mapView.makeMap()
 
     var filterMenuView = new FilterMenuView()
-    $('.block1').html(filterMenuView.render().el)
+    this.$el.find('.charts .row').append(filterMenuView.render().el)
 
-    var offset = 2
-    this.chartCollection.each(function(chart, idx) {
-      var view = {}
-      switch (chart.get('chart_type')) {
-        case 'bar':
-          view = new BarChartView({
-            model: chart
-          })
-          console.log(view)
-          break
-        case 'line':
-          view = new LineChartView({
-            model: chart
-          })
-          break
-        case 'pie':
-          view = new PieChartView({
-            model: chart
-          })
-          break
-        case 'hbar':
-          view = new HorizontalBarChartView({
-            model: chart
-          })
-          break
-        case 'table':
-          view = new TableView({
-            model: chart
-          })
-          break
-        case 'stat':
-          view = new StatView({
-            model: chart
-          })
-          break
-      }
-      $('.block' + (idx+offset)).html(view.render().el)
-    })
-
-    this.update()
+    this.filterCollection.reset(this.filter_hash['#renewableenergy'])
+    this.chartCollection.add(this.chart_hash['#renewableenergy'])
 
     return this
   },
   update: function() {
-    this.chartCollection.each(function(chart){
+    this.chartCollection.each(function(chart) {
       chart.update()
     })
   },
   switchTab: function(e) {
-    console.log(e.target.hash)
+    var self = this
     this.filterCollection.reset(this.filter_hash[e.target.hash])
+    this.chartCollection.reset()
+    this.chartCollection.add(this.chart_hash[e.target.hash])
   }
 })
 

@@ -18,8 +18,8 @@ var StatView = ChartView.extend({
     return this
   },
   update: function() {
+    this.resize()
     var stat = this.prepData(this.model.get('data'))
-    console.log(stat)
     this.$el.find('.stat span').html(stat)
     //this.chart.update(this.prepData(this.model.get('data')))
   },

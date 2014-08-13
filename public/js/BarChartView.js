@@ -13,6 +13,7 @@ var BarChartView = ChartView.extend({
       toolbar: $('#toolbar-partial').html()
     }))
     this.$el.find('.chart-inner').css('overflow', 'hidden')
+
     this.chart = false
     return this
   },
@@ -22,14 +23,9 @@ var BarChartView = ChartView.extend({
       x: this.model.get('key')
       , y: []
       , colors: Dashboard.colors
-      , title: 'Vertical Bar Chart'
       , yTickFormat: d3.format(".2s")
       , opacity: 1
     })
-  },
-  update: function() {
-    if(!this.chart) this.drawChart()
-    this.chart.update(this.prepData(this.model.get('data')))
   },
   prepData: function(data){
     var row = data[0]

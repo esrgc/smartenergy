@@ -4,7 +4,7 @@ var ChartView = require('./ChartView')
 
 
 
-var FilterMenuView = Backbone.View.extend({
+var FilterMenuView = ChartView.extend({
   template: $('#filter-menu-template').html(),
   events: {
 
@@ -14,10 +14,15 @@ var FilterMenuView = Backbone.View.extend({
   },
   render: function() {
     var self = this
-    console.log('render')
     this.$el.html(Mustache.render(this.template, {title: 'Project Types'}, {
       title: $('#title-partial').html()
     }))
+    this.update()
+    return this
+  },
+  update: function() {
+    var self = this
+    this.resize()
     Dashboard.filterCollection.each(function(filter) {
       if (filter.get('type') === 'technology') {
         self.$el.find('.technology').show()
@@ -33,9 +38,6 @@ var FilterMenuView = Backbone.View.extend({
         self.$el.find('.program').append(new SectorFilter({model: filter}).render().el)
       }
     })
-    return this
-  },
-  update: function() {
   }
 })
 
