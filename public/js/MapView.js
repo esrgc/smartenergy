@@ -38,16 +38,35 @@ var MapView = Backbone.View.extend({
           style: self.style,
           onEachFeature: self.onEachFeature.bind(self)
         }).addTo(self.map)
+      }),
+      $.getJSON('data/maryland-legislative-districts.json', function(json) {
+        self.legislativeDistricts = L.geoJson(json, {
+          style: self.style,
+          onEachFeature: self.onEachFeature.bind(self)
+        })
+      }),
+      $.getJSON('data/maryland-congressional-districts.json', function(json) {
+        self.congressionalDistricts = L.geoJson(json, {
+          style: self.style,
+          onEachFeature: self.onEachFeature.bind(self)
+        })
+      }),
+      $.getJSON('data/maryland-zips.json', function(json) {
+        self.zips = L.geoJson(json, {
+          style: self.style,
+          onEachFeature: self.onEachFeature.bind(self)
+        })
       })
     ).then(function() {
 
       var baseMaps = {
-        "Streets": mapbox
+        "Counties": self.geomLayer,
+        "Legislative Districts": self.legislativeDistricts,
+        "Congressional Districts": self.congressionalDistricts,
+        "Zip Codes": self.zips
       }
 
-      var overlayMaps = {
-        "Counties": self.geomLayer
-      }
+      var overlayMaps = {}
 
       L.control.layers(baseMaps, overlayMaps).addTo(self.map)
     })
