@@ -19,6 +19,7 @@ var TableView = ChartView.extend({
       title: $('#title-partial').html(),
       toolbar: $('#toolbar-partial').html()
     }))
+    this.resize()
     this.$el.find('th').each(function(idx, th){
       if(th.innerHTML === self.model.get('sort_key')) {
         $(th).addClass('sort')

@@ -46,7 +46,7 @@ var BarChartView = ChartView.extend({
     })
     this.$el.parent().html(view.render().el)
     view.update()
-    this.remove()
+//    this.remove()
   }
 })
 

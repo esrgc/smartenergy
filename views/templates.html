@@ -24,28 +24,30 @@
 </script>
 
 <script type="text/template" id="table-template">
-  <div class="chart">
-    {{> toolbar }}
-    {{> title }}
-    <div class="chart-inner">
-      <table class="table table-bordered table-striped table-condensed">
-        <thead>
-          <tr>
-          {{#data.columns}}
-            <th>{{.}}</th>
-          {{/data.columns}}
-          </tr>
-        </thead>
-        <tbody>
-        {{#data.rows}}
-          <tr>
-          {{#row}}
-            <td>{{.}}</td>
-          {{/row}}
-          </tr>
-        {{/data.rows}}
-        </tbody>
-      </table>
+  <div class="col-md-4 col-sm-6 block">
+    <div class="chart">
+      {{> toolbar }}
+      {{> title }}
+      <div class="chart-inner">
+        <table class="table table-bordered table-striped table-condensed">
+          <thead>
+            <tr>
+            {{#data.columns}}
+              <th>{{.}}</th>
+            {{/data.columns}}
+            </tr>
+          </thead>
+          <tbody>
+          {{#data.rows}}
+            <tr>
+            {{#row}}
+              <td>{{.}}</td>
+            {{/row}}
+            </tr>
+          {{/data.rows}}
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </script>
