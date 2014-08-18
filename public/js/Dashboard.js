@@ -153,7 +153,10 @@ var Dashboard = Backbone.View.extend({
   },
   switchTab: function(e) {
     var self = this
-    this.filterCollection.reset(this.filter_hash[e.target.hash])
+    var geos = this.filterCollection.filter(function(model){
+      return model.get('type') === 'geo'
+    })
+    this.filterCollection.reset(this.filter_hash[e.target.hash].concat(geos))
     this.chartCollection.reset()
     this.chartCollection.add(this.chart_hash[e.target.hash])
   }
