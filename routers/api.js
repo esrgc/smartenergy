@@ -33,48 +33,32 @@ api.get('/getBarData', function(req, res){
 api.get('/getBarData2', function(req, res){
   var data = [
     {
-      'id': 'Mon',
-      '2011': 42235.7,
-      '2012': 42235.7,
-      '2013': 42235.7
+      'technology': 'Solar PV',
+      'value': 2600
+    },{
+      'technology': 'Solar Thermal',
+      'value': 1200
+    },{
+      'technology': 'Geothermal',
+      'value': 900
+    },{
+      'technology': 'Wood Burning Stoves',
+      'value': 200
+    },{
+      'technology': 'Wind',
+      'value': 200
+    },{
+      'technology': 'Biomass',
+      'value': 100
+    },{
+      'technology': 'Landfall Gas',
+      'value': 250
+    },{
+      'technology': 'Bioheat',
+      'value': 650
     },
-    {
-      'id': 'Tue',
-      '2011': 165113.8,
-      '2012': 42235.7,
-      '2013': 42235.7
-    },
-    {
-      'id': 'Wed',
-      '2011': 64447.3,
-      '2012': 42235.7,
-      '2013': 42235.7
-    },
-    {
-      'id': 'Thu',
-      '2011': 12444.0,
-      '2012': 42235.7,
-      '2013': 42235.7
-    },
-    {
-      'id': 'Fri',
-      '2011': 22444.0,
-      '2012': 42235.7,
-      '2013': 42235.7
-    },
-    {
-      'id': 'Sat',
-      '2011': 62444.0,
-      '2012': 42235.7,
-      '2013': 42235.7
-    },
-    {
-      'id': 'Sun',
-      '2011': 92444.0,
-      '2012': 42235.7,
-      '2013': 42235.7
-    }
   ]
+  var data = filter(req.query, data)
   returnData(req, res, data)
 })
 
@@ -149,19 +133,19 @@ api.get('/getLineData', function(req, res){
 
 api.get('/getPieData', function(req, res){
   var data = [
-    {id: "Allegany", value: 500},
-    {id: "Anne Arundel", value: 7300},
-    {id: "Baltimore", value: 8000},
-    {id: "Baltimore City", value: 2720},
-    {id: "Calvert", value: 1142},
-    {id: "Prince George's", value: 3000},
-    {id: "Queen Anne's", value: 400},
-    {id: "Somerset", value: 100},
-    {id: "St. Mary's", value: 1100},
-    {id: "Talbot", value: 500},
-    {id: "Washington", value: 760},
-    {id: "Wicomico", value: 500},
-    {id: "Worcester", value: 500}
+    {geo: "Allegany", value: 500},
+    {geo: "Anne Arundel", value: 7300},
+    {geo: "Baltimore", value: 8000},
+    {geo: "Baltimore City", value: 2720},
+    {geo: "Calvert", value: 1142},
+    {geo: "Prince George's", value: 3000},
+    {geo: "Queen Anne's", value: 400},
+    {geo: "Somerset", value: 100},
+    {geo: "St. Mary's", value: 1100},
+    {geo: "Talbot", value: 500},
+    {geo: "Washington", value: 760},
+    {geo: "Wicomico", value: 500},
+    {geo: "Worcester", value: 500}
   ]
   var data = filter(req.query, data)
   returnData(req, res, data)
@@ -169,11 +153,35 @@ api.get('/getPieData', function(req, res){
 
 api.get('/getPieData2', function(req, res){
   var data = [
-    {id: "Allegany", value: 20},
-    {id: "Anne Arundel", value: 300},
-    {id: "Baltimore", value: 400},
-    {id: "Baltimore City", value: 20},
-    {id: "Worcester", value: 50}
+    {geo: "Allegany", value: 20},
+    {geo: "Anne Arundel", value: 300},
+    {geo: "Baltimore", value: 400},
+    {geo: "Baltimore City", value: 20},
+    {geo: "Worcester", value: 50}
+  ]
+  var data = filter(req.query, data)
+  returnData(req, res, data)
+})
+
+api.get('/getPieData3', function(req, res){
+  var data = [
+    {program: 'Grant', value: 400},
+    {program: 'Rebate/Voucher', value: 300},
+    {program: 'Financing', value: 150},
+    {program: 'Tax Credit', value: 750},
+    {program: 'Other', value: 50}
+  ]
+  var data = filter(req.query, data)
+  returnData(req, res, data)
+})
+
+api.get('/getSector', function(req, res){
+  var data = [
+    {sector: 'Residential', value: 400},
+    {sector: 'Commercial', value: 300},
+    {sector: 'Agricultural', value: 150},
+    {sector: 'Local Government', value: 750},
+    {sector: 'State Government', value: 50}
   ]
   var data = filter(req.query, data)
   returnData(req, res, data)

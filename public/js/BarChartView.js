@@ -24,7 +24,8 @@ var BarChartView = ChartView.extend({
       , y: []
       , colors: Dashboard.colors
       , yTickFormat: d3.format(".2s")
-      , opacity: 1
+      , hoverTemplate: "{{x}}: {{y}} projects"
+      , opacity: 0.8
     })
   },
   prepData: function(data){
@@ -36,7 +37,11 @@ var BarChartView = ChartView.extend({
         numberkeys.push(key)
       }
     })
-    this.chart.options.y = numberkeys
+    if (numberkeys.length == 1) {
+      this.chart.options.y = numberkeys[0]
+    } else {
+      this.chart.options.y = numberkeys
+    }
     return data
   },
   toTable: function(){

@@ -12,7 +12,7 @@ var MapView = require('./MapView')
   , ChartCollection = require('./ChartCollection')
 
 var Dashboard = Backbone.View.extend({
-  colors: ['#94BA65', '#2790B0', '#2B4E72'],
+  colors: ['#2B4E72','#94BA65', '#2790B0'],
   template: $('#dashboard-template').html(),
   el: $(".dashboard"),
   events: {
@@ -27,23 +27,29 @@ var Dashboard = Backbone.View.extend({
 
     this.chartCollection = new ChartCollection()
     this.chartCollection.on('add', this.renderChart, this)
+    this.makeCharts()
+  },
+  makeCharts: function() {
     this.chart_hash = {
       '#energyeffiency': [
-        {title: "Electricity Savings", api: 'api/getPieData', key: 'id', chart_type: 'pie'},
-        {title: "CO2 Emissions Reductions", api: 'api/getPieData2', key: 'id', chart_type: 'pie'},
-        {title: "Program Type", api: 'api/getPieData2', key: 'id', chart_type: 'pie'},
+        {title: "Electricity Savings", api: 'api/getPieData', key: 'geo', chart_type: 'pie'},
+        {title: "CO2 Emissions Reductions", api: 'api/getPieData2', key: 'geo', chart_type: 'pie'},
+        {title: "Program Type", api: 'api/getPieData3', key: 'program', chart_type: 'pie'},
+        {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie'},
         {title: "MEA Contribution", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')}
       ],
       '#renewableenergy': [
-        {title: "Capacity", api: 'api/getPieData2', key: 'id', chart_type: 'pie'},
-        {title: "Technology Type", api: 'api/getBarData2', key: 'id', chart_type: 'bar'},
-        {title: "Program Type", api: 'api/getPieData2', key: 'id', chart_type: 'pie'},
+        {title: "Technology Type", api: 'api/getBarData2', key: 'technology', chart_type: 'bar'},
+        {title: "Program Type", api: 'api/getPieData3', key: 'program', chart_type: 'pie'},
+        {title: "Capacity", api: 'api/getPieData2', key: 'geo', chart_type: 'pie'},
+        {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie'},
         {title: "MEA Contribution", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')}
       ],
       '#transportation': [
-        {title: "Charging/Fueling Station Technology", api: 'api/getPieData', key: 'id', chart_type: 'pie'},
-        {title: "Vehicle Technology", api: 'api/getPieData2', key: 'id', chart_type: 'pie'},
-        {title: "Program Type", api: 'api/getPieData2', key: 'id', chart_type: 'pie'},
+        {title: "Charging/Fueling Station Technology", api: 'api/getPieData', key: 'geo', chart_type: 'pie'},
+        {title: "Vehicle Technology", api: 'api/getPieData2', key: 'geo', chart_type: 'pie'},
+        {title: "Program Type", api: 'api/getPieData3', key: 'program', chart_type: 'pie'},
+        {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie'},
         {title: "MEA Contribution", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')},
       ]
     }
