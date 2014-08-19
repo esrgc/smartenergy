@@ -34,21 +34,21 @@ var Dashboard = Backbone.View.extend({
       '#energyeffiency': [
         {title: "Electricity Savings", api: 'api/getPieData', key: 'geo', chart_type: 'pie'},
         {title: "CO2 Emissions Reductions", api: 'api/getPieData2', key: 'geo', chart_type: 'pie'},
-        {title: "Program Type", api: 'api/getPieData3', key: 'program', chart_type: 'pie'},
+        {title: "Program Type", api: 'api/getProgramType', key: 'program_type', chart_type: 'pie'},
         {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie'},
         {title: "MEA Contribution", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')}
       ],
       '#renewableenergy': [
-        {title: "Technology Type", api: 'api/getBarData2', key: 'technology', chart_type: 'bar'},
-        {title: "Program Type", api: 'api/getPieData3', key: 'program', chart_type: 'pie'},
-        {title: "Capacity", api: 'api/getPieData2', key: 'geo', chart_type: 'pie'},
+        {title: "Technology Type", api: 'api/getTechnology', key: 'technology', chart_type: 'bar'},
+        {title: "Program Type", api: 'api/getProgramType', key: 'program_type', chart_type: 'pie'},
+        {title: "Capacity", api: 'api/getCapacity', key: 'county', chart_type: 'pie'},
         {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie'},
         {title: "MEA Contribution", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')}
       ],
       '#transportation': [
         {title: "Charging/Fueling Station Technology", api: 'api/getPieData', key: 'geo', chart_type: 'pie'},
         {title: "Vehicle Technology", api: 'api/getPieData2', key: 'geo', chart_type: 'pie'},
-        {title: "Program Type", api: 'api/getPieData3', key: 'program', chart_type: 'pie'},
+        {title: "Program Type", api: 'api/getProgramType', key: 'program_type', chart_type: 'pie'},
         {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie'},
         {title: "MEA Contribution", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')},
       ]
@@ -78,16 +78,16 @@ var Dashboard = Backbone.View.extend({
       {value: 'Idle Reduction', color: '#FFAA00', type: 'vehicle-technology'},
     ]
     this.programtypes = [
-      {value: 'Grant', type: 'program'},
-      {value: 'Rebate/Voucher', type: 'program'},
-      {value: 'Financing', type: 'program'},
-      {value: 'Tax Credit', type: 'program'},
-      {value: 'Other', type: 'program'}
+      {value: 'Grant', type: 'program_type'},
+      {value: 'Rebate/Voucher', type: 'program_type'},
+      {value: 'Financing', type: 'program_type'},
+      {value: 'Tax Credit', type: 'program_type'},
+      {value: 'Other', type: 'program_type'}
     ]
     this.sectors = [
       {value: 'Residential', type: 'sector'},
       {value: 'Commercial', type: 'sector'},
-      {value: 'Agricultural', type: 'sector'},
+      {value: 'Agriculture', type: 'sector'},
       {value: 'Local Government', type: 'sector'},
       {value: 'State Government', type: 'sector'}
     ]
@@ -133,8 +133,7 @@ var Dashboard = Backbone.View.extend({
     }
     var container = $('<div class="chart-container"/>')
     container.append(view.render().el)
-    this.$el.find('.charts .row').append(container)
-
+    this.$el.find('.charts > .row').append(container)
     chart.update()
   },
   render: function() {

@@ -24,7 +24,7 @@ var StatView = ChartView.extend({
     //this.chart.update(this.prepData(this.model.get('data')))
   },
   prepData: function(data){
-    var stat = this.model.get('data')[this.model.get('key')]
+    var stat = this.model.get('data')[0][this.model.get('key')]
     if (this.model.get('format')) {
       var format = this.model.get('format')
     } else {

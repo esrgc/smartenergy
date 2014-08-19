@@ -1,13 +1,6 @@
 <script type="text/template" id="dashboard-template">
   <div class="row">
     <div class="col-md-6">
-      <div class="header">
-        <div class="logo">
-          <h1><%= title %></h1>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
       <div class="tabs">
         <ul class="nav nav-pills">
           <li class="active"><a href="#renewableenergy" data-toggle="pill">Renewable Energy</a></li>
@@ -16,7 +9,11 @@
         </ul>
       </div>
     </div>
-  </div>
+    <div class="col-md-6">
+      <div class="sub-title">
+        <h3>Powered by Open Data on <a href="http://data.maryland.gov">data.maryland.gov</a></h3>
+      </div>
+    </div>
   </div>
   <div class="charts">
     <div class="row"></div>
@@ -78,11 +75,13 @@
   <div class="chart">
     {{> title }}
     <div class="chart-inner">
-      <div class="filters">
-        <div class="filter-box technology"><div class="filter-title">Technology</div></div>
-        <div class="filter-box vehicle-technology"><div class="filter-title">Vehicle Technology</div></div>
-        <div class="filter-box program"><div class="filter-title">Program</div></div>
-        <div class="filter-box sector"><div class="filter-title">Sector</div></div>
+      <div class="filters container-fluid">
+        <div class="row">
+          <div class="filter-box technology col-md-6"><div class="filter-title">Technology</div></div>
+          <div class="filter-box vehicle-technology col-md-6"><div class="filter-title">Vehicle Technology</div></div>
+          <div class="filter-box program col-md-6"><div class="filter-title">Program</div></div>
+          <div class="filter-box sector col-md-6"><div class="filter-title">Sector</div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -109,12 +108,9 @@
 </script>
 
 <script type="text/template" id="filter-label-template">
-  <input type="checkbox">
-  <span>{{display}}</span>
+<button type="button" class="btn btn-default btn-sm">{{display}}</button>
 </script>
 
 <script type="text/template" id="project-type-filter">
-  <input type="checkbox">
-  <span class="swatch"></span>
-  <span>{{display}}</span>
+<button type="button" class="btn btn-default btn-sm"><span class="swatch"></span>{{display}}</button>
 </script>

@@ -18,6 +18,9 @@ var ChartModel = Backbone.Model.extend({
   },
   update: function(filters) {
     var self = this
+    if (this.request && this.request.readyState !== 4) {
+      this.request.abort()
+    }
     var url = this.get('api')
     url += '?'
     Dashboard.filterCollection.each(function(filter) {
@@ -26,7 +29,7 @@ var ChartModel = Backbone.Model.extend({
       }
     })
     console.log(url)
-    $.getJSON(url, function(res){
+    this.request = $.getJSON(url, function(res){
       self.set('data', res)
     })
   },

@@ -1,134 +1,57 @@
 var express = require('express')
   , returnData = require('../lib/return-data')
   , filter = require('../lib/filter')
+  , Socrata = require('../lib/Socrata')
+  , config = require('../config/config')
+
+var socrataDataset = new Socrata.Dataset()
+socrataDataset.setHost('https://data.maryland.gov')
+socrataDataset.setAppToken(config.socrata.apptoken)
+socrataDataset.setUID(config.socrata.uid)
+socrataDataset.setCredentials(config.socrata.user, config.socrata.password)
 
 var api = new express.Router()
 
 /* Return dummy data */
 
-api.get('/getBarData', function(req, res){
-  var data = [
-    {
-      "Name": "Grant 5307",
-      "On": 828,
-      "Off": 1079,
-      "Rest": 300
-    },
-    {
-      "Name": "Grant 5311",
-      "On": 689,
-      "Off": 795,
-      "Rest": 200
-    },
-    {
-      "Name": "Grant DHR",
-      "On": 1206,
-      "Off": 1805,
-      "Rest": 600
-    }
-  ]
-  returnData(req, res, data)
+api.get('/getTechnology', function(req, res){
+  var qry = '$select=technology,count(id) as value&$group=technology'
+  qry += filter(req.query)
+  socrataDataset.query(qry, function(data) {
+    returnData(req, res, data)
+  })
 })
 
-api.get('/getBarData2', function(req, res){
-  var data = [
-    {
-      'technology': 'Solar PV',
-      'value': 2600
-    },{
-      'technology': 'Solar Thermal',
-      'value': 1200
-    },{
-      'technology': 'Geothermal',
-      'value': 900
-    },{
-      'technology': 'Wood Burning Stoves',
-      'value': 200
-    },{
-      'technology': 'Wind',
-      'value': 200
-    },{
-      'technology': 'Biomass',
-      'value': 100
-    },{
-      'technology': 'Landfall Gas',
-      'value': 250
-    },{
-      'technology': 'Bioheat',
-      'value': 650
-    },
-  ]
-  var data = filter(req.query, data)
-  returnData(req, res, data)
+api.get('/getProgramType', function(req, res){
+  var qry = '$select=program_type,count(id) as value&$group=program_type'
+  qry += filter(req.query)
+  socrataDataset.query(qry, function(data) {
+    returnData(req, res, data)
+  })
 })
 
-api.get('/getTableData', function(req, res){
-  var data = [
-    {
-      "ID": "111a",
-      "CHILD": 13,
-      "DIS": 11,
-      "On": 358,
-      "Off": 463
-    },
-    {
-      "ID": "111r",
-      "CHILD": 10,
-      "DIS": 32,
-      "On": 269,
-      "Off": 373
-    },
-    {
-      "ID": "190a",
-      "CHILD": 0,
-      "DIS": 13,
-      "On": 41,
-      "Off": 51
-    }
-  ]
-  returnData(req, res, data)
+api.get('/getCapacity', function(req, res){
+  var qry = '$select=county,sum(capacity)%20as%20value&$group=county'
+  qry += filter(req.query)
+  socrataDataset.query(qry, function(data) {
+    returnData(req, res, data)
+  })
 })
 
-api.get('/getLineData', function(req, res){
-  var data = [
-    {
-      'date': '2013-06-01',
-      'numCats':22817,
-      'goalCats': 80000,
-      'numFluffyCats': 10000
-    },
-    {
-      'date': '2013-06-02',
-      'numCats':24817,
-      'goalCats': 80000,
-      'numFluffyCats': 11000
-    },
-    {
-      'date': '2013-06-03',
-      'numCats':35817,
-      'goalCats': 80000,
-      'numFluffyCats': 16000
-    },
-    {
-      'date': '2013-06-04',
-      'numCats':48817,
-      'goalCats': 80000,
-      'numFluffyCats': 18000
-    },
-    {
-      'date': '2013-06-05',
-      'numCats':68705,
-      'goalCats': 80000,
-      'numFluffyCats': 22000
-    },
-    {
-      'date': '2013-06-06',
-      'numCats':92920,
-      'goalCats': 80000,
-      'numFluffyCats': 28000
-    }
-  ]
-  returnData(req, res, data)
+api.get('/getSector', function(req, res){
+  var qry = '$select=sector,count(id)%20as%20value&$group=sector'
+  qry += filter(req.query)
+  socrataDataset.query(qry, function(data) {
+    returnData(req, res, data)
+  })
+})
+
+api.get('/getContribution', function(req, res){
+  var qry = '$select=sum(mea_award)%20as%20contribution'
+  qry += filter(req.query)
+  socrataDataset.query(qry, function(data) {
+    returnData(req, res, data)
+  })
 })
 
 api.get('/getPieData', function(req, res){
@@ -160,44 +83,6 @@ api.get('/getPieData2', function(req, res){
     {geo: "Worcester", value: 50}
   ]
   var data = filter(req.query, data)
-  returnData(req, res, data)
-})
-
-api.get('/getPieData3', function(req, res){
-  var data = [
-    {program: 'Grant', value: 400},
-    {program: 'Rebate/Voucher', value: 300},
-    {program: 'Financing', value: 150},
-    {program: 'Tax Credit', value: 750},
-    {program: 'Other', value: 50}
-  ]
-  var data = filter(req.query, data)
-  returnData(req, res, data)
-})
-
-api.get('/getSector', function(req, res){
-  var data = [
-    {sector: 'Residential', value: 400},
-    {sector: 'Commercial', value: 300},
-    {sector: 'Agricultural', value: 150},
-    {sector: 'Local Government', value: 750},
-    {sector: 'State Government', value: 50}
-  ]
-  var data = filter(req.query, data)
-  returnData(req, res, data)
-})
-
-api.get('/getContribution', function(req, res){
-  var data = {
-    'contribution': 363928
-  }
-  returnData(req, res, data)
-})
-
-api.get('/getLeverage', function(req, res){
-  var data = {
-    'leverage': 11.6
-  }
   returnData(req, res, data)
 })
 

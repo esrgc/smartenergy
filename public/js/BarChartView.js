@@ -29,19 +29,20 @@ var BarChartView = ChartView.extend({
     })
   },
   prepData: function(data){
+    var self = this
     var row = data[0]
-    var keys = _.without(_.keys(row), this.model.get('key'))
-    var numberkeys = []
-    _.each(keys, function(key){
-      if(_.isNumber(row[key])){
-        numberkeys.push(key)
-      }
+    var keys = _.without(_.keys(row), this.model.get('key'), 'chart_total')
+    this.chart.options.y = keys
+    data.forEach(function(row) {
+      row.chart_total = 0
+      self.chart.options.y.forEach(function(y) {
+        row[y] = +row[y]
+        row.chart_total += row[y]
+      })
     })
-    if (numberkeys.length == 1) {
-      this.chart.options.y = numberkeys[0]
-    } else {
-      this.chart.options.y = numberkeys
-    }
+    data = _.sortBy(data, function(row) {
+      return row.chart_total
+    }).reverse()
     return data
   },
   toTable: function(){

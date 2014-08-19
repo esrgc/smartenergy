@@ -36,25 +36,29 @@ var MapView = Backbone.View.extend({
       $.getJSON('data/mdcnty.json', function(json) {
         self.geomLayer = L.geoJson(json, {
           style: self.style,
-          onEachFeature: self.onEachFeature.bind(self)
+          onEachFeature: self.onEachFeature.bind(self),
+          name: 'county'
         }).addTo(self.map)
       }),
       $.getJSON('data/maryland-legislative-districts.json', function(json) {
         self.legislativeDistricts = L.geoJson(json, {
           style: self.style,
-          onEachFeature: self.onEachFeature.bind(self)
+          onEachFeature: self.onEachFeature.bind(self),
+          name: 'legislative'
         })
       }),
       $.getJSON('data/maryland-congressional-districts.json', function(json) {
         self.congressionalDistricts = L.geoJson(json, {
           style: self.style,
-          onEachFeature: self.onEachFeature.bind(self)
+          onEachFeature: self.onEachFeature.bind(self),
+          name: 'congressional'
         })
       }),
       $.getJSON('data/maryland-zips.json', function(json) {
         self.zips = L.geoJson(json, {
           style: self.style,
-          onEachFeature: self.onEachFeature.bind(self)
+          onEachFeature: self.onEachFeature.bind(self),
+          name: 'zipcode'
         })
       })
     ).then(function() {
@@ -74,8 +78,9 @@ var MapView = Backbone.View.extend({
   onEachFeature: function(feature, layer) {
     var self = this
     layer.on('click', function(e){
+      console.log(layer)
       var name = e.target.feature.properties.name
-      var filter = Dashboard.filterCollection.findWhere({type: 'geo', value: name})
+      var filter = Dashboard.filterCollection.findWhere({type: layer.options.name, value: name})
       if (filter) {
         layer.setStyle(self.style)
         filter.destroy()
@@ -83,7 +88,8 @@ var MapView = Backbone.View.extend({
         layer.setStyle(self.selectedStyle)
         Dashboard.filterCollection.add({
           value: name,
-          type: 'geo'
+          type: layer.options.name,
+          active: true
         })
       }
     })

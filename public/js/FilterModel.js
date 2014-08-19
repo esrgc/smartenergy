@@ -1,7 +1,7 @@
 var FilterModel = Backbone.Model.extend({
   defaults: function() {
     return {
-      active: true
+      active: false
     }
   },
   initialize: function(){
