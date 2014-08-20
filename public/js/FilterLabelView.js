@@ -10,7 +10,6 @@ var FilterLabelView = Backbone.View.extend({
     this.listenTo(this.model, 'destroy', this.remove)
   },
   render: function() {
-    console.log('render')
     this.$el.html(Mustache.render(this.template, this.model.toJSON()))
     this.style()
     return this

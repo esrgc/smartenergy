@@ -11,6 +11,7 @@ html, body {
 
 body {
   background: url('../img/white_wall_hash/white_wall_hash.png') repeat;
+  font-family: 'Roboto', sans-serif;
 }
 
 .dashboard {
@@ -67,18 +68,20 @@ body {
     clear: both;
     border: 1px solid @tableBorder;
     .stat {
-      line-height: @chartHeight - 36;
+      height: 100%;
+      padding: 10px;
       span {
+        width: 100%;
         display: inline-block;
         vertical-align: middle;
-        font-size: 48px;
       }
     }
     .filters {
       height: 100%;
       .filter-box {
         overflow: hidden;
-        padding-top: 10px;
+        padding-top: 5px;
+        padding-bottom: 5px;
         display: none;
         .filter-title {
           text-align: left;

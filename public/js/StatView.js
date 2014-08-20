@@ -21,7 +21,8 @@ var StatView = ChartView.extend({
     this.resize()
     var stat = this.prepData(this.model.get('data'))
     this.$el.find('.stat span').html(stat)
-    //this.chart.update(this.prepData(this.model.get('data')))
+    this.$el.find('.stat span').fitText()
+    this.$el.find('.stat span').css('line-height', this.$el.find('.stat').height() + 'px')
   },
   prepData: function(data){
     var stat = this.model.get('data')[0][this.model.get('key')]

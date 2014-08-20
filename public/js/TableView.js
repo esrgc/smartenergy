@@ -19,7 +19,6 @@ var TableView = ChartView.extend({
       title: $('#title-partial').html(),
       toolbar: $('#toolbar-partial').html()
     }))
-    this.resize()
     this.$el.find('th').each(function(idx, th){
       if(th.innerHTML === self.model.get('sort_key')) {
         $(th).addClass('sort')
@@ -33,6 +32,7 @@ var TableView = ChartView.extend({
   },
   update: function(){
     this.render()
+    this.resize()
   },
   prepData: function(res) {
     var table = {
@@ -44,8 +44,12 @@ var TableView = ChartView.extend({
       var columns = _.keys(data[0])
       table.columns = columns
       _.each(data, function(row){
+        var v = []
+        columns.forEach(function(c) {
+          v.push(row[c])
+        })
         table.rows.push({
-          row: _.values(row)
+          row: v
         })
       })
     }

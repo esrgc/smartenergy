@@ -1,6 +1,3 @@
-var Backbone = require('backbone')
-  , _ = require('underscore')
-Backbone.$ = $
 
 var ChartModel = Backbone.Model.extend({
   defaults: function() {
@@ -18,6 +15,7 @@ var ChartModel = Backbone.Model.extend({
   },
   update: function(filters) {
     var self = this
+    this.clearData()
     if (this.request && this.request.readyState !== 4) {
       this.request.abort()
     }
@@ -28,10 +26,22 @@ var ChartModel = Backbone.Model.extend({
         url += filter.get('type') + '=' + filter.get('value') + '&'
       }
     })
-    console.log(url)
     this.request = $.getJSON(url, function(res){
       self.set('data', res)
     })
+  },
+  clearData: function() {
+    var data = this.get('data')
+    if (data) {
+      var keys = _.without(_.keys(data[0]), this.get('key'))
+      data.forEach(function(row) {
+        keys.forEach(function(key) {
+          row[key] = 0
+        })
+      })
+      this.set('data', data)
+      this.trigger('change:data')
+    }
   },
   sortByKey: function(column) {
     var data = this.get('data')

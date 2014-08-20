@@ -11,6 +11,9 @@ var FilterMenuView = ChartView.extend({
   },
   initialize: function(){
     Dashboard.filterCollection.on('reset', this.render, this)
+    Dashboard.filterCollection.on('change', this.changeSummary, this)
+    Dashboard.filterCollection.on('add', this.changeSummary, this)
+    Dashboard.filterCollection.on('remove', this.changeSummary, this)
   },
   render: function() {
     var self = this
@@ -18,6 +21,7 @@ var FilterMenuView = ChartView.extend({
       title: $('#title-partial').html()
     }))
     this.update()
+    this.changeSummary()
     return this
   },
   update: function() {
@@ -33,11 +37,15 @@ var FilterMenuView = ChartView.extend({
       } else if (filter.get('type') === 'sector') {
         self.$el.find('.sector').show()
         self.$el.find('.sector').append(new SectorFilter({model: filter}).render().el)
-      } else if (filter.get('type') === 'program') {
+      } else if (filter.get('type') === 'program_type') {
         self.$el.find('.program').show()
         self.$el.find('.program').append(new SectorFilter({model: filter}).render().el)
       }
     })
+  },
+  changeSummary: function() {
+    $('.dashboard .filter-summary').html('')
+    var filters = Dashboard.filterCollection.where({active: true})
   }
 })
 

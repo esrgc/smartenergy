@@ -57,25 +57,24 @@ var Dashboard = Backbone.View.extend({
   makeFilters: function() {
     this.effiency = []
     this.renewables = [
-      {value: 'Solar PV', color: '#FFAA00', type: 'technology'},
-      {value: 'Solar Thermal', color: '#26AD6A', type: 'technology'},
-      {value: 'Geothermal', color: '#AB953F', type: 'technology'},
-      {value: 'Wood Burning Stoves', color: '#ebeb00', type: 'technology'},
-      {value: 'Wind', color: '#C238C0', type: 'technology'},
-      {value: 'Biomass', color: '#FF0000', type: 'technology'},
-      {value: 'Landfall Gas', color: '#00FF00', type: 'technology'},
-      {value: 'Bioheat', color: '#0070FF', type: 'technology'}
+      {value: 'Solar PV', color: '#FF851B', type: 'technology'},
+      {value: 'Solar Hot Water', color: '#39CCCC', type: 'technology'},
+      {value: 'Geothermal', color: '#FF4136', type: 'technology'},
+      {value: 'Wood Burning Stoves', color: '#FFDC00', type: 'technology'},
+      {value: 'Wind', color: '#B10DC9', type: 'technology'},
+      {value: 'Landfill Gas', color: '#01FF70', type: 'technology'},
+      {value: 'Bioheat', color: '#0074D9', type: 'technology'}
     ]
     this.transportation = [
-      {value: 'Electric', color: '#FFAA00', type: 'vehicle-technology'},
-      {value: 'Biodiesel', color: '#FFAA00', type: 'vehicle-technology'},
-      {value: 'E85', color: '#FFAA00', type: 'vehicle-technology'},
-      {value: 'Natural Gas (CNG)', color: '#FFAA00', type: 'vehicle-technology'},
-      {value: 'Natural Gas (LNG)', color: '#FFAA00', type: 'vehicle-technology'},
-      {value: 'Propane', color: '#FFAA00', type: 'vehicle-technology'},
-      {value: 'Hydrogen', color: '#FFAA00', type: 'vehicle-technology'},
-      {value: 'Hybrid', color: '#FFAA00', type: 'vehicle-technology'},
-      {value: 'Idle Reduction', color: '#FFAA00', type: 'vehicle-technology'},
+      {value: 'Electric', color: '#0074D9', type: 'vehicle-technology'},
+      {value: 'Biodiesel', color: '#39CCCC', type: 'vehicle-technology'},
+      {value: 'E85', color: '#2ECC40', type: 'vehicle-technology'},
+      {value: 'Natural Gas (CNG)', color: '#FFDC00', type: 'vehicle-technology'},
+      {value: 'Natural Gas (LNG)', color: '#FF851B', type: 'vehicle-technology'},
+      {value: 'Propane', color: '#FF4136', type: 'vehicle-technology'},
+      {value: 'Hydrogen', color: '#F012BE', type: 'vehicle-technology'},
+      {value: 'Hybrid', color: '#B10DC9', type: 'vehicle-technology'},
+      {value: 'Idle Reduction', color: '#01FF70', type: 'vehicle-technology'},
     ]
     this.programtypes = [
       {value: 'Grant', type: 'program_type'},

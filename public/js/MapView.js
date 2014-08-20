@@ -78,7 +78,6 @@ var MapView = Backbone.View.extend({
   onEachFeature: function(feature, layer) {
     var self = this
     layer.on('click', function(e){
-      console.log(layer)
       var name = e.target.feature.properties.name
       var filter = Dashboard.filterCollection.findWhere({type: layer.options.name, value: name})
       if (filter) {

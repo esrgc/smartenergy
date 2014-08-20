@@ -8,10 +8,10 @@ var PieChartView = BarChartView.extend({
       , value: 'value'
       , colors: Dashboard.colors
       , opacity: 1
+      , arclabels: true
+      , arclabelsMin: 8
+      , opacity: 0.8
     })
-  },
-  prepData: function(res) {
-   return res
   }
 })
 

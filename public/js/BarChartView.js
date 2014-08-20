@@ -31,18 +31,24 @@ var BarChartView = ChartView.extend({
   prepData: function(data){
     var self = this
     var row = data[0]
-    var keys = _.without(_.keys(row), this.model.get('key'), 'chart_total')
-    this.chart.options.y = keys
-    data.forEach(function(row) {
-      row.chart_total = 0
-      self.chart.options.y.forEach(function(y) {
-        row[y] = +row[y]
-        row.chart_total += row[y]
+    if (row) {
+      var keys = _.without(_.keys(row), this.model.get('key'))
+      this.chart.options.y = keys
+      var totals = []
+      data.forEach(function(row, i) {
+        if (!row[self.model.get('key')]) {
+          row[self.model.get('key')] = 'Other'
+        }
+        totals[i] = 0
+        self.chart.options.y.forEach(function(y) {
+          row[y] = +row[y]
+          totals[i] += row[y]
+        })
       })
-    })
-    data = _.sortBy(data, function(row) {
-      return row.chart_total
-    }).reverse()
+      data = _.sortBy(data, function(row, i) {
+        return totals[i]
+      }).reverse()
+    }
     return data
   },
   toTable: function(){
@@ -51,8 +57,7 @@ var BarChartView = ChartView.extend({
       model: this.model
     })
     this.$el.parent().html(view.render().el)
-    view.update()
-//    this.remove()
+    view.resize()
   }
 })
 
