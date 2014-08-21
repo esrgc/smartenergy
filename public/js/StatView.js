@@ -20,18 +20,23 @@ var StatView = ChartView.extend({
   update: function() {
     this.resize()
     var stat = this.prepData(this.model.get('data'))
+    console.log(stat)
     this.$el.find('.stat span').html(stat)
     this.$el.find('.stat span').fitText()
     this.$el.find('.stat span').css('line-height', this.$el.find('.stat').height() + 'px')
   },
   prepData: function(data){
     var stat = this.model.get('data')[0][this.model.get('key')]
-    if (this.model.get('format')) {
-      var format = this.model.get('format')
+    if (stat === 0 || isNaN(stat)) {
+      return ''
     } else {
-      var format = this.format
+      if (this.model.get('format')) {
+        var format = this.model.get('format')
+      } else {
+        var format = this.format
+      }
+      return format(stat)
     }
-    return format(stat)
   }
 })
 

@@ -133,6 +133,7 @@ var Dashboard = Backbone.View.extend({
     var container = $('<div class="chart-container"/>')
     container.append(view.render().el)
     this.$el.find('.charts > .row').append(container)
+    view.resize()
     chart.update()
   },
   render: function() {

@@ -7,7 +7,8 @@ var ChartModel = Backbone.Model.extend({
       sort_key: false,
       sort_desc: true,
       chart_type: 'bar',
-      key: 'Name'
+      key: 'Name',
+      loading: false
     }
   },
   initialize: function() {
@@ -15,6 +16,7 @@ var ChartModel = Backbone.Model.extend({
   },
   update: function(filters) {
     var self = this
+    this.set('loading', true)
     this.clearData()
     if (this.request && this.request.readyState !== 4) {
       this.request.abort()
@@ -27,18 +29,23 @@ var ChartModel = Backbone.Model.extend({
       }
     })
     this.request = $.getJSON(url, function(res){
+      self.set('loading', false)
       self.set('data', res)
     })
   },
   clearData: function() {
     var data = this.get('data')
     if (data) {
-      var keys = _.without(_.keys(data[0]), this.get('key'))
-      data.forEach(function(row) {
-        keys.forEach(function(key) {
-          row[key] = 0
+      if (this.get('chart_type') === 'stat') {
+        data[0][this.get('key')] = 0
+      } else {
+        var keys = _.without(_.keys(data[0]), this.get('key'))
+        data.forEach(function(row) {
+          keys.forEach(function(key) {
+            row[key] = 0
+          })
         })
-      })
+      }
       this.set('data', data)
       this.trigger('change:data')
     }

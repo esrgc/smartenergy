@@ -13,13 +13,12 @@ var BarChartView = ChartView.extend({
       toolbar: $('#toolbar-partial').html()
     }))
     this.$el.find('.chart-inner').css('overflow', 'hidden')
-
+    this.chartel = this.$el.find('.chart-inner > .the-chart').get(0)
     this.chart = false
     return this
   },
   drawChart: function() {
-    var chartel = this.$el.find('.chart-inner').get(0)
-    this.chart = new GeoDash.BarChartVertical(chartel, {
+    this.chart = new GeoDash.BarChartVertical(this.chartel, {
       x: this.model.get('key')
       , y: []
       , colors: Dashboard.colors

@@ -70,7 +70,7 @@ api.get('/getPieData', function(req, res){
     {geo: "Wicomico", value: 500},
     {geo: "Worcester", value: 500}
   ]
-  var data = filter(req.query, data)
+  //var data = filter(req.query, data)
   returnData(req, res, data)
 })
 
@@ -82,7 +82,7 @@ api.get('/getPieData2', function(req, res){
     {geo: "Baltimore City", value: 20},
     {geo: "Worcester", value: 50}
   ]
-  var data = filter(req.query, data)
+  //var data = filter(req.query, data)
   returnData(req, res, data)
 })
 

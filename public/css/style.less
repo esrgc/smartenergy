@@ -10,7 +10,8 @@ html, body {
 }
 
 body {
-  background: url('../img/white_wall_hash/white_wall_hash.png') repeat;
+  /*background: url('../img/white_wall_hash/white_wall_hash.png') repeat;*/
+  background: #fff;
   font-family: 'Roboto', sans-serif;
 }
 
@@ -67,6 +68,7 @@ body {
     overflow-y: auto;
     clear: both;
     border: 1px solid @tableBorder;
+    position: relative;
     .stat {
       height: 100%;
       padding: 10px;
@@ -75,6 +77,23 @@ body {
         display: inline-block;
         vertical-align: middle;
       }
+    }
+    .the-chart {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      background-color: inherit;
+      z-index: 0;
+    }
+    .loader {
+      /*display: none;*/
+      text-align: center;
+      position: absolute;
+      width: 100%;
+      z-index: 1;
+      font-size: 48px;
+      color: #ededed;
     }
     .filters {
       height: 100%;

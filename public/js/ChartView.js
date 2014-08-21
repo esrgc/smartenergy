@@ -13,6 +13,7 @@ var ChartView = Backbone.View.extend({
       self.update()
     })
     this.listenTo(this.model, 'change:data', this.update)
+    this.listenTo(this.model, 'change:loading', this.loading)
     this.listenTo(Dashboard.chartCollection, 'reset', this.remove)
   },
   render: function() {
@@ -31,10 +32,22 @@ var ChartView = Backbone.View.extend({
   resize: function() {
     var height = this.$el.find('.chart').innerHeight() - this.$el.find('.title').outerHeight() - parseInt(this.$el.find('.chart').css('padding'))*2 - 2
     this.$el.find('.chart-inner').height(height)
+    this.$el.find('.loader').css('line-height', height + 'px')
   },
   remove: function() {
     this.$el.parent().remove()
-    //this.$el.remove()
+  },
+  loading: function(e) {
+    var self = this
+    if (this.model.get('loading')) {
+      this.$el.find('.loader').show()
+      setTimeout(function() {
+        self.$el.find('.the-chart').hide()
+      }, 500)
+    } else {
+      this.$el.find('.loader').hide()
+      this.$el.find('.the-chart').show()
+    }
   },
   prepData: function(res) {
     return res

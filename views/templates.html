@@ -57,7 +57,10 @@
   <div class="chart">
     {{> toolbar }}
     {{> title }}
-    <div class="chart-inner"></div>
+    <div class="chart-inner">
+      <div class="loader"><i class="fa fa-circle-o-notch fa-spin"></i></div>
+      <div class="the-chart"></div>
+    </div>
   </div>
 </div>
 </script>
@@ -67,6 +70,7 @@
   <div class="chart">
     {{> title }}
     <div class="chart-inner">
+      <div class="loader"><i class="fa fa-circle-o-notch fa-spin"></i></div>
       <div class="stat"><span></span></div>
     </div>
   </div>
