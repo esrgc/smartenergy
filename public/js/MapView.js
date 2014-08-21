@@ -131,13 +131,15 @@ var MapView = Backbone.View.extend({
   },
   updateGeoFilters: function(filter) {
     var self = this
-    var layer = this.layer_hash[filter.get('type')]
-    layer.eachLayer(function(l) {
-      if(l.feature.properties.name === filter.get('value')) {
-        console.log(l)
-        l.setStyle(self.style)
-      }
-    })
+    if (filter.get('geo')) {
+      var layer = this.layer_hash[filter.get('type')]
+      layer.eachLayer(function(l) {
+        if(l.feature.properties.name === filter.get('value')) {
+          console.log(l)
+          l.setStyle(self.style)
+        }
+      })
+    }
   },
   update: function() {
     var self = this

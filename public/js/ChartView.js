@@ -14,7 +14,7 @@ var ChartView = Backbone.View.extend({
     })
     this.listenTo(this.model, 'change:data', this.update)
     this.listenTo(this.model, 'change:loading', this.loading)
-    this.listenTo(Dashboard.chartCollection, 'reset', this.remove)
+    this.listenTo(this.model, 'remove', this.remove)
   },
   render: function() {
     this.$el.html(Mustache.render(this.template, this.model.toJSON(), {

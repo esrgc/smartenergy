@@ -150,13 +150,14 @@ var Dashboard = Backbone.View.extend({
   render: function() {
     this.$el.html(Mustache.render(this.template))
 
-    this.filterCollection.reset(this.filter_hash['#renewableenergy'])
+    this.filterCollection.add(this.filter_hash['#renewableenergy'])
 
     this.chartCollection.add(this.mapModel)
 
-    var filterMenuView = new FilterMenuView()
-    this.$el.find('.charts > .row').append(filterMenuView.render().el)
-    filterMenuView.update()
+    this.filterMenuView = new FilterMenuView()
+    this.$el.find('.charts > .row').append(this.filterMenuView.render().el)
+
+    this.filterMenuView.update()
 
     this.chartCollection.add(this.chart_hash['#renewableenergy'])
 
@@ -169,13 +170,19 @@ var Dashboard = Backbone.View.extend({
   },
   switchTab: function(e) {
     var self = this
-    var geos = this.filterCollection.filter(function(model){
-      return model.get('type') === 'geo'
-    })
+    var filters = []
+    var geos = this.filterCollection.where({geo: true})
     this.filterCollection.reset(this.filter_hash[e.target.hash].concat(geos))
-    this.chartCollection.reset()
+    this.filterMenuView.update()
+
+    var charts = []
+    this.chartCollection.each(function(chart, idx) {
+      if (chart.get('chart_type') !== 'map') {
+        charts.push(chart)
+      }
+    })
+    this.chartCollection.remove(charts)
     this.chartCollection.add(this.chart_hash[e.target.hash])
-    this.chartCollection.add(this.mapModel)
   }
 })
 
