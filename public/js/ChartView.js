@@ -8,8 +8,7 @@ var ChartView = Backbone.View.extend({
     var self = this
     this.options = options || {};
     $(window).on('resize', function(){
-      self.render()
-      self.resize()
+      self.chart = false
       self.update()
     })
     this.listenTo(this.model, 'change:data', this.update)
@@ -23,6 +22,7 @@ var ChartView = Backbone.View.extend({
     return this
   },
   update: function() {
+    console.log(this.chart)
     if(!this.chart) {
       this.resize()
       this.drawChart()
