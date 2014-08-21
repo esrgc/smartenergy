@@ -20,7 +20,6 @@ var FilterMenuView = ChartView.extend({
     this.$el.html(Mustache.render(this.template, {title: 'Project Types'}, {
       title: $('#title-partial').html()
     }))
-    this.update()
     this.changeSummary()
     return this
   },

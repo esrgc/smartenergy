@@ -30,6 +30,7 @@ var Dashboard = Backbone.View.extend({
     this.makeCharts()
   },
   makeCharts: function() {
+    this.mapModel = {title: "Map", api: 'api/getPoints', key: 'geo', chart_type: 'map'}
     this.chart_hash = {
       '#energyeffiency': [
         {title: "Electricity Savings", api: 'api/getPieData', key: 'geo', chart_type: 'pie'},
@@ -98,55 +99,65 @@ var Dashboard = Backbone.View.extend({
   },
   renderChart: function(chart) {
     var view = {}
-    switch (chart.get('chart_type')) {
-      case 'bar':
-        view = new BarChartView({
-          model: chart
-        })
-        break
-      case 'line':
-        view = new LineChartView({
-          model: chart
-        })
-        break
-      case 'pie':
-        view = new PieChartView({
-          model: chart
-        })
-        break
-      case 'hbar':
-        view = new HorizontalBarChartView({
-          model: chart
-        })
-        break
-      case 'table':
-        view = new TableView({
-          model: chart
-        })
-        break
-      case 'stat':
-        view = new StatView({
-          model: chart
-        })
-        break
+    if (chart.get('chart_type') === 'map') {
+      var mapView = new MapView({
+        model: chart
+      })
+
+      this.$el.find('.charts > .row').append(mapView.render().el)
+      mapView.makeMap()
+      chart.update()
+    } else {
+      switch (chart.get('chart_type')) {
+        case 'bar':
+          view = new BarChartView({
+            model: chart
+          })
+          break
+        case 'line':
+          view = new LineChartView({
+            model: chart
+          })
+          break
+        case 'pie':
+          view = new PieChartView({
+            model: chart
+          })
+          break
+        case 'hbar':
+          view = new HorizontalBarChartView({
+            model: chart
+          })
+          break
+        case 'table':
+          view = new TableView({
+            model: chart
+          })
+          break
+        case 'stat':
+          view = new StatView({
+            model: chart
+          })
+          break
+      }
+      var container = $('<div class="chart-container"/>')
+      container.append(view.render().el)
+      this.$el.find('.charts > .row').append(container)
+      view.resize()
+      chart.update()
     }
-    var container = $('<div class="chart-container"/>')
-    container.append(view.render().el)
-    this.$el.find('.charts > .row').append(container)
-    view.resize()
-    chart.update()
   },
   render: function() {
     this.$el.html(Mustache.render(this.template))
-    var mapView = new MapView()
-
-    this.$el.find('.charts .row').append(mapView.render().el)
-    mapView.makeMap()
-
-    var filterMenuView = new FilterMenuView()
-    this.$el.find('.charts .row').append(filterMenuView.render().el)
 
     this.filterCollection.reset(this.filter_hash['#renewableenergy'])
+
+    this.chartCollection.add(this.mapModel)
+
+    var filterMenuView = new FilterMenuView()
+    this.$el.find('.charts > .row').append(filterMenuView.render().el)
+    filterMenuView.update()
+
     this.chartCollection.add(this.chart_hash['#renewableenergy'])
 
     return this
@@ -164,6 +175,7 @@ var Dashboard = Backbone.View.extend({
     this.filterCollection.reset(this.filter_hash[e.target.hash].concat(geos))
     this.chartCollection.reset()
     this.chartCollection.add(this.chart_hash[e.target.hash])
+    this.chartCollection.add(this.mapModel)
   }
 })
 

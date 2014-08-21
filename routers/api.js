@@ -54,6 +54,14 @@ api.get('/getContribution', function(req, res){
   })
 })
 
+api.get('/getPoints', function(req, res){
+  var qry = '$select=point,%20technology,program_name,link,mea_award,capacity,capacity_units'
+  qry += filter(req.query)
+  socrataDataset.query(qry, function(data) {
+    returnData(req, res, data)
+  })
+})
+
 api.get('/getPieData', function(req, res){
   var data = [
     {geo: "Allegany", value: 500},
