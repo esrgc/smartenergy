@@ -42,7 +42,9 @@ var ChartView = Backbone.View.extend({
     if (this.model.get('loading')) {
       this.$el.find('.loader').show()
       setTimeout(function() {
-        self.$el.find('.the-chart').hide()
+        if (self.model.get('loading')) {
+          self.$el.find('.the-chart').hide()
+        }
       }, 500)
     } else {
       this.$el.find('.loader').hide()
