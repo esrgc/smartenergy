@@ -141,6 +141,40 @@ body {
   margin-bottom: 0px;
   background: @main;
   border: 1px solid @main;
+  .layerToggle {
+    background: #111;
+    border: 1px solid black;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    -webkit-background-clip: padding-box;
+    -moz-background-clip: padding;
+    background-clip: padding-box;
+    color: #f9f9f9;
+    padding: 0 2px 0 2px;
+    opacity: .8;
+    text-align: left;
+    width: 90px;
+    margin: 1px 0 1px 1px!important;
+    &:hover {
+      cursor: pointer;
+      opacity: .9;
+    }
+    p {
+      font-size: 11px;
+      margin: 0 0 3px 0;
+      i {
+        display: none;
+        float: right;
+        margin-top: 2px;
+      }
+      &.active {
+        i {
+          display: inline;
+        }
+      }
+    }
+  }
 }
 
 .dashboard .chart.filters .chart-inner {

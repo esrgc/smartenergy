@@ -1,6 +1,10 @@
 var MapView = Backbone.View.extend({
   template: $('#map-template').html(),
   renewables_template: $('#renewable-popup').html(),
+  layers_template: $('#layers-template').html(),
+  events: {
+    'click .layerToggle': 'layerToggle'
+  },
   initialize: function() {
     this.render()
     this.listenTo(this.model, 'change:data', this.update, this)
@@ -13,15 +17,8 @@ var MapView = Backbone.View.extend({
   makeMap: function() {
     var self = this
     var el = this.$el.find('.map').get(0)
-    this.map = L.map(el).setView([39, -77], 7)
+    this.map = L.map(el, {attributionControl: false}).setView([39, -77], 7)
     this.makeLayers()
-    this.map.on('moveend', function(e){
-      console.log(self.map.getCenter())
-    })
-    this.map.on('baselayerchange', function(e) {
-      var geofilters = Dashboard.filterCollection.where({geo: true})
-      Dashboard.filterCollection.remove(geofilters)
-    })
   },
   makeLayers: function() {
     var self = this
@@ -57,7 +54,7 @@ var MapView = Backbone.View.extend({
         }).addTo(self.map)
       }),
       $.getJSON('data/mdcnty.json', function(json) {
-        self.geomLayer = L.geoJson(json, {
+        self.counties = L.geoJson(json, {
           style: self.style,
           onEachFeature: self.onEachFeature.bind(self),
           name: 'county'
@@ -86,29 +83,44 @@ var MapView = Backbone.View.extend({
       })
     ).then(function() {
 
-      var baseMaps = {
-        "Maryland": self.maryland,
-        "Counties": self.geomLayer,
-        "Legislative Districts": self.legislativeDistricts,
-        "Congressional Districts": self.congressionalDistricts,
-        "Zip Codes": self.zips
-      }
-
-      var overlayMaps = {
-        "Individual Projects": self.projects
-      }
-
-      self.layer_hash = {
-        "maryland": self.maryland,
-        "county": self.geomLayer,
-        "legislative": self.legislativeDistricts,
-        "congressional": self.congressionalDistricts,
-        "zipcode": self.zips,
-        "projects": self.projects
-      }
-
-      L.control.layers(baseMaps, overlayMaps).addTo(self.map)
+      self.layer_switcher = {layers: [
+        {name: "Maryland", id: "maryland", layer: self.maryland, type: 'base'},
+        {name: "Counties", id: "county", layer: self.counties, type: 'base'},
+        {name: "Leg. Dist.", id: "legislative", layer: self.legislativeDistricts, type: 'base'},
+        {name: "Cong. Dist.", id: "congressional", layer: self.congressionalDistricts, type: 'base'},
+        {name: "Zip Codes", id: "zipcode", layer: self.zips, type: 'base'},
+        {name: "Individual Projects", id: "projects", layer: self.projects, type: 'overlay'}
+      ]}
+      var layers_html = Mustache.render(self.layers_template, self.layer_switcher)
+      self.$el.find('.map').find('.leaflet-bottom.leaflet-left').html(layers_html)
+      self.$el.find('#maryland').find('p').addClass('active')
     })
+  },
+  layerToggle: function(e) {
+    var self = this
+    var id = $(e.target).parent().attr('id')
+    var layer = _.where(this.layer_switcher.layers, {id: id})[0]
+    if (layer.type === 'overlay') {
+      if (self.map.hasLayer(layer.layer)) {
+        this.map.removeLayer(layer.layer)
+        $(e.target).removeClass('active')
+      } else {
+        this.map.addLayer(layer.layer)
+        $(e.target).addClass('active')
+      }
+    } else if (layer.type === 'base') {
+      if (!this.map.hasLayer(layer.layer)) {
+        var base = _.where(this.layer_switcher.layers, {type: 'base'})
+        _.each(base, function(l) {
+          self.map.removeLayer(l.layer)
+          self.$el.find('.layerToggle#' + l.id).find('p').removeClass('active')
+        })
+        var geofilters = Dashboard.filterCollection.where({geo: true})
+        Dashboard.filterCollection.remove(geofilters)
+        this.map.addLayer(layer.layer)
+        $(e.target).addClass('active')
+      }
+    }
   },
   onEachFeature: function(feature, layer) {
     var self = this
@@ -132,10 +144,9 @@ var MapView = Backbone.View.extend({
   updateGeoFilters: function(filter) {
     var self = this
     if (filter.get('geo')) {
-      var layer = this.layer_hash[filter.get('type')]
+      var layer = _.where(this.layer_switcher.layers, {id: filter.get('type')})[0].layer
       layer.eachLayer(function(l) {
         if(l.feature.properties.name === filter.get('value')) {
-          console.log(l)
           l.setStyle(self.style)
         }
       })
