@@ -32,9 +32,8 @@
         <table class="table table-bordered table-striped table-condensed">
           <thead>
             <tr>
-            {{#data.columns}}
-              <th>{{.}}</th>
-            {{/data.columns}}
+            <th id="{{key}}">{{key}}</th>
+            <th id="value">{{units}}</th>
             </tr>
           </thead>
           <tbody>
@@ -71,7 +70,7 @@
     {{> title }}
     <div class="chart-inner">
       <div class="loader"><i class="fa fa-circle-o-notch fa-spin"></i></div>
-      <div class="stat"><span></span></div>
+      <div class="stat"></div>
     </div>
   </div>
 </div>

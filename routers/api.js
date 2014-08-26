@@ -30,8 +30,16 @@ api.get('/getProgramType', function(req, res){
   })
 })
 
-api.get('/getCapacity', function(req, res){
+api.get('/getCapacityByCounty', function(req, res){
   var qry = '$select=county,sum(capacity)%20as%20value&$group=county'
+  qry += filter(req.query)
+  socrataDataset.query(qry, function(data) {
+    returnData(req, res, data)
+  })
+})
+
+api.get('/getCapacityBySector', function(req, res){
+  var qry = '$select=sector,sum(capacity)%20as%20value&$group=sector'
   qry += filter(req.query)
   socrataDataset.query(qry, function(data) {
     returnData(req, res, data)
@@ -47,7 +55,7 @@ api.get('/getSector', function(req, res){
 })
 
 api.get('/getContribution', function(req, res){
-  var qry = '$select=sum(mea_award)%20as%20contribution'
+  var qry = '$select=sum(mea_award)%20as%20contribution,sum(total_project_cost)%20as%20project_cost,count(id)%20as%20total_projects'
   qry += filter(req.query)
   socrataDataset.query(qry, function(data) {
     returnData(req, res, data)

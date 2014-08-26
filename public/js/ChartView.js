@@ -14,6 +14,7 @@ var ChartView = Backbone.View.extend({
     this.listenTo(this.model, 'change:data', this.update)
     this.listenTo(this.model, 'change:loading', this.loading)
     this.listenTo(this.model, 'remove', this.remove)
+    this.colors = Dashboard.colors
   },
   render: function() {
     this.$el.html(Mustache.render(this.template, this.model.toJSON(), {
@@ -22,12 +23,13 @@ var ChartView = Backbone.View.extend({
     return this
   },
   update: function() {
-    console.log(this.chart)
     if(!this.chart) {
       this.resize()
       this.drawChart()
     }
-    this.chart.update(this.prepData(this.model.get('data')))
+    var d = this.prepData(this.model.get('data'))
+    this.chart.setColor(this.colors)
+    this.chart.update(d)
   },
   resize: function() {
     var height = this.$el.find('.chart').innerHeight() - this.$el.find('.title').outerHeight() - parseInt(this.$el.find('.chart').css('padding'))*2 - 2

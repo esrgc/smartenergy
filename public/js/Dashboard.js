@@ -35,36 +35,35 @@ var Dashboard = Backbone.View.extend({
       '#energyeffiency': [
         {title: "Electricity Savings", api: 'api/getPieData', key: 'geo', chart_type: 'pie'},
         {title: "CO2 Emissions Reductions", api: 'api/getPieData2', key: 'geo', chart_type: 'pie'},
-        {title: "Program Type", api: 'api/getProgramType', key: 'program_type', chart_type: 'pie'},
-        {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie'},
-        {title: "MEA Contribution", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')}
+        {title: "Program Type", api: 'api/getProgramType', key: 'program_type', chart_type: 'pie', units: 'projects'},
+        {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie', units: 'projects'},
+        {title: "Investment Stats", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')}
       ],
       '#renewableenergy': [
-        {title: "Technology Type", api: 'api/getTechnology', key: 'technology', chart_type: 'bar'},
-        {title: "Program Type", api: 'api/getProgramType', key: 'program_type', chart_type: 'pie'},
-        {title: "Capacity", api: 'api/getCapacity', key: 'county', chart_type: 'pie'},
-        {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie'},
-        {title: "MEA Contribution", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')}
+        {title: "Technology Type", api: 'api/getTechnology', key: 'technology', chart_type: 'pie', units: 'projects'},
+        {title: "Program Type", api: 'api/getProgramType', key: 'program_type', chart_type: 'pie', units: 'projects'},
+        {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie', units: 'projects'},
+        {title: "Investment Stats", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')}
       ],
       '#transportation': [
         {title: "Charging/Fueling Station Technology", api: 'api/getPieData', key: 'geo', chart_type: 'pie'},
         {title: "Vehicle Technology", api: 'api/getPieData2', key: 'geo', chart_type: 'pie'},
-        {title: "Program Type", api: 'api/getProgramType', key: 'program_type', chart_type: 'pie'},
-        {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie'},
-        {title: "MEA Contribution", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')},
+        {title: "Program Type", api: 'api/getProgramType', key: 'program_type', chart_type: 'pie', units: 'projects'},
+        {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie', units: 'projects'},
+        {title: "Investment Stats", api: 'api/getContribution', key: 'contribution', chart_type: 'stat', format: d3.format('$,')},
       ]
     }
   },
   makeFilters: function() {
     this.effiency = []
     this.renewables = [
-      {value: 'Solar PV', color: '#FF851B', type: 'technology'},
-      {value: 'Solar Hot Water', color: '#39CCCC', type: 'technology'},
-      {value: 'Geothermal', color: '#FF4136', type: 'technology'},
-      {value: 'Wood Burning Stoves', color: '#FFDC00', type: 'technology'},
-      {value: 'Wind', color: '#B10DC9', type: 'technology'},
-      {value: 'Landfill Gas', color: '#01FF70', type: 'technology'},
-      {value: 'Bioheat', color: '#0074D9', type: 'technology'}
+      {value: 'Solar PV', color: '#FF851B', type: 'technology', units: 'kW'},
+      {value: 'Solar Hot Water', color: '#39CCCC', type: 'technology', units: 'sqft'},
+      {value: 'Geothermal', color: '#FF4136', type: 'technology', units: 'tons'},
+      {value: 'Wood Burning Stove', color: '#FFDC00', type: 'technology', units: 'BTUs/hr'},
+      {value: 'Wind', color: '#B10DC9', type: 'technology', units: 'kW'},
+      {value: 'Landfill Gas', color: '#01FF70', type: 'technology', units: 'kW'},
+      {value: 'Bioheat', color: '#0074D9', type: 'technology', units: 'gallons'}
     ]
     this.transportation = [
       {value: 'Electric', color: '#0074D9', type: 'vehicle-technology'},
@@ -164,6 +163,28 @@ var Dashboard = Backbone.View.extend({
     return this
   },
   update: function() {
+    var self = this
+    var x = {title: "Capacity/Annual Savings", api: 'api/getCapacityByCounty', key: 'county', chart_type: 'pie'}
+    var capacity_charts = [
+      {title: "Capacity/Annual Savings By County", api: 'api/getCapacityByCounty', key: 'county', chart_type: 'pie'},
+      {title: "Capacity/Annual Savings By Sector", api: 'api/getCapacityBySector', key: 'sector', chart_type: 'pie'}
+    ]
+    capacity_charts.forEach(function(chart) {
+      var tech_filters = self.filterCollection.where({active: true, type: 'technology'})
+      if (tech_filters.length === 1) {
+        var chart_exits = self.chartCollection.where({title: chart.title})
+        if (chart_exits.length === 0) {
+          chart.units = tech_filters[0].get('units')
+          self.chartCollection.add(chart)
+        }
+      } else {
+        self.chartCollection.each(function(_chart) {
+          if (_chart.get('title') === chart.title) {
+            self.chartCollection.remove(_chart)
+          }
+        })
+      }
+    })
     this.chartCollection.each(function(chart) {
       chart.update()
     })

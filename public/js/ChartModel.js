@@ -8,11 +8,13 @@ var ChartModel = Backbone.Model.extend({
       sort_desc: true,
       chart_type: 'bar',
       key: 'Name',
-      loading: false
+      loading: false,
+      hoverTemplate: '{{label}}: {{value}}',
+      units: ''
     }
   },
   initialize: function() {
-
+    this.set('hoverTemplate', '{{label}}: {{value}} ' + this.get('units'))
   },
   update: function(filters) {
     var self = this

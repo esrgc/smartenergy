@@ -56,7 +56,8 @@ var TableView = ChartView.extend({
     return table
   },
   sortByHeader: function(e) {
-    var column = e.target.innerHTML
+    var column = $(e.target).attr('id')
+    console.log(column)
     this.model.sortByKey(column)
   },
   setGroupBy: function(e){
@@ -100,7 +101,6 @@ var TableView = ChartView.extend({
     }
     this.$el.parent().html(view.render().el)
     view.update()
-    this.remove()
   }
 })
 
