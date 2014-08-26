@@ -19,20 +19,20 @@ var StatView = ChartView.extend({
   },
   update: function() {
     this.resize()
-    var stat = this.prepData(this.model.get('data'))
+    var round = d3.format('.2')
+    var data = this.model.get('data')[0]
+    var stat = {}
+    var i = (parseFloat(data.project_cost) - parseFloat(data.contribution))/parseFloat(data.contribution)
+    stat.investment_leverage = d3.round(i, 2)
+    stat.contribution = this.format(data.contribution)
     var html = '<ul>'
     html += '<li>MEA Contribution: <b>' + stat.contribution + '</b></li>'
     html += '<li>Investment Leverage: <b>' + stat.investment_leverage + '</b></li>'
-    html += '<li>Total Projects: <b>' + stat.total_projects + '</b></li>'
+    html += '<li>Total Projects: <b>' + data.total_projects + '</b></li>'
     html += '</ul>'
     this.$el.find('.stat').html(html)
   },
   prepData: function(data){
-    var data = data[0]
-    var round = d3.format('.2')
-    var i = (parseFloat(data.project_cost) - parseFloat(data.contribution))/parseFloat(data.contribution)
-    data.investment_leverage = d3.round(i, 2)
-    data.contribution = this.format(data.contribution)
     return data
   }
 })
