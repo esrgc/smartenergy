@@ -10,8 +10,9 @@ var FilterMenuView = ChartView.extend({
 
   },
   initialize: function(){
-    //Dashboard.filterCollection.on('add', this.addFilter, this)
-    Dashboard.filterCollection.on('remove', this.removeFilter, this)
+    Dashboard.filterCollection.on('change:active', this.changeSummary, this)
+    Dashboard.filterCollection.on('add', this.changeSummary, this)
+    Dashboard.filterCollection.on('remove', this.changeSummary, this)
     Dashboard.filterCollection.on('reset', this.removeFilter, this)
   },
   render: function() {
@@ -54,7 +55,91 @@ var FilterMenuView = ChartView.extend({
   },
   changeSummary: function() {
     $('.dashboard .filter-summary').html('')
-    var filters = Dashboard.filterCollection.where({active: true})
+    var summary = ''
+    var filters = _.reject(Dashboard.filterCollection.where({active: true}), function(f) {
+      if (f.get('type') === 'group') return true
+    })
+    if (filters.length == 0) {
+      summary = 'All Projects'
+    } else {
+      var filters = Dashboard.filterCollection.where({active: true, type: 'technology'})
+      if (filters.length) {
+        var x = []
+        _.each(filters, function(f) {
+          x.push(f.get('value'))
+        })
+        if (filters.length == 1) {
+          summary += x[0] + ' projects'
+        } else {
+          summary += _.initial(x).join(', ')
+            + ' and ' + _.last(x)
+            + ' projects'
+        }
+      } else {
+        summary += 'All projects'
+      }
+      var filters = Dashboard.filterCollection.where({active: true, geo: true})
+      console.log(filters.length)
+      if (filters.length) {
+        var x = []
+        _.each(filters, function(f) {
+          x.push(f.get('value'))
+        })
+        var type = filters[0].get('type')
+        var geo_lookup = {
+          'county': 'County',
+          'legislative': 'Legislative District',
+          'congressional': 'Congressional District',
+          'zipcode': 'Zip Code',
+        }
+        summary += ' in '
+        if (filters.length === 1 ) {
+          if (type === 'county') {
+            summary += x[0] + ' ' + geo_lookup[type]
+          } else {
+            summary += geo_lookup[type] + ' ' + x[0]
+          }
+        } else {
+          var list = '' + _.initial(x).join(', ')
+            + ' and ' + _.last(x)
+          if (type === 'county') {
+            summary += list + ' Counties'
+          } else {
+            summary += geo_lookup[type] + 's ' + list
+          }
+        }
+      }
+      var filters = Dashboard.filterCollection.where({active: true, type: 'program_type'})
+      if (filters.length) {
+        var x = []
+        _.each(filters, function(f) {
+          x.push(f.get('value'))
+        })
+        if (filters.length == 1) {
+          summary += ' funded by ' + x.join(', ')
+        } else {
+          summary += ' funded by '
+            + _.initial(x).join(', ')
+            + ' and ' + _.last(x)
+        }
+      }
+      var filters = Dashboard.filterCollection.where({active: true, type: 'sector'})
+      if (filters.length) {
+        var x = []
+        _.each(filters, function(f) {
+          x.push(f.get('value'))
+        })
+        if (filters.length == 1) {
+          summary += ' in the ' + x[0] + ' sector'
+        } else {
+          summary += ' in '
+            + _.initial(x).join(', ')
+            + ' and ' + _.last(x)
+            + ' sectors'
+        }
+      }
+    }
+    $('.dashboard .filter-summary').html(summary)
   }
 })
 

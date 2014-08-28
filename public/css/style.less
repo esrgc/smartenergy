@@ -194,6 +194,12 @@ body {
   float: left;
   margin-right: 5px;
   margin-bottom: 5px;
+  &.active:before {
+    font-family: FontAwesome;
+    font-size: 10px;
+    padding-right: 3px;
+    content:"\f00c";
+  }
 }
 
 .dashboard .filters button.clear {
@@ -235,3 +241,12 @@ body {
   }
 }
 
+.filter-summary {
+  text-align: left;
+  font-size: 18px;
+  padding-bottom: 10px;
+  color: #444;
+  .filter {
+    color: #444;
+  }
+}
