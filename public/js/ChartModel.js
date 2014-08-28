@@ -22,7 +22,7 @@ var ChartModel = Backbone.Model.extend({
     var self = this
     if (this.get('visible')) {
       this.set('loading', true)
-      this.clearData()
+      //this.clearData()
       if (this.request && this.request.readyState !== 4) {
         this.request.abort()
       }

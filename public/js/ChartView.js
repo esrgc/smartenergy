@@ -59,16 +59,16 @@ var ChartView = Backbone.View.extend({
     if (this.model.get('loading')) {
       this.$el.find('.loader').show()
       if (this.model.get('chart_type') === 'stat') {
-        self.$el.find('.the-chart').hide()
+        //self.$el.find('.the-chart').hide()
       } else {
         setTimeout(function() {
           if (self.model.get('loading')) {
-            self.$el.find('.the-chart').hide()
+            //self.$el.find('.the-chart').hide()
           }
         }, 500)
       }
     } else {
-      this.$el.find('.loader').hide()
+      //this.$el.find('.loader').hide()
       this.$el.find('.the-chart').show()
     }
   },
