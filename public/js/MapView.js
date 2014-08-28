@@ -20,6 +20,7 @@ var MapView = Backbone.View.extend({
     var el = this.$el.find('.map').get(0)
     this.map = L.map(el, {attributionControl: false}).setView([39, -77], 7)
     self.$el.find('.map').find('.leaflet-top.leaflet-right').html('<div class="loader"><i class="fa fa-circle-o-notch fa-spin"></i></div>')
+    self.$el.find('.map').find('.leaflet-bottom.leaflet-right').html('<div id="mouseover" class="layerToggle"></div>')
     this.makeLayers()
   },
   makeLayers: function() {
@@ -151,6 +152,14 @@ var MapView = Backbone.View.extend({
           geo: true
         })
       }
+    })
+    layer.on('mouseover', function(e) {
+      console.log(e.target.feature.properties.name)
+      self.$el.find('.map').find('#mouseover').html(e.target.feature.properties.name)
+      self.$el.find('.map').find('#mouseover').show()
+    })
+    layer.on('mouseout', function(e) {
+      self.$el.find('.map').find('#mouseover').hide()
     })
   },
   updateGeoFilters: function(filter) {
