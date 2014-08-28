@@ -68,8 +68,8 @@ var ChartView = Backbone.View.extend({
         }, 500)
       }
     } else {
-      //this.$el.find('.loader').hide()
-      this.$el.find('.the-chart').show()
+      this.$el.find('.loader').hide()
+      //this.$el.find('.the-chart').show()
     }
   },
   prepData: function(res) {
