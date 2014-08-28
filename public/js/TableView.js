@@ -39,6 +39,7 @@ var TableView = ChartView.extend({
       rows: [],
       columns: []
     }
+    console.log(res)
     if(res.length) {
       var data = res
       var columns = _.keys(data[0])

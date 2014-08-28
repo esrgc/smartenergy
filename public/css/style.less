@@ -41,8 +41,15 @@ body {
   }
 }
 
-.chart-container {
-  
+.loader {
+  display: none;
+  text-align: center;
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  z-index: 1;
+  font-size: 24px;
+  color: #e3e3e3;
 }
 
 .chart {
@@ -93,15 +100,6 @@ body {
       top: 0;
       background-color: inherit;
       z-index: 0;
-    }
-    .loader {
-      display: none;
-      text-align: center;
-      position: absolute;
-      width: 100%;
-      z-index: 1;
-      font-size: 48px;
-      color: #ededed;
     }
     .filters {
       height: 100%;

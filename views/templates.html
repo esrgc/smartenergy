@@ -32,7 +32,7 @@
         <table class="table table-bordered table-striped table-condensed">
           <thead>
             <tr>
-            <th id="{{key}}">{{key}}</th>
+            <th id="{{key}}"></th>
             <th id="value">{{units}}</th>
             </tr>
           </thead>
@@ -70,7 +70,7 @@
     {{> title }}
     <div class="chart-inner">
       <div class="loader"><i class="fa fa-circle-o-notch fa-spin"></i></div>
-      <div class="stat"></div>
+      <div class="the-chart"><div class="stat"></div></div>
     </div>
   </div>
 </div>
@@ -84,7 +84,8 @@
       <div class="filters container-fluid">
         <div class="row">
           <div class="filter-box technology col-md-6"><div class="filter-title">Technology</div><div class="the-filters"></div></div>
-          <div class="filter-box vehicle-technology col-md-6"><div class="filter-title">Vehicle Technology</div><div class="the-filters"></div></div>
+          <div class="filter-box vehicle_technology col-md-6"><div class="filter-title">Vehicle Technology</div><div class="the-filters"></div></div>
+          <div class="filter-box charging_fueling_station_technology col-md-6"><div class="filter-title">Charging Station Technology</div><div class="the-filters"></div></div>
           <div class="filter-box program col-md-6"><div class="filter-title">Program</div><div class="the-filters"></div></div>
           <div class="filter-box sector col-md-6"><div class="filter-title">Sector</div><div class="the-filters"></div></div>
         </div>

@@ -11,6 +11,7 @@ var PieChartView = BarChartView.extend({
       , arclabelsMin: 8
       , opacity: 0.9
       , hoverTemplate: this.model.get('hoverTemplate')
+      , arcstrokewidth: 1
     })
   }
 })

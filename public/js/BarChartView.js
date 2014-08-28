@@ -51,22 +51,6 @@ var BarChartView = ChartView.extend({
     }
     return data
   },
-  setColors: function(data) {
-    var self = this
-    var colors = []
-    _.each(data, function(d) {
-      var x = d[self.model.get('key')]
-      var filters = Dashboard.filterCollection.where({value: x})
-      if (filters.length) {
-        if (filters[0].get('color')) {
-          colors.push(filters[0].get('color'))
-        }
-      }
-    })
-    if (colors.length) {
-      self.colors = colors
-    }
-  },
   toTable: function(){
     var TableView = require('./TableView')
     var view = new TableView({

@@ -9,6 +9,7 @@ var MapView = Backbone.View.extend({
     this.render()
     this.listenTo(this.model, 'change:data', this.update, this)
     this.listenTo(Dashboard.filterCollection, 'remove', this.updateGeoFilters, this)
+    this.listenTo(this.model, 'change:loading', this.loading)
   },
   render: function() {
     this.$el.html(Mustache.render(this.template))
@@ -18,6 +19,7 @@ var MapView = Backbone.View.extend({
     var self = this
     var el = this.$el.find('.map').get(0)
     this.map = L.map(el, {attributionControl: false}).setView([39, -77], 7)
+    self.$el.find('.map').find('.leaflet-top.leaflet-right').html('<div class="loader"><i class="fa fa-circle-o-notch fa-spin"></i></div>')
     this.makeLayers()
   },
   makeLayers: function() {
@@ -34,8 +36,8 @@ var MapView = Backbone.View.extend({
 
     this.circlestyle = {
       radius: 3,
-      fillColor: "#ff7800",
-      color: "#000",
+      fillColor: "#999999",
+      color: "#000000",
       weight: 1,
       opacity: 1,
       fillOpacity: 0.8
@@ -96,6 +98,12 @@ var MapView = Backbone.View.extend({
       self.$el.find('#maryland').find('p').addClass('active')
     })
   },
+  makePopup: function(feature) {
+    if (feature.mea_award) {
+       feature.mea_award = d3.format('$,')(feature.mea_award)
+    }
+    return Mustache.render(this.renewables_template, feature)
+  },
   layerToggle: function(e) {
     var self = this
     var id = $(e.target).parent().attr('id')
@@ -104,9 +112,11 @@ var MapView = Backbone.View.extend({
       if (self.map.hasLayer(layer.layer)) {
         this.map.removeLayer(layer.layer)
         $(e.target).removeClass('active')
+        this.model.set('visible', false)
       } else {
         this.map.addLayer(layer.layer)
         $(e.target).addClass('active')
+        this.model.set('visible', true)
       }
     } else if (layer.type === 'base') {
       if (!this.map.hasLayer(layer.layer)) {
@@ -118,6 +128,8 @@ var MapView = Backbone.View.extend({
         var geofilters = Dashboard.filterCollection.where({geo: true})
         Dashboard.filterCollection.remove(geofilters)
         this.map.addLayer(layer.layer)
+        //var groupFilter = Dashboard.filterCollection.findWhere({type: 'group'})
+        //if (layer.id !== 'maryland') groupFilter.set('value', layer.id)
         $(e.target).addClass('active')
       }
     }
@@ -159,9 +171,11 @@ var MapView = Backbone.View.extend({
       if (feature.point) {
         var latlng = feature.point.split(',').map(parseFloat)
         if (latlng.length == 2) {
-          var filter = Dashboard.filterCollection.where({value: feature.technology})
-          if (filter.length) {
-            self.circlestyle.fillColor = filter[0].get('color')
+          if (feature.technology) {
+            var filter = Dashboard.filterCollection.where({value: feature.technology})
+            if (filter.length) {
+              self.circlestyle.fillColor = filter[0].get('color')
+            }
           }
           var marker = L.circleMarker(latlng, self.circlestyle)
           marker.bindPopup(self.makePopup(feature))
@@ -170,11 +184,8 @@ var MapView = Backbone.View.extend({
       }
     })
   },
-  makePopup: function(feature) {
-    if (feature.mea_award) {
-       feature.mea_award = d3.format('$,')(feature.mea_award)
-    }
-    return Mustache.render(this.renewables_template, feature)
+  loading: function() {
+    this.$el.find('.map').find('.loader').toggle()
   }
 })
 

@@ -34,9 +34,12 @@ var FilterMenuView = ChartView.extend({
       if (filter.get('type') === 'technology') {
         self.$el.find('.technology').show()
         self.$el.find('.technology .the-filters').append(new TechnologyFilter({model: filter}).render().el)
-      } if (filter.get('type') === 'vehicle-technology') {
-        self.$el.find('.vehicle-technology').show()
-        self.$el.find('.vehicle-technology .the-filters').append(new TechnologyFilter({model: filter}).render().el)
+      } else if (filter.get('type') === 'vehicle_technology') {
+        self.$el.find('.vehicle_technology').show()
+        self.$el.find('.vehicle_technology .the-filters').append(new TechnologyFilter({model: filter}).render().el)
+      } else if (filter.get('type') === 'charging_fueling_station_technology') {
+        self.$el.find('.charging_fueling_station_technology').show()
+        self.$el.find('.charging_fueling_station_technology .the-filters').append(new TechnologyFilter({model: filter}).render().el)
       } else if (filter.get('type') === 'sector') {
         self.$el.find('.sector').show()
         self.$el.find('.sector .the-filters').append(new SectorFilter({model: filter}).render().el)

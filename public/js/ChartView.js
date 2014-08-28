@@ -32,22 +32,41 @@ var ChartView = Backbone.View.extend({
     this.chart.update(d)
   },
   resize: function() {
-    var height = this.$el.find('.chart').innerHeight() - this.$el.find('.title').outerHeight() - parseInt(this.$el.find('.chart').css('padding'))*2 - 2
+    var height = this.$el.find('.chart').innerHeight() - this.$el.find('.title').outerHeight(true) - parseInt(this.$el.find('.chart').css('padding'))*2 - 2
     this.$el.find('.chart-inner').height(height)
-    this.$el.find('.loader').css('line-height', height + 'px')
   },
   remove: function() {
     this.$el.parent().remove()
+  },
+  setColors: function(data) {
+    var self = this
+    var colors = []
+    _.each(data, function(d) {
+      var x = d[self.model.get('key')]
+      var filters = Dashboard.filterCollection.where({value: x})
+      if (filters.length) {
+        if (filters[0].get('color')) {
+          colors.push(filters[0].get('color'))
+        }
+      }
+    })
+    if (colors.length) {
+      self.colors = colors
+    }
   },
   loading: function(e) {
     var self = this
     if (this.model.get('loading')) {
       this.$el.find('.loader').show()
-      setTimeout(function() {
-        if (self.model.get('loading')) {
-          self.$el.find('.the-chart').hide()
-        }
-      }, 500)
+      if (this.model.get('chart_type') === 'stat') {
+        self.$el.find('.the-chart').hide()
+      } else {
+        setTimeout(function() {
+          if (self.model.get('loading')) {
+            self.$el.find('.the-chart').hide()
+          }
+        }, 500)
+      }
     } else {
       this.$el.find('.loader').hide()
       this.$el.find('.the-chart').show()
@@ -62,8 +81,7 @@ var ChartView = Backbone.View.extend({
     window.location.href = url
   },
   code: function(e) {
-    var querystring = $.param(Dashboard.filterCollection.toJSON())
-    var url = this.model.get('api') + '?' + querystring
+    var url = this.model.makeQuery()
     window.open(url)
   }
 })

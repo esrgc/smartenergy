@@ -10,19 +10,30 @@ var ChartModel = Backbone.Model.extend({
       key: 'Name',
       loading: false,
       hoverTemplate: '{{label}}: {{value}}',
-      units: ''
+      units: '',
+      visible: true
     }
   },
   initialize: function() {
     this.set('hoverTemplate', '{{label}}: {{value}} ' + this.get('units'))
+    this.listenTo(this, 'change:visible', this.update)
   },
-  update: function(filters) {
+  update: function() {
     var self = this
-    this.set('loading', true)
-    this.clearData()
-    if (this.request && this.request.readyState !== 4) {
-      this.request.abort()
+    if (this.get('visible')) {
+      this.set('loading', true)
+      this.clearData()
+      if (this.request && this.request.readyState !== 4) {
+        this.request.abort()
+      }
+      var url = this.makeQuery()
+      this.request = $.getJSON(url, function(res){
+        self.set('loading', false)
+        self.set('data', res)
+      })
     }
+  },
+  makeQuery: function() {
     var url = this.get('api')
     url += '?'
     Dashboard.filterCollection.each(function(filter) {
@@ -30,24 +41,22 @@ var ChartModel = Backbone.Model.extend({
         url += filter.get('type') + '=' + filter.get('value') + '&'
       }
     })
-    this.request = $.getJSON(url, function(res){
-      self.set('loading', false)
-      self.set('data', res)
-    })
+    url += 'tab=' + Dashboard.activetab
+    return url
   },
   clearData: function() {
     var data = this.get('data')
-    if (data) {
+    if (data && data[0]) {
       if (this.get('chart_type') === 'stat') {
-        data[0][this.get('key')] = 0
+        var keys = _.keys(data[0])
       } else {
         var keys = _.without(_.keys(data[0]), this.get('key'))
-        data.forEach(function(row) {
-          keys.forEach(function(key) {
-            row[key] = 0
-          })
-        })
       }
+      data.forEach(function(row) {
+        keys.forEach(function(key) {
+          row[key] = 0
+        })
+      })
       this.set('data', data)
       this.trigger('change:data')
     }
