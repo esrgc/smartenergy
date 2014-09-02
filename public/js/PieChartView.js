@@ -10,7 +10,7 @@ var PieChartView = BarChartView.extend({
       , arclabels: true
       , arclabelsMin: 8
       , opacity: 0.9
-      , hoverTemplate: this.model.get('hoverTemplate')
+      , hoverTemplate: '{{label}}: {{value}} ' + this.model.get('units')
       , arcstrokewidth: 0
       , arcstrokecolor: '#999'
       , innerRadius: 50

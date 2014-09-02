@@ -58,12 +58,12 @@ var Dashboard = Backbone.View.extend({
     this.effiency = []
     this.renewables = [
       {value: 'Solar PV', color: '#FF851B', type: 'technology', units: 'kW'},
-      {value: 'Solar Hot Water', color: '#39CCCC', type: 'technology', units: 'sqft'},
       {value: 'Geothermal', color: '#FF4136', type: 'technology', units: 'tons'},
+      {value: 'Solar Hot Water', color: '#39CCCC', type: 'technology', units: 'sqft'},
       {value: 'Wood Burning Stove', color: '#FFDC00', type: 'technology', units: 'BTUs/hr'},
       {value: 'Wind', color: '#B10DC9', type: 'technology', units: 'kW'},
-      {value: 'Landfill Gas', color: '#01FF70', type: 'technology', units: 'kW'},
-      {value: 'Bioheat', color: '#0074D9', type: 'technology', units: 'gallons'}
+      {value: 'Bioheat', color: '#0074D9', type: 'technology', units: 'gallons'},
+      {value: 'Landfill Gas', color: '#01FF70', type: 'technology', units: 'kW'}
     ]
     this.transportation = [
       {value: 'Electric', color: '#0074D9', type: 'vehicle_technology'},
@@ -177,10 +177,10 @@ var Dashboard = Backbone.View.extend({
   },
   update: function(e) {
     var self = this
-    var x = {title: "Capacity/Annual Savings", api: 'api/getCapacityByCounty', key: 'county', chart_type: 'pie'}
     var capacity_charts = [
-      {title: "Capacity/Annual Savings By County", api: 'api/getCapacityByCounty', key: 'county', chart_type: 'pie'},
-      {title: "Capacity/Annual Savings By Sector", api: 'api/getCapacityBySector', key: 'sector', chart_type: 'pie'}
+      {title: "Capacity By County", api: 'api/getCapacityByCounty', key: 'county', chart_type: 'pie'},
+      {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'sector', chart_type: 'pie'},
+      {title: "Capacity Over Time", api: 'api/getCapacityOverTime', key: 'd', y: 'sum_capacity', chart_type: 'line'},
     ]
     capacity_charts.forEach(function(chart) {
       var tech_filters = self.filterCollection.where({active: true, type: 'technology'})
@@ -188,6 +188,9 @@ var Dashboard = Backbone.View.extend({
         var chart_exits = self.chartCollection.where({title: chart.title})
         if (chart_exits.length === 0) {
           chart.units = tech_filters[0].get('units')
+          if (chart.chart_type === 'line') {
+            chart.colors = [tech_filters[0].get('color')]
+          }
           self.chartCollection.add(chart)
         }
       } else {

@@ -51,9 +51,12 @@ module.exports = function(grunt) {
       }
     },
     watch: {
+      options: {
+        spawn: false,
+      },
       browserify: {
         files: ['public/js/*.js'],
-        tasks: ['bump', 'browserify', 'uglify']
+        tasks: ['bump', 'browserify', 'uglify'],
       },
       css: {
         files: 'public/css/*.less',

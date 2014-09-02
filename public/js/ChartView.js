@@ -15,6 +15,7 @@ var ChartView = Backbone.View.extend({
     this.listenTo(this.model, 'change:loading', this.loading)
     this.listenTo(this.model, 'remove', this.remove)
     this.colors = Dashboard.colors
+    this.hoverTemplate = '{{label}}: {{value}} ' + this.model.get('units')
   },
   render: function() {
     this.$el.html(Mustache.render(this.template, this.model.toJSON(), {

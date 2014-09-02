@@ -2,6 +2,8 @@ var express = require('express')
   , returnData = require('../lib/return-data')
   , filter = require('../lib/filter')
   , Socrata = require('../lib/Socrata')
+  , async = require('async')
+  , _ = require('underscore')
   , config = require('../config/config')
 
 var socrataDataset = new Socrata.Dataset()
@@ -28,7 +30,7 @@ api.use(function(req, res, next) {
 
 api.get('/getTechnology', function(req, res){
   var qry = '$select=technology,count(id) as value&$group=technology'
-  qry += filter.where(req.query, 'technology')
+  qry += filter.where(req.query, qry, 'technology')
   req.socrata_req = socrataDataset.query(qry,function(data) {
     returnData(req, res, data)
   })
@@ -36,7 +38,7 @@ api.get('/getTechnology', function(req, res){
 
 api.get('/getProgramType', function(req, res){
   var qry = '$select=program_type,count(id) as value&$group=program_type'
-  qry += filter.where(req.query)
+  qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     returnData(req, res, data)
   })
@@ -44,7 +46,7 @@ api.get('/getProgramType', function(req, res){
 
 api.get('/getCapacityByCounty', function(req, res){
   var qry = '$select=county,sum(capacity)%20as%20value&$group=county'
-  qry += filter.where(req.query)
+  qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     returnData(req, res, data)
   })
@@ -52,7 +54,7 @@ api.get('/getCapacityByCounty', function(req, res){
 
 api.get('/getCapacityBySector', function(req, res){
   var qry = '$select=sector,sum(capacity)%20as%20value&$group=sector'
-  qry += filter.where(req.query)
+  qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     returnData(req, res, data)
   })
@@ -60,7 +62,7 @@ api.get('/getCapacityBySector', function(req, res){
 
 api.get('/getSector', function(req, res){
   var qry = '$select=sector,count(id)%20as%20value&$group=sector'
-  qry += filter.where(req.query)
+  qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     returnData(req, res, data)
   })
@@ -68,7 +70,7 @@ api.get('/getSector', function(req, res){
 
 api.get('/getStats', function(req, res){
   var qry = '$select=sum(mea_award)%20as%20contribution,sum(total_project_cost)%20as%20project_cost,count(id)%20as%20total_projects'
-  qry += filter.where(req.query)
+  qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     returnData(req, res, data)
   })
@@ -76,7 +78,7 @@ api.get('/getStats', function(req, res){
 
 api.get('/getContribution', function(req, res){
   var qry = '$select=sum(mea_award)%20as%20value,county&$group=county'
-  qry += filter.where(req.query)
+  qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     returnData(req, res, data)
   })
@@ -91,7 +93,7 @@ api.get('/getPoints', function(req, res){
   } else if (req.query.tab === 'transportation') {
     qry = '$select=point,program_name,link,mea_award,vehicle_technology as technology'
   }
-  qry += filter.where(req.query)
+  qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     returnData(req, res, data)
   })
@@ -99,7 +101,7 @@ api.get('/getPoints', function(req, res){
 
 api.get('/getStationTechnology', function(req, res){
   var qry = '$select=charging_fueling_station_technology,count(id) as value&$group=charging_fueling_station_technology'
-  qry += filter.where(req.query,'charging_fueling_station_technology')
+  qry += filter.where(req.query, qry, 'charging_fueling_station_technology')
   req.socrata_req = socrataDataset.query(qry, function(data) {
     returnData(req, res, data)
   })
@@ -107,7 +109,7 @@ api.get('/getStationTechnology', function(req, res){
 
 api.get('/getVehicleTechnology', function(req, res){
   var qry = '$select=vehicle_technology,count(id) as value&$group=vehicle_technology'
-  qry += filter.where(req.query, 'vehicle_technology')
+  qry += filter.where(req.query, qry, 'vehicle_technology')
   req.socrata_req = socrataDataset.query(qry, function(data) {
     returnData(req, res, data)
   })
@@ -115,7 +117,7 @@ api.get('/getVehicleTechnology', function(req, res){
 
 api.get('/getReductions', function(req, res){
   var qry = '$select=county,sum(co2_emissions_reductions_tons) as value&$group=county'
-  qry += filter.where(req.query)
+  qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     returnData(req, res, data)
   })
@@ -123,8 +125,66 @@ api.get('/getReductions', function(req, res){
 
 api.get('/getSavings', function(req, res){
   var qry = '$select=county,sum(electricity_savings_kwh) as value&$group=county'
-  qry += filter.where(req.query)
+  qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
+    returnData(req, res, data)
+  })
+})
+
+api.get('/getCapacityOverTime', function(req, res){
+
+  async.parallel([
+    function(callback) {
+      var qry = '$select=sum(capacity), \'2008\' as d&$where=date<%272009-01-01T12:00:00%27'
+      qry += filter.where(req.query, qry)
+      socrataDataset.query(qry, function(data) {
+        callback(null, data)
+      })
+    },
+    function(callback) {
+      var qry = '$select=sum(capacity), \'2009\' as d&$where=date<%272010-01-01T12:00:00%27'
+      qry += filter.where(req.query, qry)
+      socrataDataset.query(qry, function(data) {
+        callback(null, data)
+      })
+    },
+    function(callback) {
+      var qry = '$select=sum(capacity), \'2010\' as d&$where=date<%272011-01-01T12:00:00%27'
+      qry += filter.where(req.query, qry)
+      socrataDataset.query(qry, function(data) {
+        callback(null, data)
+      })
+    },
+    function(callback) {
+      var qry = '$select=sum(capacity), \'2011\' as d&$where=date<%272012-01-01T12:00:00%27'
+      qry += filter.where(req.query, qry)
+      socrataDataset.query(qry, function(data) {
+        callback(null, data)
+      })
+    },
+    function(callback) {
+      var qry = '$select=sum(capacity), \'2012\' as d&$where=date<%272013-01-01T12:00:00%27'
+      qry += filter.where(req.query, qry)
+      socrataDataset.query(qry, function(data) {
+        callback(null, data)
+      })
+    },
+    function(callback) {
+      var qry = '$select=sum(capacity), \'2013\' as d&$where=date<%272014-01-01T12:00:00%27'
+      qry += filter.where(req.query, qry)
+      socrataDataset.query(qry, function(data) {
+        callback(null, data)
+      })
+    },
+    function(callback) {
+      var qry = '$select=sum(capacity), \'2014\' as d&$where=date<%272015-01-01T12:00:00%27'
+      qry += filter.where(req.query, qry)
+      socrataDataset.query(qry, function(data) {
+        callback(null, data)
+      })
+    }
+  ], function(err, results) {
+    var data = _.flatten(results)
     returnData(req, res, data)
   })
 })

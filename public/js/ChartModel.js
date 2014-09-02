@@ -16,7 +16,6 @@ var ChartModel = Backbone.Model.extend({
     }
   },
   initialize: function() {
-    this.set('hoverTemplate', '{{label}}: {{value}} ' + this.get('units'))
     this.listenTo(this, 'change:visible', this.update)
   },
   update: function() {
