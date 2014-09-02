@@ -11,7 +11,8 @@ var ChartModel = Backbone.Model.extend({
       loading: false,
       hoverTemplate: '{{label}}: {{value}}',
       units: '',
-      visible: true
+      visible: true,
+      toolbar: true,
     }
   },
   initialize: function() {

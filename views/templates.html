@@ -23,7 +23,6 @@
 <script type="text/template" id="table-template">
   <div class="col-md-3 col-sm-4 block">
     <div class="chart">
-      {{> toolbar }}
       {{> title }}
       <div class="chart-inner">
         <table class="table table-bordered table-striped table-condensed">
@@ -51,7 +50,6 @@
 <script type="text/template" id="chart-template">
 <div class="col-md-3 col-sm-4 block">
   <div class="chart">
-    {{> toolbar }}
     {{> title }}
     <div class="chart-inner">
       <div class="loader"><i class="fa fa-circle-o-notch fa-spin"></i></div>
@@ -78,8 +76,17 @@
   <div class="chart">
     {{> title }}
     <div class="chart-inner">
+    <div class="row">
+
+    </div>
       <div class="filters container-fluid">
         <div class="row">
+          <div class="col-md-12">
+            <div class="description">
+            <p>Select filters below to view and compare Maryland Energy Administration contributions to the growth of clean, renewable energy and energy efficiency industries in our state.</p>
+            <p>Select different layers on the map to view contributions to specific regions in Maryland.</p>
+            </div>
+          </div>
           <div class="filter-box technology col-md-6"><div class="filter-title">Technology</div><div class="the-filters"></div></div>
           <div class="filter-box vehicle_technology col-md-6"><div class="filter-title">Vehicle Technology</div><div class="the-filters"></div></div>
           <div class="filter-box charging_fueling_station_technology col-md-6"><div class="filter-title">Charging Station Technology</div><div class="the-filters"></div></div>
@@ -107,7 +114,17 @@
 </script>
 
 <script type="text/template" id="title-partial">
-  <div class="title"><h3>{{ title }}</h3></div>
+  <div class="title">
+    {{#toolbar}}
+    <div class="toolbar">
+      <i class="fa fa-table tool totable"></i>
+      <i class="fa fa-bar-chart-o tool tochart"></i>
+      <i class="fa fa-download tool download"></i>
+      <i class="fa fa-code tool code"></i>
+    </div>
+    {{/toolbar}}
+    <h3>{{ title }}</h3>
+  </div>
 </script>
 
 <script type="text/template" id="toolbar-partial">

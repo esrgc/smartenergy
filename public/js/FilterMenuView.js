@@ -2,8 +2,6 @@ var ChartView = require('./ChartView')
   , TechnologyFilter = require('./TechnologyFilter')
   , SectorFilter = require('./SectorFilter')
 
-
-
 var FilterMenuView = ChartView.extend({
   template: $('#filter-menu-template').html(),
   events: {
@@ -17,7 +15,7 @@ var FilterMenuView = ChartView.extend({
   },
   render: function() {
     var self = this
-    this.$el.html(Mustache.render(this.template, {title: 'Project Types'}, {
+    this.$el.html(Mustache.render(this.template, {title: 'Project Filters', toolbar: false}, {
       title: $('#title-partial').html()
     }))
     this.changeSummary()

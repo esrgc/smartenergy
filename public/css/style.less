@@ -54,28 +54,42 @@ body {
 
 .chart {
   height: @chartHeight;
-  background: @alternate;
+  /*background: @alternate;*/
   border: 1px solid @tableBorder;
   border-radius: 2px;
-  padding: 5px;
   overflow: hidden;
   color: @textColor;
+  /*box-shadow: 0 0 5px #999;*/
+  box-shadow: 5px 5px 14px -5px #c5c5c5;
   .title {
     overflow: hidden;
     text-align: left;
     padding-bottom: 5px;
+    background: #f8f8f8;
+    padding: 5px;
+    border-bottom: 1px solid @tableBorder;
+    h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+    .toolbar {
+      float: right;
+      text-align: right;
+      .tool {
+        padding: 0px;
+      }
+      .tool:hover {
+        cursor: pointer;
+        background: rgba(0, 0, 0, 0.1);
+      }
+    }
   }
-  .title h3 {
-    margin: 0;
-    font-size: 18px;
-  }
-
   .chart-inner {
     width: 100%;
     background: #fff;
     overflow-y: auto;
     clear: both;
-    border: 1px solid @tableBorder;
+    /*border: 1px solid @tableBorder;*/
     position: relative;
     .stat {
       height: 100%;
@@ -136,10 +150,10 @@ body {
 }
 
 .dashboard .map {
-  height: @chartHeight + 0;
+  height: @chartHeight * 2 + 20;
   margin-bottom: 0px;
   background: @main;
-  border: 1px solid @main;
+  border: 1px solid @tableBorder;
   #mouseover {
     display: none;
     margin: 1px !important;
@@ -181,6 +195,12 @@ body {
   }
 }
 
+.filters .description {
+  padding-top: 15px;
+  text-align: left;
+  font-weight: bold;
+}
+
 .dashboard .chart.filters .chart-inner {
   padding: 10px;
 }
@@ -208,21 +228,6 @@ body {
 }
 
 .dashboard .filters button.clear {
-}
-
-
-.dashboard .chart .toolbar {
-  float: right;
-  text-align: right;
-}
-
-.dashboard .chart .toolbar .tool {
-  padding: 0px;
-}
-
-.dashboard .chart .toolbar .tool:hover {
-  cursor: pointer;
-  background: rgba(0, 0, 0, 0.1);
 }
 
 .footer, .wrap:after {

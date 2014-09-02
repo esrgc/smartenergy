@@ -43,7 +43,7 @@ var Dashboard = Backbone.View.extend({
         {title: "Technology Type", api: 'api/getTechnology', key: 'technology', chart_type: 'pie', units: 'projects'},
         {title: "Program Type", api: 'api/getProgramType', key: 'program_type', chart_type: 'pie', units: 'projects'},
         {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie', units: 'projects'},
-        {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,')},
+        {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false},
         {title: "MEA Contribution By County", api: 'api/getContribution', key: 'county', chart_type: 'pie', group: 'geo', units: 'dollars'}
       ],
       'transportation': [
@@ -100,8 +100,8 @@ var Dashboard = Backbone.View.extend({
     ]
     this.filter_hash = {
       'energyeffiency': this.sectors.concat(this.programtypes),
-      'renewableenergy': this.sectors.concat(this.renewables).concat(this.programtypes),
-      'transportation': this.sectors.concat(this.transportation).concat(this.programtypes)
+      'renewableenergy': this.sectors.concat(this.renewables),
+      'transportation': this.sectors.concat(this.transportation)
     }
     this.filterCollection.add(this.filter_hash[this.activetab])
     var groupfilter = {
