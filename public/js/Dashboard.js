@@ -40,10 +40,10 @@ var Dashboard = Backbone.View.extend({
         {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie', units: 'projects'}
       ],
       'renewableenergy': [
+      {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false},
         {title: "Technology Type", api: 'api/getTechnology', key: 'technology', chart_type: 'pie', units: 'projects'},
         {title: "Program Type", api: 'api/getProgramType', key: 'program_type', chart_type: 'pie', units: 'projects'},
         {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie', units: 'projects'},
-        {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false},
         {title: "MEA Contribution By County", api: 'api/getContribution', key: 'county', chart_type: 'pie', group: 'geo', units: 'dollars'}
       ],
       'transportation': [
