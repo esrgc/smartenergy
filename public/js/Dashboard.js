@@ -12,7 +12,7 @@ var MapView = require('./MapView')
   , ChartCollection = require('./ChartCollection')
 
 var Dashboard = Backbone.View.extend({
-  colors: ['#2B4E72','#94BA65', '#2790B0'],
+  colors: ['#2790B0', '#94BA65', '#2B4E72'],
   template: $('#dashboard-template').html(),
   el: $(".dashboard"),
   activetab: 'renewableenergy',
