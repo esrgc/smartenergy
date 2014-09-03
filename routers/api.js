@@ -134,7 +134,7 @@ api.get('/getSavings', function(req, res){
 
 api.get('/getCapacityOverTime', function(req, res){
 
-  var getCapacityForYear = function(year, callback) {
+  var _getCapacityForYear = function(year, callback) {
     var nextyear = year+1
     var qry = '$select=sum(capacity), \'' + year + '\' as d&$where=date<%27' + nextyear + '-01-01T12:00:00%27'
     qry += filter.where(req.query, qry)
@@ -142,6 +142,8 @@ api.get('/getCapacityOverTime', function(req, res){
       callback(null, data)
     })
   }
+
+  var getCapacityForYear = async.memoize(_getCapacityForYear)
 
   async.parallel([
     function(callback) { getCapacityForYear(2008, callback) },
