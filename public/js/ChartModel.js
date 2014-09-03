@@ -13,6 +13,7 @@ var ChartModel = Backbone.Model.extend({
       units: '',
       visible: true,
       toolbar: true,
+      sort: true
     }
   },
   initialize: function() {
@@ -29,6 +30,9 @@ var ChartModel = Backbone.Model.extend({
       var url = this.makeQuery()
       this.request = $.getJSON(url, function(res){
         self.set('loading', false)
+        if (self.get('sort')) {
+          res = self.sortByKey(res, 'value')
+        }
         self.set('data', res)
       })
     }
@@ -61,8 +65,7 @@ var ChartModel = Backbone.Model.extend({
       this.trigger('change:data')
     }
   },
-  sortByKey: function(column) {
-    var data = this.get('data')
+  sortByKey: function(data, column) {
     if(!this.get('sort_key')) {
       this.set('sort_key', column)
       this.set('sort_desc', true)
@@ -74,11 +77,11 @@ var ChartModel = Backbone.Model.extend({
       this.set('sort_desc', true)
     }
     if(this.get('sort_desc')){
-      data = _.sortBy(data, function(obj){ return obj[column] }).reverse()
+      data = _.sortBy(data, function(obj){ return +obj[column] }).reverse()
     } else {
-      data = _.sortBy(data, function(obj){ return obj[column] })
+      data = _.sortBy(data, function(obj){ return +obj[column] })
     }
-    this.set('data', data)
+    return data
   }
 })
 
