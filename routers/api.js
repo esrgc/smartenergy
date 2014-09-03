@@ -134,7 +134,7 @@ api.get('/getSavings', function(req, res){
 
 api.get('/getCapacityOverTime', function(req, res){
 
-  var _getCapacityForYear = function(year, callback) {
+  var _getPerYear = function(year, callback) {
     var nextyear = year+1
     var qry = '$select=sum(capacity), \'' + year + '\' as d&$where=date<%27' + nextyear + '-01-01T12:00:00%27'
     qry += filter.where(req.query, qry)
@@ -143,16 +143,43 @@ api.get('/getCapacityOverTime', function(req, res){
     })
   }
 
-  var getCapacityForYear = async.memoize(_getCapacityForYear)
+  var getPerYear = async.memoize(_getPerYear)
 
   async.parallel([
-    function(callback) { getCapacityForYear(2008, callback) },
-    function(callback) { getCapacityForYear(2009, callback) },
-    function(callback) { getCapacityForYear(2010, callback) },
-    function(callback) { getCapacityForYear(2011, callback) },
-    function(callback) { getCapacityForYear(2012, callback) },
-    function(callback) { getCapacityForYear(2013, callback) },
-    function(callback) { getCapacityForYear(2014, callback) }
+    function(callback) { getPerYear(2008, callback) },
+    function(callback) { getPerYear(2009, callback) },
+    function(callback) { getPerYear(2010, callback) },
+    function(callback) { getPerYear(2011, callback) },
+    function(callback) { getPerYear(2012, callback) },
+    function(callback) { getPerYear(2013, callback) },
+    function(callback) { getPerYear(2014, callback) }
+  ], function(err, results) {
+    var data = _.flatten(results)
+    returnData(req, res, data)
+  })
+})
+
+api.get('/getReductionOverTime', function(req, res){
+
+  var _getPerYear = function(year, callback) {
+    var nextyear = year+1
+    var qry = '$select=sum(co2_emissions_reductions_tons), \'' + year + '\' as d&$where=date<%27' + nextyear + '-01-01T12:00:00%27'
+    qry += filter.where(req.query, qry)
+    socrataDataset.query(qry, function(data) {
+      callback(null, data)
+    })
+  }
+
+  var getPerYear = async.memoize(_getPerYear)
+
+  async.parallel([
+    function(callback) { getPerYear(2008, callback) },
+    function(callback) { getPerYear(2009, callback) },
+    function(callback) { getPerYear(2010, callback) },
+    function(callback) { getPerYear(2011, callback) },
+    function(callback) { getPerYear(2012, callback) },
+    function(callback) { getPerYear(2013, callback) },
+    function(callback) { getPerYear(2014, callback) }
   ], function(err, results) {
     var data = _.flatten(results)
     returnData(req, res, data)

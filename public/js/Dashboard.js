@@ -44,7 +44,8 @@ var Dashboard = Backbone.View.extend({
         {title: "Technology Type", api: 'api/getTechnology', key: 'technology', chart_type: 'pie', units: 'projects'},
         {title: "Program Type", api: 'api/getProgramType', key: 'program_type', chart_type: 'pie', units: 'projects'},
         {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie', units: 'projects'},
-        {title: "MEA Contribution By County", api: 'api/getContribution', key: 'county', chart_type: 'pie', group: 'geo', units: 'dollars'}
+        {title: "MEA Contribution By County", api: 'api/getContribution', key: 'county', chart_type: 'pie', group: 'geo', units: 'dollars'},
+        {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'd', chart_type: 'line', units: 'tons'}
       ],
       'transportation': [
         {title: "Vehicle Technology", api: 'api/getVehicleTechnology', key: 'vehicle_technology', chart_type: 'pie'},
@@ -180,7 +181,7 @@ var Dashboard = Backbone.View.extend({
     var capacity_charts = [
       {title: "Capacity By County", api: 'api/getCapacityByCounty', key: 'county', chart_type: 'pie'},
       {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'sector', chart_type: 'pie'},
-      {title: "Capacity Over Time", api: 'api/getCapacityOverTime', key: 'd', y: 'sum_capacity', chart_type: 'line'},
+      {title: "Capacity Growth", api: 'api/getCapacityOverTime', key: 'd', y: 'sum_capacity', chart_type: 'line'},
     ]
     capacity_charts.forEach(function(chart) {
       var tech_filters = self.filterCollection.where({active: true, type: 'technology'})
