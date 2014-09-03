@@ -35,7 +35,6 @@ var LineChartView = BarChartView.extend({
         obj[self.model.get('key')] = parseDate(obj[self.model.get('key')])
       }
     })
-    console.log(res)
     return res
   }
 })

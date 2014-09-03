@@ -77,7 +77,6 @@ var FilterMenuView = ChartView.extend({
         summary += 'All projects'
       }
       var filters = Dashboard.filterCollection.where({active: true, geo: true})
-      console.log(filters.length)
       if (filters.length) {
         var x = []
         _.each(filters, function(f) {
