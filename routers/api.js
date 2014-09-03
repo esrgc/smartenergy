@@ -93,6 +93,7 @@ api.get('/getPoints', function(req, res){
   } else if (req.query.tab === 'transportation') {
     qry = '$select=point,program_name,link,mea_award,vehicle_technology as technology'
   }
+  qry += '&$order=id'
   qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     returnData(req, res, data)
