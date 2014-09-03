@@ -185,8 +185,9 @@ var Dashboard = Backbone.View.extend({
     capacity_charts.forEach(function(chart) {
       var tech_filters = self.filterCollection.where({active: true, type: 'technology'})
       if (tech_filters.length === 1) {
-        var chart_exits = self.chartCollection.where({title: chart.title})
+        var chart_exits = self.chartCollection.where({api: chart.api})
         if (chart_exits.length === 0) {
+          chart.title = tech_filters[0].get('value') + ' ' + chart.title
           chart.units = tech_filters[0].get('units')
           if (chart.chart_type === 'line') {
             chart.colors = [tech_filters[0].get('color')]
@@ -195,7 +196,7 @@ var Dashboard = Backbone.View.extend({
         }
       } else {
         self.chartCollection.each(function(_chart) {
-          if (_chart.get('title') === chart.title) {
+          if (_chart.get('api') === chart.api) {
             self.chartCollection.remove(_chart)
           }
         })
