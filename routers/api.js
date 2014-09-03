@@ -134,56 +134,23 @@ api.get('/getSavings', function(req, res){
 
 api.get('/getCapacityOverTime', function(req, res){
 
+  var getCapacityForYear = function(year, callback) {
+    var nextyear = year+1
+    var qry = '$select=sum(capacity), \'' + year + '\' as d&$where=date<%27' + nextyear + '-01-01T12:00:00%27'
+    qry += filter.where(req.query, qry)
+    socrataDataset.query(qry, function(data) {
+      callback(null, data)
+    })
+  }
+
   async.parallel([
-    function(callback) {
-      var qry = '$select=sum(capacity), \'2008\' as d&$where=date<%272009-01-01T12:00:00%27'
-      qry += filter.where(req.query, qry)
-      socrataDataset.query(qry, function(data) {
-        callback(null, data)
-      })
-    },
-    function(callback) {
-      var qry = '$select=sum(capacity), \'2009\' as d&$where=date<%272010-01-01T12:00:00%27'
-      qry += filter.where(req.query, qry)
-      socrataDataset.query(qry, function(data) {
-        callback(null, data)
-      })
-    },
-    function(callback) {
-      var qry = '$select=sum(capacity), \'2010\' as d&$where=date<%272011-01-01T12:00:00%27'
-      qry += filter.where(req.query, qry)
-      socrataDataset.query(qry, function(data) {
-        callback(null, data)
-      })
-    },
-    function(callback) {
-      var qry = '$select=sum(capacity), \'2011\' as d&$where=date<%272012-01-01T12:00:00%27'
-      qry += filter.where(req.query, qry)
-      socrataDataset.query(qry, function(data) {
-        callback(null, data)
-      })
-    },
-    function(callback) {
-      var qry = '$select=sum(capacity), \'2012\' as d&$where=date<%272013-01-01T12:00:00%27'
-      qry += filter.where(req.query, qry)
-      socrataDataset.query(qry, function(data) {
-        callback(null, data)
-      })
-    },
-    function(callback) {
-      var qry = '$select=sum(capacity), \'2013\' as d&$where=date<%272014-01-01T12:00:00%27'
-      qry += filter.where(req.query, qry)
-      socrataDataset.query(qry, function(data) {
-        callback(null, data)
-      })
-    },
-    function(callback) {
-      var qry = '$select=sum(capacity), \'2014\' as d&$where=date<%272015-01-01T12:00:00%27'
-      qry += filter.where(req.query, qry)
-      socrataDataset.query(qry, function(data) {
-        callback(null, data)
-      })
-    }
+    function(callback) { getCapacityForYear(2008, callback) },
+    function(callback) { getCapacityForYear(2009, callback) },
+    function(callback) { getCapacityForYear(2010, callback) },
+    function(callback) { getCapacityForYear(2011, callback) },
+    function(callback) { getCapacityForYear(2012, callback) },
+    function(callback) { getCapacityForYear(2013, callback) },
+    function(callback) { getCapacityForYear(2014, callback) }
   ], function(err, results) {
     var data = _.flatten(results)
     returnData(req, res, data)
