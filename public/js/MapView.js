@@ -109,7 +109,7 @@ var MapView = Backbone.View.extend({
     var self = this
     var id = $(e.target).parent().attr('id')
     var layer = _.where(this.layer_switcher.layers, {id: id})[0]
-    if (layer.type === 'overlay') {
+    if (layer && layer.type === 'overlay') {
       if (self.map.hasLayer(layer.layer)) {
         this.map.removeLayer(layer.layer)
         $(e.target).removeClass('active')
@@ -154,7 +154,6 @@ var MapView = Backbone.View.extend({
       }
     })
     layer.on('mouseover', function(e) {
-      console.log(e.target.feature.properties.name)
       self.$el.find('.map').find('#mouseover').html(e.target.feature.properties.name)
       self.$el.find('.map').find('#mouseover').show()
     })
