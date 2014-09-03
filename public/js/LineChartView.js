@@ -18,7 +18,6 @@ var LineChartView = BarChartView.extend({
       , yTicksCount: 5
       , legend: false
     })
-    console.log(this.chart.options)
   },
   prepData: function(res) {
     var self = this
@@ -34,6 +33,10 @@ var LineChartView = BarChartView.extend({
       if(!isDate) {
         obj[self.model.get('key')] = parseDate(obj[self.model.get('key')])
       }
+      _.each(keys, function(key) {
+        var x = obj[key]
+        obj[key] = Math.round(x*100) / 100
+      })
     })
     return res
   }
