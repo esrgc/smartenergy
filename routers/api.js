@@ -44,6 +44,14 @@ api.get('/getProgramType', function(req, res){
   })
 })
 
+api.get('/getProgramName', function(req, res){
+  var qry = '$select=program_name,count(id) as value&$group=program_name'
+  qry += filter.where(req.query, qry)
+  req.socrata_req = socrataDataset.query(qry, function(data) {
+    returnData(req, res, data)
+  })
+})
+
 api.get('/getCapacityByCounty', function(req, res){
   var qry = '$select=county,sum(capacity)%20as%20value&$group=county'
   qry += filter.where(req.query, qry)
