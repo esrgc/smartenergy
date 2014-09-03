@@ -53,12 +53,12 @@ var FilterMenuView = ChartView.extend({
   },
   changeSummary: function() {
     $('.dashboard .filter-summary').html('')
-    var summary = ''
+    var summary = '<p>'
     var filters = _.reject(Dashboard.filterCollection.where({active: true}), function(f) {
       if (f.get('type') === 'group') return true
     })
     if (filters.length == 0) {
-      summary = 'All Projects'
+      summary += 'All Projects'
     } else {
       var filters = Dashboard.filterCollection.where({active: true, type: 'technology'})
       if (filters.length) {
@@ -136,6 +136,7 @@ var FilterMenuView = ChartView.extend({
         }
       }
     }
+    summary += '</p>'
     $('.dashboard .filter-summary').html(summary)
   }
 })
