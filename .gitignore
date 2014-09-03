@@ -26,3 +26,4 @@ node_modules
 
 config
 public/js/min/*
+public/css/*.css
