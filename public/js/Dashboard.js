@@ -17,7 +17,7 @@ var Dashboard = Backbone.View.extend({
   el: $(".dashboard"),
   activetab: 'renewableenergy',
   events: {
-    //'click .tabs a': 'switchTab'
+    'click .tabs a': 'switchTab'
   },
   initialize: function() {
     this.filterCollection = new FilterCollection()
@@ -36,7 +36,7 @@ var Dashboard = Backbone.View.extend({
       'energyeffiency': [
         {title: "Electricity Savings", api: 'api/getSavings', key: 'county', chart_type: 'pie', units: 'kWh'},
         {title: "CO2 Emissions Reductions", api: 'api/getReductions', key: 'county', chart_type: 'pie', units: 'tons'},
-        {title: "Program Type", api: 'api/getProgramType', key: 'program_type', chart_type: 'pie', units: 'projects'},
+        {title: "Program", api: 'api/getProgramName', key: 'program_name', chart_type: 'pie', units: 'projects'},
         {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie', units: 'projects'}
       ],
       'renewableenergy': [
@@ -48,9 +48,9 @@ var Dashboard = Backbone.View.extend({
         {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'd', chart_type: 'line', units: 'tons'}
       ],
       'transportation': [
-        {title: "Vehicle Technology", api: 'api/getVehicleTechnology', key: 'vehicle_technology', chart_type: 'pie'},
+        //{title: "Vehicle Technology", api: 'api/getVehicleTechnology', key: 'vehicle_technology', chart_type: 'pie'},
         {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'charging_fueling_station_technology', chart_type: 'pie'},
-        {title: "Program Type", api: 'api/getProgramType', key: 'program_type', chart_type: 'pie', units: 'projects'},
+        {title: "Program", api: 'api/getProgramName', key: 'program_name', chart_type: 'pie', units: 'projects'},
         {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie', units: 'projects'}
       ]
     }
@@ -100,9 +100,9 @@ var Dashboard = Backbone.View.extend({
       {value: 'State Government', type: 'sector'}
     ]
     this.filter_hash = {
-      'energyeffiency': this.sectors.concat(this.programtypes),
+      'energyeffiency': this.sectors,
       'renewableenergy': this.sectors.concat(this.renewables),
-      'transportation': this.sectors.concat(this.transportation)
+      'transportation': this.sectors.concat(this.stations)
     }
     this.filterCollection.add(this.filter_hash[this.activetab])
     var groupfilter = {
