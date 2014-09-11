@@ -25,11 +25,11 @@ var StatView = ChartView.extend({
     var i = (parseFloat(data.project_cost) - parseFloat(data.contribution))/parseFloat(data.contribution) || 0
     stat.investment_leverage = d3.round(i, 2)
     stat.contribution = this.format(data.contribution)
-    var html = '<ul>'
-    html += '<li>MEA Contribution: <b>' + stat.contribution + '</b></li>'
-    html += '<li>Investment Leverage: <b>' + stat.investment_leverage + '</b></li>'
-    html += '<li>Total Projects: <b>' + data.total_projects + '</b></li>'
-    html += '</ul>'
+    var html = '<table class="table table-condensed">'
+    html += '<tr><td>MEA Contribution</td><td><strong>' + stat.contribution + '</strong></td></tr>'
+    html += '<tr><td>Investment Leverage</td><td><strong>' + stat.investment_leverage + '</strong></td></tr>'
+    html += '<tr><td>Total Projects</td><td><strong>' + data.total_projects + '</strong></td></tr>'
+    html += '</table>'
     this.$el.find('.stat').html(html)
   },
   prepData: function(data){
