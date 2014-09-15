@@ -41,11 +41,11 @@ var Dashboard = Backbone.View.extend({
       ],
       'renewableenergy': [
         {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
-        {title: "Technology Type", api: 'api/getTechnology', key: 'technology', chart_type: 'pie', units: 'projects'},
-        {title: "Program", api: 'api/getProgramName', key: 'program_name', chart_type: 'pie', units: 'projects'},
-        {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie', units: 'projects'},
-        {title: "MEA Contribution By County", api: 'api/getContribution', key: 'county', chart_type: 'pie', group: 'geo', units: 'dollars'},
-        {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'd', chart_type: 'line', units: 'tons'}
+        {title: "Technology Type", api: 'api/getTechnology', y: 'projects', key: 'technology', chart_type: 'pie', units: 'projects'},
+        {title: "MEA Contribution By County", api: 'api/getContribution', key: 'county', y: ['Total Project Cost', 'MEA Contribution'], chart_type: 'bar', group: 'geo', units: '', valueFormat: d3.format('$,'), width: 'col-md-6 col-sm-12', legend: true},
+        {title: "Program", api: 'api/getProgramName', key: 'Program Name', y: 'projects', chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
+        {title: "Sector", api: 'api/getSector', key: 'sector', y: 'projects', chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
+        {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'year', y: 'reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%Y")}
       ],
       'transportation': [
         //{title: "Vehicle Technology", api: 'api/getVehicleTechnology', key: 'vehicle_technology', chart_type: 'pie'},
@@ -179,9 +179,9 @@ var Dashboard = Backbone.View.extend({
   update: function(e) {
     var self = this
     var capacity_charts = [
-      {title: "Capacity By County", api: 'api/getCapacityByCounty', key: 'county', chart_type: 'pie'},
-      {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'sector', chart_type: 'pie'},
-      {title: "Capacity Growth", api: 'api/getCapacityOverTime', key: 'd', y: 'sum_capacity', chart_type: 'line'},
+      {title: "Capacity By County", api: 'api/getCapacityByCounty', key: 'county', y: 'Capacity', chart_type: 'pie'},
+      {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'sector', y: 'Capacity', chart_type: 'bar'},
+      {title: "Capacity Growth", api: 'api/getCapacityOverTime', key: 'year', y: 'Capacity', chart_type: 'line', labelFormat: d3.time.format("%Y")},
     ]
     capacity_charts.forEach(function(chart) {
       var tech_filters = self.filterCollection.where({active: true, type: 'technology'})

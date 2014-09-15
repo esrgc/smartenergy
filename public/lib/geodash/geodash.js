@@ -976,7 +976,7 @@ GeoDash.Chart = GeoDash.Class.extend({
     // draw legend
     , legend: false
     , legendWidth: 80
-    // position of legend. top, middle, bottom
+    // position of legend. top, middle, bottom, inside
     , legendPosition: 'middle'
     // width of y axis label, height of x axis label
     , axisLabelPadding: 20
@@ -1094,13 +1094,17 @@ GeoDash.Chart = GeoDash.Class.extend({
       })
 
     if(this.options.legend) {
-      this.container.append('div')
+      var d = this.container.append('div')
         .attr('class', 'legend')
-        .style("width", this.options.legendWidth + 'px')
         .style("background", function(){
           var c = d3.select(self.el).style("background-color")
           return c
         })
+
+      if (this.options.legendWidth !== 'auto') {
+        d.style("width", this.options.legendWidth + 'px')
+      }
+
     }
 
     this.makeSVG()
@@ -1114,8 +1118,8 @@ GeoDash.Chart = GeoDash.Class.extend({
   , setXAxis: function() {
     var xrange = this.width
       , marginleft = 0
-    if(this.options.legend) {
-      xrange -= this.options.legendWidth
+    if(this.options.legend && this.options.legendPosition !== 'inside' && this.options.legendWidth !== 'auto') {
+      xrange -= (this.options.legendWidth + 10)
     }
     if(this.options.drawY) {
       xrange -= this.options.yAxisWidth
@@ -1308,7 +1312,7 @@ GeoDash.Chart = GeoDash.Class.extend({
     var self = this
     if(this.options.legend) {
       var block = {width: 10, height: 10, padding: 5}
-      var padding = 3
+      var padding = 5
       var legend = this.container.select('.legend')
 
       var d = this.color.domain()//.slice().reverse()
@@ -1332,14 +1336,17 @@ GeoDash.Chart = GeoDash.Class.extend({
         .style("height", block.height + 'px')
         .style("background", this.color)
 
-      legenditem.append("div")
+      var value = legenditem.append("div")
           .attr("class", "value")
-          .style("width", this.options.legendWidth - block.width - padding*2 + 'px')
           .text(function(d) { return d })
+
+      if (this.options.legendWidth !== 'auto') {
+        value.style("width", this.options.legendWidth - block.width - padding*2 - block.padding + 'px')
+      }
 
       legenditems.exit().remove()
 
-      if(this.options.legendPosition == 'middle') {
+      if(this.options.legendPosition == 'middle' || this.options.legendPosition == 'inside') {
         var lHeight = parseInt(legend.style('height'))
         var middle = (this.height / 2) - (lHeight / 2)
         legend.style('top', middle + 'px')
@@ -2495,6 +2502,7 @@ GeoDash.LineChart = GeoDash.Chart.extend({
     , outerPadding: 0
     , linePadding: 20
     , showArea: false
+    , accumulate: false
   }
   , makeSVG: function() {
     var self = this
@@ -2548,6 +2556,17 @@ GeoDash.LineChart = GeoDash.Chart.extend({
       }
       self.linedata.push(l)
     })
+
+    if (this.options.accumulate) {
+      this.linedata.forEach(function(line) {
+        var sums = []
+        line.values.forEach(function(value, idx) {
+          if (idx > 0) {
+            line.values[idx].y += line.values[idx-1].y
+          }
+        })
+      })
+    }
 
     /*
       dashed: [{
@@ -2638,6 +2657,7 @@ GeoDash.LineChart = GeoDash.Chart.extend({
       d3.min(this.linedata, function(c) { return d3.min(c.values, function(v) { return v.y; }) }),
       d3.max(this.linedata, function(c) { return d3.max(c.values, function(v) { return v.y; }) })
     ])
+
     var ydomain = this.y.domain()
 
     var range = ydomain[1] - ydomain[0]

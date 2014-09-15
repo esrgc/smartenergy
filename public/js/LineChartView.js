@@ -8,7 +8,7 @@ var LineChartView = BarChartView.extend({
     }
     this.chart = new GeoDash.LineChart(this.chartel, {
       x: this.model.get('key')
-      , y: []
+      , y: this.model.get('y')
       , colors: this.colors
       , legend: true
       , legendWidth: 90
@@ -17,6 +17,9 @@ var LineChartView = BarChartView.extend({
       , xTickFormat: d3.time.format('%Y')
       , yTicksCount: 5
       , legend: false
+      , showArea: true
+      , accumulate: true
+      , valueFormat: this.model.get('valueFormat')
     })
   },
   prepData: function(res) {

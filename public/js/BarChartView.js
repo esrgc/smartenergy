@@ -20,34 +20,54 @@ var BarChartView = ChartView.extend({
   drawChart: function() {
     this.chart = new GeoDash.BarChartVertical(this.chartel, {
       x: this.model.get('key')
-      , y: []
+      , y: this.model.get('y')
       , colors: this.colors
       , yTickFormat: d3.format(".2s")
-      , hoverTemplate: "{{x}}: {{y}} projects"
+      , hoverTemplate: "{{x}}: {{y}} " + this.model.get('units')
       , opacity: 0.8
+      , barLabels: this.model.get('barLabels')
+      , legend: this.model.get('legend')
+      , legendWidth: 'auto'
+      , legendPosition: 'inside'
+      , valueFormat: this.model.get('valueFormat')
     })
   },
   prepData: function(data){
     var self = this
     var row = data[0]
     if (row) {
-      var keys = _.without(_.keys(row), this.model.get('key'))
-      this.chart.options.y = keys
+      if (this.model.get('y').length < 1) {
+        var keys = _.without(_.keys(row), this.model.get('key'))
+        if (keys.length === 1) {
+          this.chart.options.y = keys[0]
+        } else {
+          this.chart.options.y = keys
+        }
+      } else {
+        this.chart.options.y = this.model.get('y')
+      }
       var totals = []
       data.forEach(function(row, i) {
         if (!row[self.model.get('key')]) {
           row[self.model.get('key')] = 'Other'
         }
         totals[i] = 0
-        self.chart.options.y.forEach(function(y) {
-          row[y] = +row[y]
-          totals[i] += row[y]
-        })
+        if (typeof self.chart.options.y === 'string') {
+          var y = +row[self.chart.options.y]
+          row[self.chart.options.y] = y
+          totals[i] += y
+        } else if (typeof self.chart.options.y === 'object') {
+          self.chart.options.y.forEach(function(y) {
+            row[y] = +row[y]
+            totals[i] += row[y]
+          })
+        }
       })
       data = _.sortBy(data, function(row, i) {
         return totals[i]
       }).reverse()
       this.setColors(data)
+      this.model.set('data', data)
     }
     return data
   },

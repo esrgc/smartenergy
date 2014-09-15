@@ -1,7 +1,7 @@
 var ChartView = require('./ChartView')
 
 var TableView = ChartView.extend({
-  template: $('#table-template').html(),
+  template: $('#table-empty-template').html(),
   events: function(){
     return _.extend({},ChartView.prototype.events,{
       'click th' : 'sortByHeader',
@@ -12,13 +12,15 @@ var TableView = ChartView.extend({
   render: function() {
     var self = this
     var attrs = this.model.toJSON()
-    if(attrs.data) {
-      attrs.data = this.prepData(attrs.data)
-    }
+    console.log(attrs)
+    // if(attrs.data) {
+    //   attrs.data = this.prepData(attrs.data)
+    // }
     this.$el.html(Mustache.render(this.template, attrs, {
       title: $('#title-partial').html(),
       toolbar: $('#toolbar-partial').html()
     }))
+    this.drawTable(this.model.get('data'))
     this.$el.find('th').each(function(idx, th){
       if(th.innerHTML === self.model.get('sort_key')) {
         $(th).addClass('sort')
@@ -31,8 +33,38 @@ var TableView = ChartView.extend({
     return this
   },
   update: function(){
-    this.render()
+    this.drawTable(this.model.get('data'))
     this.resize()
+  },
+  drawTable: function(data) {
+    var self = this
+    var table = this.$el.find('table')
+    console.log(table)
+    table.empty()
+    var html = '<thead><tr>'
+    var keys = []
+    html += '<th>' + this.model.get('key') + '</th>'
+    if (typeof this.model.get('y') === 'string') {
+      keys.push(this.model.get('y'))
+      html += '<th>' + this.model.get('y') + '</th>'
+    } else if (typeof this.model.get('y') === 'object') {
+      this.model.get('y').forEach(function(y) {
+        html += '<th>' + y + '</th>'
+        keys.push(y)
+      })
+    }
+    html += '</tr></thead><tbody>'
+    //var data = this.model.get('data')
+    _.each(data, function(row, idx) {
+      html += '<tr>'
+      html += '<td>' + self.model.get('labelFormat')(row[self.model.get('key')]) + '</td>'
+        _.each(keys, function(key) {
+          html += '<td>' + self.model.get('valueFormat')(row[key]) + '</td>'
+        })
+      html += '</tr>'
+    })
+    html += '</tbody>'
+    table.html(html)
   },
   prepData: function(res) {
     var self = this
@@ -57,9 +89,12 @@ var TableView = ChartView.extend({
     return table
   },
   sortByHeader: function(e) {
-    var column = $(e.target).attr('id')
+    var column = $(e.target).html()
+    console.log(column)
     var data = this.model.sortByKey(this.model.get('data'), column)
-    this.model.set('data', data)
+    console.log(data)
+    this.drawTable(data)
+    //this.model.set('data', data)
   },
   setGroupBy: function(e){
     var groupBy = this.model.get('groupBy')

@@ -21,7 +21,7 @@
 </script>
 
 <script type="text/template" id="table-template">
-  <div class="col-md-3 col-sm-4 block">
+  <div class="{{width}} block">
     <div class="chart">
       {{> title }}
       <div class="chart-inner">
@@ -47,8 +47,21 @@
   </div>
 </script>
 
+<script type="text/template" id="table-empty-template">
+  <div class="{{width}} block">
+    <div class="chart">
+      {{> title }}
+      <div class="chart-inner">
+        <table class="table table-condensed">
+
+        </table>
+      </div>
+    </div>
+  </div>
+</script>
+
 <script type="text/template" id="chart-template">
-<div class="col-md-3 col-sm-4 block">
+<div class="{{width}} block">
   <div class="chart">
     {{> title }}
     <div class="chart-inner">
@@ -60,7 +73,7 @@
 </script>
 
 <script type="text/template" id="stat-template">
-<div class="col-md-3 col-sm-4 block">
+<div class="{{width}} block">
   <div class="chart">
     {{> title }}
     <div class="chart-inner">
