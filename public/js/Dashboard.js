@@ -31,7 +31,7 @@ var Dashboard = Backbone.View.extend({
     this.makeCharts()
   },
   makeCharts: function() {
-    this.mapModel = {title: "Map", api: 'api/getPoints', key: 'geo', chart_type: 'map', visible: false}
+    this.mapModel = {title: "Map", api: 'api/getPoints', key: 'geo', chart_type: 'map'}
     this.chart_hash = {
       'energyeffiency': [
         {title: "Electricity Savings", api: 'api/getSavings', key: 'county', chart_type: 'pie', units: 'kWh'},

@@ -47,7 +47,7 @@ var MapView = Backbone.View.extend({
     var mapbox = L.tileLayer('http://{s}.tiles.mapbox.com/v3/esrgc.map-y9awf40v/{z}/{x}/{y}.png')
     mapbox.addTo(self.map)
 
-    this.projects = L.featureGroup()
+    this.projects = L.featureGroup().addTo(self.map)
 
     $.when(
       $.getJSON('data/maryland-single.json', function(json) {
@@ -97,11 +97,12 @@ var MapView = Backbone.View.extend({
       var layers_html = Mustache.render(self.layers_template, self.layer_switcher)
       self.$el.find('.map').find('.leaflet-bottom.leaflet-left').html(layers_html)
       self.$el.find('#maryland').find('p').addClass('active')
+      self.$el.find('#projects').find('p').addClass('active')
     })
   },
   makePopup: function(feature) {
     if (feature.mea_award) {
-       feature.mea_award = d3.format('$,')(feature.mea_award)
+      feature.mea_award = d3.format('$,')(feature.mea_award)
     }
     return Mustache.render(this.renewables_template, feature)
   },

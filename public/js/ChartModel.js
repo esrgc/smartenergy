@@ -29,16 +29,12 @@ var ChartModel = Backbone.Model.extend({
     var self = this
     if (this.get('visible')) {
       this.set('loading', true)
-      //this.clearData()
       if (this.request && this.request.readyState !== 4) {
         this.request.abort()
       }
       var url = this.makeQuery()
       this.request = $.getJSON(url, function(res){
         self.set('loading', false)
-        // if (self.get('sort')) {
-        //   res = self.sortByKey(res, 'value')
-        // }
         self.set('data', res)
       })
     }
