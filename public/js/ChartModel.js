@@ -32,15 +32,14 @@ var ChartModel = Backbone.Model.extend({
       if (this.request && this.request.readyState !== 4) {
         this.request.abort()
       }
-      var url = this.makeQuery()
+      var url = this.makeQuery(this.get('api'))
       this.request = $.getJSON(url, function(res){
         self.set('loading', false)
         self.set('data', res)
       })
     }
   },
-  makeQuery: function() {
-    var url = this.get('api')
+  makeQuery: function(url) {
     url += '?'
     Dashboard.filterCollection.each(function(filter) {
       if (filter.get('active')) {

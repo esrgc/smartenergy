@@ -1,3 +1,5 @@
+var ChartModel = require('./ChartModel')
+
 var MapView = Backbone.View.extend({
   template: $('#map-template').html(),
   renewables_template: $('#renewable-popup').html(),
@@ -36,7 +38,7 @@ var MapView = Backbone.View.extend({
     this.selectedStyle.fillOpacity = 0.9
 
     this.circlestyle = {
-      radius: 3,
+      radius: 4,
       fillColor: "#999999",
       color: "#000000",
       weight: 1,
@@ -100,11 +102,28 @@ var MapView = Backbone.View.extend({
       self.$el.find('#projects').find('p').addClass('active')
     })
   },
-  makePopup: function(feature) {
-    if (feature.mea_award) {
-      feature.mea_award = d3.format('$,')(feature.mea_award)
-    }
-    return Mustache.render(this.renewables_template, feature)
+  makePopup: function(features, latlng) {
+    var self = this
+    var money = d3.format('$,.2f')
+    var content = '<div class="map-projects">'
+    _.each(features, function(feature) {
+      var i = (parseFloat(feature.total_project_cost) - parseFloat(feature.mea_award))/parseFloat(feature.mea_award) || 0
+      feature.investment_leverage = d3.round(i, 2)
+      if (feature.mea_award) {
+        feature.mea_award = money(feature.mea_award)
+      }
+      if (feature.other_agency_dollars) {
+        feature.other_agency_dollars = money(feature.other_agency_dollars)
+      } else {
+        feature.other_agency_dollars = money(0)
+      }
+      if (feature.total_project_cost) {
+        feature.total_project_cost = money(feature.total_project_cost)
+      }
+      content += Mustache.render(self.renewables_template, feature)
+    })
+    content += '</div>'
+    return content
   },
   layerToggle: function(e) {
     var self = this
@@ -176,18 +195,36 @@ var MapView = Backbone.View.extend({
   update: function() {
     var self = this
     self.projects.clearLayers()
-    _.each(this.model.get('data'), function(feature) {
+    _.each(this.model.get('data'), function(features) {
+      var feature = features[0]
       if (feature.point) {
         var latlng = feature.point.split(',').map(parseFloat)
         if (latlng.length == 2) {
-          if (feature.technology) {
-            var filter = Dashboard.filterCollection.where({value: feature.technology})
-            if (filter.length) {
-              self.circlestyle.fillColor = filter[0].get('color')
+          if (features.length > 1) {
+            self.circlestyle.fillColor = '#666666'
+            self.circlestyle.radius = 5
+          } else {
+            if (feature.technology) {
+              var filter = Dashboard.filterCollection.where({value: feature.technology})
+              if (filter.length) {
+                self.circlestyle.fillColor = filter[0].get('color')
+                self.circlestyle.radius = 4
+              }
             }
           }
           var marker = L.circleMarker(latlng, self.circlestyle)
-          marker.bindPopup(self.makePopup(feature))
+          marker.on('click', function(point, latlng, e) {
+            var url = 'api/getProjectsByPoint'
+            url = self.model.makeQuery(url)
+            url += '&point=' + point.point
+            var popup = L.popup()
+            .setLatLng(latlng)
+            .setContent('Loading')
+            .openOn(self.map)
+            $.getJSON(url, function(res){
+              popup.setContent(self.makePopup(res, latlng))
+            })
+          }.bind(this, feature, latlng))
           self.projects.addLayer(marker)
         }
       }

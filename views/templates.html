@@ -158,10 +158,16 @@
 </script>
 
 <script type="text/template" id="renewable-popup">
-<ul class="list-unstyled">
-<li><b>Technology:</b> {{technology}}</li>
-<li><b>Program Name:</b> <a href="{{link}}">{{program_name}}</a></li>
-<li><b>MEA Contribution:</b> {{mea_award}}</li>
-<li><b>Capacity:</b>: {{capacity}} {{capacity_units}}</li>
-<ul>
+<div class="map-project">
+  <ul class="list-unstyled">
+    <li><b>Technology:</b> {{technology}}</li>
+    <li><b>Program Name:</b> <a href="{{link}}">{{program_name}}</a></li>
+    <li><b>Project Name:</b> {{project_name}}</li>
+    <li><b>MEA Contribution:</b> {{mea_award}}</li>
+    <li><b>Other State Contributions:</b> {{other_agency_dollars}}</li>
+    <li><b>Total Project Cost:</b> {{total_project_cost}}</li>
+    <li><b>Investment Leverage:</b> {{investment_leverage}}</li>
+    <li><b>Capacity:</b> {{capacity}} {{capacity_units}}</li>
+  <ul>
+</div>
 </script>
