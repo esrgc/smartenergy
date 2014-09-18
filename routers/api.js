@@ -121,22 +121,33 @@ api.get('/getContribution', function(req, res){
   })
 })
 
-https://data.maryland.gov/resource/mqt3-eu4s.json?$$app_token=AJ2997z4w2PohNzr0sNqUIHcn&$select=point,%20count(id)&$group=point&$order=count_id%20desc
-
 api.get('/getPoints', function(req, res){
-  //qry = '$select=point,%20count(id)&$group=point&$order=count_id%20desc&$where=point is not null'
-  qry = '$select=point,technology&$order=id%20desc&$limit=10000'
+  var data = []
+    , limit = 10000
+    , offset = 0
+  var qry = '$select=point,technology&$order=id%20desc&$limit=' + limit
   qry += filter.where(req.query, qry, 'point')
-  req.socrata_req = socrataDataset.query(qry, function(data) {
-    var points = _.groupBy(data, 'point')
-    returnData(req, res, points)
-  })
+  async.whilst(
+    function() { return limit == 10000 },
+    function(next) {
+      var _qry = qry + '&$offset=' + offset
+      req.socrata_req = socrataDataset.query(_qry, function(_data) {
+        data = data.concat(_data)
+        limit = _data.length
+        offset += 10000
+        next()
+      })
+    },
+    function(err) {
+      var points = _.groupBy(data, 'point')
+      returnData(req, res, points)
+    }
+  )
 })
 
 api.get('/getProjectsByPoint', function(req, res){
   var qry = ''
 
-  //function getPoints(
   if (req.query.tab === 'renewableenergy') {
     qry = '$select=point,program_name,project_name,other_agency_dollars,total_project_cost,capacity,capacity_units,notes,link,mea_award,technology'
   } else if (req.query.tab === 'energyeffiency') {
@@ -147,7 +158,6 @@ api.get('/getProjectsByPoint', function(req, res){
   qry += '&$order=id&$limit=10000'
   qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
-    console.log(data.length)
     returnData(req, res, data)
   })
 })
