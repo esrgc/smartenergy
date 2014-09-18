@@ -32,10 +32,10 @@ var MapView = Backbone.View.extend({
       "weight": 1,
       "opacity": 0.65,
       "fillOpacity": 0.1,
-      "fillColor": "#2B4E72"
+      "fillColor": "#A9C783"
     }
     this.selectedStyle = JSON.parse(JSON.stringify(this.style))
-    this.selectedStyle.fillOpacity = 0.9
+    this.selectedStyle.fillOpacity = 0.4
 
     this.circlestyle = {
       radius: 4,
@@ -43,13 +43,35 @@ var MapView = Backbone.View.extend({
       color: "#000000",
       weight: 1,
       opacity: 1,
-      fillOpacity: 0.8
+      fillOpacity: 0.8,
+      projects: 1
     }
 
     var mapbox = L.tileLayer('http://{s}.tiles.mapbox.com/v3/esrgc.map-y9awf40v/{z}/{x}/{y}.png')
     mapbox.addTo(self.map)
 
-    this.projects = L.featureGroup().addTo(self.map)
+    this.projects = L.markerClusterGroup({
+      maxClusterRadius: 50,
+      showCoverageOnHover: false,
+      polygonOptions: {
+        color: '#2B4E72',
+        weight: 2,
+        fillColor: '#2B4E72',
+        fillOpacity: 0.1
+      },
+      iconCreateFunction: function(cluster) {
+        var markers = cluster.getAllChildMarkers()
+        var num_projects = 0
+        _.each(markers, function(m) {
+          if (m.options.projects) num_projects += m.options.projects
+        })
+        return new L.DivIcon({
+          className: 'div-icon',
+          html: num_projects,
+          iconSize: L.point(30, 30)
+        })
+      }
+    }).addTo(self.map)
 
     $.when(
       $.getJSON('data/maryland-single.json', function(json) {
@@ -120,6 +142,13 @@ var MapView = Backbone.View.extend({
       if (feature.total_project_cost) {
         feature.total_project_cost = money(feature.total_project_cost)
       }
+      feature.color = '#bbb'
+      if (feature.technology) {
+        var filter = Dashboard.filterCollection.where({value: feature.technology})
+        if (filter.length) {
+          feature.color = filter[0].get('color')
+        }
+      }
       content += Mustache.render(self.renewables_template, feature)
     })
     content += '</div>'
@@ -128,7 +157,7 @@ var MapView = Backbone.View.extend({
   layerToggle: function(e) {
     var self = this
     var id = $(e.target).parent().attr('id')
-    var layer = _.where(this.layer_switcher.layers, {id: id})[0]
+    var layer = _.findWhere(this.layer_switcher.layers, {id: id})
     if (layer && layer.type === 'overlay') {
       if (self.map.hasLayer(layer.layer)) {
         this.map.removeLayer(layer.layer)
@@ -149,8 +178,6 @@ var MapView = Backbone.View.extend({
         var geofilters = Dashboard.filterCollection.where({geo: true})
         Dashboard.filterCollection.remove(geofilters)
         this.map.addLayer(layer.layer)
-        //var groupFilter = Dashboard.filterCollection.findWhere({type: 'group'})
-        //if (layer.id !== 'maryland') groupFilter.set('value', layer.id)
         $(e.target).addClass('active')
       }
     }
@@ -159,15 +186,15 @@ var MapView = Backbone.View.extend({
     var self = this
     layer.on('click', function(e){
       var name = e.target.feature.properties.name
-      var filter = Dashboard.filterCollection.findWhere({type: layer.options.name, value: name})
+      var filter = Dashboard.filterCollection.findWhere({type: e.layer.options.name, value: name})
       if (filter) {
-        layer.setStyle(self.style)
+        e.layer.setStyle(self.style)
         filter.destroy()
       } else {
-        layer.setStyle(self.selectedStyle)
+        e.layer.setStyle(self.selectedStyle)
         Dashboard.filterCollection.add({
           value: name,
-          type: layer.options.name,
+          type: e.layer.options.name,
           active: true,
           geo: true
         })
@@ -201,8 +228,12 @@ var MapView = Backbone.View.extend({
         var latlng = feature.point.split(',').map(parseFloat)
         if (latlng.length == 2) {
           if (features.length > 1) {
-            self.circlestyle.fillColor = '#666666'
-            self.circlestyle.radius = 5
+            var myIcon = L.divIcon({
+              className: 'div-icon projects-icon',
+              html: features.length,
+              iconSize: L.point(30, 30)
+            })
+            var marker = L.marker(latlng, {icon: myIcon, projects: features.length})
           } else {
             if (feature.technology) {
               var filter = Dashboard.filterCollection.where({value: feature.technology})
@@ -211,8 +242,8 @@ var MapView = Backbone.View.extend({
                 self.circlestyle.radius = 4
               }
             }
+            var marker = L.circleMarker(latlng, self.circlestyle)
           }
-          var marker = L.circleMarker(latlng, self.circlestyle)
           marker.on('click', function(point, latlng, e) {
             var url = 'api/getProjectsByPoint'
             url = self.model.makeQuery(url)

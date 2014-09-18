@@ -281,14 +281,41 @@ body {
 }
 
 .map-project {
-  padding: 5px;
   border: 1px solid #bbb;
   border-radius: 4px;
   margin: 0px 5px 5px 0;
+  .bar {
+    float: left;
+    height: 5px;
+    width: 100%;
+    background: #bbb;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
   b {
     color: @alternate3;
   }
   ul {
+    margin-top: 5px;
     margin-bottom: 0px;
+    padding: 5px;
+    background: #ffffff;
   }
+}
+
+.div-icon {
+  background: fadeout(@alternate3, 20%);
+  border-radius: 999px;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  font-size: 12px;
+  color: #fff;
+  border-radius: 15px;
+  line-height: 30px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.projects-icon {
+  
 }
