@@ -3,7 +3,7 @@ var express = require('express')
   , filter = require('../lib/filter')
   , Socrata = require('../lib/Socrata')
   , async = require('async')
-  , _ = require('underscore')
+  , _ = require('lodash')
   , config = require('../config/config')
 
 var socrataDataset = new Socrata.Dataset()
