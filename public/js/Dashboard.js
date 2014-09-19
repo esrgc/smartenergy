@@ -34,10 +34,11 @@ var Dashboard = Backbone.View.extend({
     this.mapModel = {title: "Map", api: 'api/getPoints', key: 'geo', chart_type: 'map'}
     this.chart_hash = {
       'energyeffiency': [
-        {title: "Electricity Savings", api: 'api/getSavings', key: 'county', chart_type: 'pie', units: 'kWh'},
-        {title: "CO2 Emissions Reductions", api: 'api/getReductions', key: 'county', chart_type: 'pie', units: 'tons'},
-        {title: "Program", api: 'api/getProgramName', key: 'program_name', chart_type: 'pie', units: 'projects'},
-        {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie', units: 'projects'}
+        {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
+        {title: "Program", api: 'api/getProgramName', key: 'Program Name', chart_type: 'bar', y: 'projects', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
+        {title: "Sector", api: 'api/getSector', key: 'sector', y: 'projects', chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
+        {title: "Electricity Savings", api: 'api/getSavings', key: 'county', y: 'savings', chart_type: 'pie', units: 'kWh'},
+        {title: "CO2 Emissions Reductions", api: 'api/getReductions', key: 'county', y: 'reduction', chart_type: 'pie', units: 'tons'}
       ],
       'renewableenergy': [
         {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
@@ -48,10 +49,11 @@ var Dashboard = Backbone.View.extend({
         {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'year', y: 'reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%Y")}
       ],
       'transportation': [
+        {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
         //{title: "Vehicle Technology", api: 'api/getVehicleTechnology', key: 'vehicle_technology', chart_type: 'pie'},
-        {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'charging_fueling_station_technology', chart_type: 'pie'},
-        {title: "Program", api: 'api/getProgramName', key: 'program_name', chart_type: 'pie', units: 'projects'},
-        {title: "Sector", api: 'api/getSector', key: 'sector', chart_type: 'pie', units: 'projects'}
+        {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'technology', y: 'projects', chart_type: 'pie'},
+        {title: "Program", api: 'api/getProgramName', key: 'Program Name', y: 'projects', chart_type: 'bar', units: 'projects', barLabels: true},
+        {title: "Sector", api: 'api/getSector', key: 'sector', y: 'projects', chart_type: 'bar', units: 'projects', barLabels: true}
       ]
     }
   },

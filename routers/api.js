@@ -113,8 +113,8 @@ api.get('/getContribution', function(req, res){
     _.each(data, function(r) {
       d.push({
         county: r.county,
-        "Total Project Cost": r.project_cost,
-        "MEA Contribution": r.mea_contribution
+        "Total Project Cost": +r.project_cost - +r.mea_contribution,
+        "MEA Contribution": +r.mea_contribution
       })
     })
     returnData(req, res, d)
@@ -125,7 +125,15 @@ api.get('/getPoints', function(req, res){
   var data = []
     , limit = 10000
     , offset = 0
-  var qry = '$select=point,technology&$order=id%20desc&$limit=' + limit
+    , qry = ''
+  if (req.query.tab === 'renewableenergy') {
+    qry = '$select=point,technology&$order=id%20desc'
+  } else if (req.query.tab === 'energyeffiency') {
+    qry = '$select=point&$order=id%20desc'
+  } else if (req.query.tab === 'transportation') {
+    qry = '$select=point,charging_fueling_station_technology as technology&$order=id%20desc'
+  }
+  qry += '&$limit=' + limit
   qry += filter.where(req.query, qry, 'point')
   async.whilst(
     function() { return limit == 10000 },
@@ -151,9 +159,9 @@ api.get('/getProjectsByPoint', function(req, res){
   if (req.query.tab === 'renewableenergy') {
     qry = '$select=point,program_name,project_name,other_agency_dollars,total_project_cost,capacity,capacity_units,notes,link,mea_award,technology'
   } else if (req.query.tab === 'energyeffiency') {
-    qry = '$select=point,program_name,link,mea_award'
+    qry = '$select=point,program_name,link,mea_award,notes'
   } else if (req.query.tab === 'transportation') {
-    qry = '$select=point,program_name,link,mea_award,vehicle_technology as technology'
+    qry = '$select=point,program_name,link,mea_award,charging_fueling_station_technology as technology,notes'
   }
   qry += '&$order=id&$limit=10000'
   qry += filter.where(req.query, qry)
@@ -163,7 +171,7 @@ api.get('/getProjectsByPoint', function(req, res){
 })
 
 api.get('/getStationTechnology', function(req, res){
-  var qry = '$select=charging_fueling_station_technology,count(id) as value&$group=charging_fueling_station_technology'
+  var qry = '$select=charging_fueling_station_technology as technology,count(id) as projects&$group=charging_fueling_station_technology'
   qry += filter.where(req.query, qry, 'charging_fueling_station_technology')
   req.socrata_req = socrataDataset.query(qry, function(data) {
     returnData(req, res, data)
@@ -179,7 +187,7 @@ api.get('/getVehicleTechnology', function(req, res){
 })
 
 api.get('/getReductions', function(req, res){
-  var qry = '$select=county,sum(co2_emissions_reductions_tons) as value&$group=county'
+  var qry = '$select=county,sum(co2_emissions_reductions_tons) as reduction&$group=county'
   qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     returnData(req, res, data)
@@ -187,7 +195,7 @@ api.get('/getReductions', function(req, res){
 })
 
 api.get('/getSavings', function(req, res){
-  var qry = '$select=county,sum(electricity_savings_kwh) as value&$group=county'
+  var qry = '$select=county,sum(electricity_savings_kwh) as savings&$group=county'
   qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     returnData(req, res, data)

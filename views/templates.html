@@ -130,10 +130,10 @@
   <div class="title">
     {{#toolbar}}
     <div class="toolbar">
+      <i class="fa fa-sliders tool chart-settings"></i>
       <i class="fa fa-table tool totable"></i>
       <i class="fa fa-bar-chart-o tool tochart"></i>
       <i class="fa fa-download tool download"></i>
-      <i class="fa fa-code tool code"></i>
     </div>
     {{/toolbar}}
     <h3>{{ title }}</h3>
@@ -142,10 +142,10 @@
 
 <script type="text/template" id="toolbar-partial">
   <div class="toolbar">
+    <i class="fa fa-sliders tool chart-settings"></i>
     <i class="fa fa-table tool totable"></i>
     <i class="fa fa-bar-chart-o tool tochart"></i>
     <i class="fa fa-download tool download"></i>
-    <i class="fa fa-code tool code"></i>
   </div>
 </script>
 
@@ -168,6 +168,7 @@
     <li><b>Total Project Cost:</b> {{total_project_cost}}</li>
     <li><b>Investment Leverage:</b> {{investment_leverage}}</li>
     <li><b>Capacity:</b> {{capacity}} {{capacity_units}}</li>
-  <ul>
+    <li><b>Notes:</b> {{notes}}</li>
+  </ul>
 </div>
 </script>
