@@ -1,4 +1,5 @@
 var ChartModel = require('./ChartModel')
+  , FilterModel = require('./FilterModel')
 
 var MapView = Backbone.View.extend({
   template: $('#map-template').html(),
@@ -84,43 +85,43 @@ var MapView = Backbone.View.extend({
           name: 'maryland'
         }).addTo(self.map)
       }),
-      $.getJSON('data/mdcnty.json', function(json) {
+      $.getJSON('data/maryland-counties.json', function(json) {
         self.counties = L.geoJson(json, {
           style: self.style,
           onEachFeature: self.onEachFeature.bind(self),
           name: 'county'
         })
-      }),
-      $.getJSON('data/maryland-legislative-districts.json', function(json) {
-        self.legislativeDistricts = L.geoJson(json, {
-          style: self.style,
-          onEachFeature: self.onEachFeature.bind(self),
-          name: 'legislative'
-        })
-      }),
-      $.getJSON('data/maryland-congressional-districts.json', function(json) {
-        self.congressionalDistricts = L.geoJson(json, {
-          style: self.style,
-          onEachFeature: self.onEachFeature.bind(self),
-          name: 'congressional'
-        })
-      }),
-      $.getJSON('data/maryland-zips.json', function(json) {
-        self.zips = L.geoJson(json, {
-          style: self.style,
-          onEachFeature: self.onEachFeature.bind(self),
-          name: 'zipcode'
-        })
       })
+      // $.getJSON('data/maryland-legislative-districts.json', function(json) {
+      //   self.legislativeDistricts = L.geoJson(json, {
+      //     style: self.style,
+      //     onEachFeature: self.onEachFeature.bind(self),
+      //     name: 'legislative'
+      //   })
+      // }),
+      // $.getJSON('data/maryland-congressional-districts.json', function(json) {
+      //   self.congressionalDistricts = L.geoJson(json, {
+      //     style: self.style,
+      //     onEachFeature: self.onEachFeature.bind(self),
+      //     name: 'congressional'
+      //   })
+      // }),
+      // $.getJSON('data/maryland-zips.json', function(json) {
+      //   self.zips = L.geoJson(json, {
+      //     style: self.style,
+      //     onEachFeature: self.onEachFeature.bind(self),
+      //     name: 'zipcode'
+      //   })
+      // })
     ).then(function() {
 
       self.layer_switcher = {layers: [
         {name: "Maryland", id: "maryland", layer: self.maryland, type: 'base'},
-        {name: "Counties", id: "county", layer: self.counties, type: 'base'},
-        {name: "Leg. Dist.", id: "legislative", layer: self.legislativeDistricts, type: 'base'},
-        {name: "Cong. Dist.", id: "congressional", layer: self.congressionalDistricts, type: 'base'},
-        {name: "Zip Codes", id: "zipcode", layer: self.zips, type: 'base'},
-        {name: "Individual Projects", id: "projects", layer: self.projects, type: 'overlay'}
+        {name: "Counties", id: "county", layer: self.counties, type: 'base'}
+        // {name: "Leg. Dist.", id: "legislative", layer: self.legislativeDistricts, type: 'base'},
+        // {name: "Cong. Dist.", id: "congressional", layer: self.congressionalDistricts, type: 'base'},
+        // {name: "Zip Codes", id: "zipcode", layer: self.zips, type: 'base'},
+        // {name: "Individual Projects", id: "projects", layer: self.projects, type: 'overlay'}
       ]}
       var layers_html = Mustache.render(self.layers_template, self.layer_switcher)
       self.$el.find('.map').find('.leaflet-bottom.leaflet-left').html(layers_html)
@@ -188,22 +189,24 @@ var MapView = Backbone.View.extend({
   },
   onEachFeature: function(feature, layer) {
     var self = this
-    layer.on('click', function(e){
-      var name = e.target.feature.properties.name
-      var filter = Dashboard.filterCollection.findWhere({type: e.layer.options.name, value: name})
+    layer.on('click', function(feature, layer, e){
+      var options = layer.options || layer._options
+      var name = feature.properties.name
+      var filter = Dashboard.filterCollection.findWhere({type: options.name, value: name})
       if (filter) {
-        e.layer.setStyle(self.style)
-        filter.destroy()
+        layer.setStyle(self.style)
+        Dashboard.filterCollection.remove(filter)
       } else {
-        e.layer.setStyle(self.selectedStyle)
-        Dashboard.filterCollection.add({
+        layer.setStyle(self.selectedStyle)
+        var f = new FilterModel({
           value: name,
-          type: e.layer.options.name,
+          type: options.name,
           active: true,
           geo: true
         })
+        Dashboard.filterCollection.add(f)
       }
-    })
+    }.bind(this, feature, layer))
     layer.on('mouseover', function(e) {
       self.$el.find('.map').find('#mouseover').html(e.target.feature.properties.name)
       self.$el.find('.map').find('#mouseover').show()

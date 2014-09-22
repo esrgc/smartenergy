@@ -5,7 +5,7 @@ var ChartView = require('./ChartView')
 var FilterMenuView = ChartView.extend({
   template: $('#filter-menu-template').html(),
   events: {
-    //'click .reset': 'resetFilters'
+    'click .reset': 'resetFilters'
   },
   initialize: function(){
     Dashboard.filterCollection.on('change:active', this.changeSummary, this)
@@ -52,7 +52,11 @@ var FilterMenuView = ChartView.extend({
 
   },
   resetFilters: function() {
-    console.log('reset')
+    var geofilters = Dashboard.filterCollection.where({geo: true})
+    Dashboard.filterCollection.remove(geofilters)
+    Dashboard.filterCollection.each(function(filter) {
+      if (filter.get('active')) filter.set({'active': false})
+    })
   },
   changeSummary: function() {
     $('.dashboard .filter-summary').html('')

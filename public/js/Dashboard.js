@@ -113,12 +113,12 @@ var Dashboard = Backbone.View.extend({
       'transportation': this.sectors.concat(this.stations)
     }
     this.filterCollection.add(this.filter_hash[this.activetab])
-    var groupfilter = {
-      value: '',
-      type: 'group',
-      active: true
-    }
-    this.filterCollection.add(groupfilter)
+    // var groupfilter = {
+    //   value: '',
+    //   type: 'group',
+    //   active: true
+    // }
+    // this.filterCollection.add(groupfilter)
   },
   renderChart: function(chart) {
     var view = {}
@@ -215,12 +215,12 @@ var Dashboard = Backbone.View.extend({
           if (chart.chart_type === 'line') {
             chart.colors = [tech_filters[0].get('color')]
           }
+          new_charts.push(chart)
         }
-        new_charts.push(chart)
       })
-      this.capacityCharts = this.chartCollection.add(new_charts)
+      if (new_charts.length) this.capacityCharts = this.chartCollection.add(new_charts)
     } else {
-      this.chartCollection.remove(this.capacityCharts)
+      if (this.capacityCharts) this.chartCollection.remove(this.capacityCharts)
     }
   },
   switchTab: function(e) {

@@ -262,9 +262,10 @@ api.get('/getCapacityOverTime', function(req, res){
   ], function(err, results) {
     var data = _.flatten(results)
     data = _.map(data, function(r) {
+      console.log(r)
       return {
         'Year': r.year,
-        'Capacity': r.sum_capacity
+        'Capacity': r.sum_capacity || 0
       }
     })
     returnData(req, res, data)
@@ -296,8 +297,8 @@ api.get('/getReductionOverTime', function(req, res){
     var data = _.flatten(results)
     data = _.map(data, function(r) {
       return {
-        'Reduction': r.reduction,
-        'Year': r.year
+        'Year': r.year,
+        'Reduction': r.reduction || 0,
       }
     })
     returnData(req, res, data)
