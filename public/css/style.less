@@ -128,17 +128,24 @@ body {
         display: none;
         .filter-title {
           text-align: left;
-          margin: 0px 5px 10px 5px;
+          margin: 0px 0px 10px 0px;
           font-size: 14px;
           font-weight: bold;
+          border-bottom: 1px solid @tableBorder;
         }
         .filter-label {
-          margin: 0px 5px 5px 5px;
+          float: left;
+          margin-right: 5px;
+          margin-bottom: 5px;
           text-align: left;
           font-size: 12px;
-          input {
-            float: left;
-            margin-right: 5px;
+           button {
+            &.active:before {
+              font-family: FontAwesome;
+              font-size: 10px;
+              padding-right: 3px;
+              content:"\f00c";
+            }
           }
           .swatch {
             float: left;
@@ -218,21 +225,6 @@ body {
 
 .dashboard .filters .radio-inline+.radio-inline, .checkbox-inline+.checkbox-inline {
   margin-left: 2px;
-}
-
-.dashboard .filters button {
-  float: left;
-  margin-right: 5px;
-  margin-bottom: 5px;
-  &.active:before {
-    font-family: FontAwesome;
-    font-size: 10px;
-    padding-right: 3px;
-    content:"\f00c";
-  }
-}
-
-.dashboard .filters button.clear {
 }
 
 .footer, .wrap:after {

@@ -55,6 +55,11 @@ var Dashboard = Backbone.View.extend({
         {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie'},
         {title: "Program", api: 'api/getProgramName', key: 'Program Name', y: 'Projects', chart_type: 'bar', units: 'projects', barLabels: true},
         {title: "Sector", api: 'api/getSector', key: 'Sector', y: 'Projects', chart_type: 'bar', units: 'projects', barLabels: true}
+      ],
+      'capacity_charts': [
+        {title: "Capacity By County", api: 'api/getCapacityByCounty', key: 'County', y: 'Capacity', chart_type: 'pie', showUnitsInTable: true},
+        {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'Sector', y: 'Capacity', chart_type: 'bar', showUnitsInTable: true},
+        {title: "Capacity Growth", api: 'api/getCapacityOverTime', key: 'Year', y: 'Capacity', chart_type: 'line', labelFormat: d3.time.format("%Y"), showUnitsInTable: true},
       ]
     }
   },
@@ -191,14 +196,18 @@ var Dashboard = Backbone.View.extend({
   },
   update: function(e) {
     var self = this
-    var capacity_charts = [
-      {title: "Capacity By County", api: 'api/getCapacityByCounty', key: 'County', y: 'Capacity', chart_type: 'pie', showUnitsInTable: true},
-      {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'Sector', y: 'Capacity', chart_type: 'bar', showUnitsInTable: true},
-      {title: "Capacity Growth", api: 'api/getCapacityOverTime', key: 'Year', y: 'Capacity', chart_type: 'line', labelFormat: d3.time.format("%Y"), showUnitsInTable: true  },
-    ]
-    capacity_charts.forEach(function(chart) {
-      var tech_filters = self.filterCollection.where({active: true, type: 'technology'})
-      if (tech_filters.length === 1) {
+    this.updateChartCollection()
+    this.chartCollection.each(function(chart) {
+      chart.update()
+    })
+  },
+  updateChartCollection: function() {
+    var self = this
+    var tech_filters = this.filterCollection.where({active: true, type: 'technology'})
+    if (tech_filters.length === 1) {
+      var new_charts = []
+      this.chart_hash['capacity_charts'].forEach(function(chart) {
+        chart = _.clone(chart)
         var chart_exits = self.chartCollection.where({api: chart.api})
         if (chart_exits.length === 0) {
           chart.title = tech_filters[0].get('value') + ' ' + chart.title
@@ -206,19 +215,13 @@ var Dashboard = Backbone.View.extend({
           if (chart.chart_type === 'line') {
             chart.colors = [tech_filters[0].get('color')]
           }
-          self.chartCollection.add(chart)
         }
-      } else {
-        self.chartCollection.each(function(_chart) {
-          if (_chart.get('api') === chart.api) {
-            self.chartCollection.remove(_chart)
-          }
-        })
-      }
-    })
-    this.chartCollection.each(function(chart) {
-      chart.update()
-    })
+        new_charts.push(chart)
+      })
+      this.capacityCharts = this.chartCollection.add(new_charts)
+    } else {
+      this.chartCollection.remove(this.capacityCharts)
+    }
   },
   switchTab: function(e) {
     var self = this

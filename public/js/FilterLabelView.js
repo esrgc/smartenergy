@@ -21,11 +21,6 @@ var FilterLabelView = Backbone.View.extend({
     var active = this.model.get('active')
     this.model.set('active', !active)
     this.$el.find('button').toggleClass('active')
-    if (active) {
-
-    } else {
-
-    }
   }
 })
 

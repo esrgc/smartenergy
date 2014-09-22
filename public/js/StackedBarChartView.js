@@ -36,7 +36,7 @@ var StackedBarChartView = BarChartView.extend({
         return totals[i]
       }).reverse()
       this.setColors(data)
-      this.model.set('data', data)
+      this.model.set('data', data, {silent: true})
       data = _.map(data, function(row) {
         var i = (parseFloat(row['Total Project Cost']) - parseFloat(row['MEA Contribution']))/parseFloat(row['MEA Contribution']) || 0
         row['Investment Leverage'] = d3.round(i, 2)

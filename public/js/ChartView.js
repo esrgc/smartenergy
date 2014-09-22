@@ -64,8 +64,8 @@ var ChartView = Backbone.View.extend({
       this.$el.find('.loader').hide()
     }
   },
-  prepData: function(res) {
-    return res
+  prepData: function(data) {
+    return data
   },
   download: function(e) {
     var querystring = $.param(Dashboard.filterCollection.toJSON())

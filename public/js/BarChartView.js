@@ -62,7 +62,7 @@ var BarChartView = ChartView.extend({
         return totals[i]
       }).reverse()
       this.setColors(data)
-      this.model.set('data', data)
+      this.model.set('data', data, {silent: true})
     }
     return data
   }

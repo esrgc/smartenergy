@@ -5,7 +5,7 @@ var ChartView = require('./ChartView')
 var FilterMenuView = ChartView.extend({
   template: $('#filter-menu-template').html(),
   events: {
-
+    //'click .reset': 'resetFilters'
   },
   initialize: function(){
     Dashboard.filterCollection.on('change:active', this.changeSummary, this)
@@ -50,6 +50,9 @@ var FilterMenuView = ChartView.extend({
   },
   removeFilter: function(filter) {
 
+  },
+  resetFilters: function() {
+    console.log('reset')
   },
   changeSummary: function() {
     $('.dashboard .filter-summary').html('')
