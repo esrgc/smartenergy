@@ -1,32 +1,6 @@
-var ChartView = require('./ChartView')
+var BarChartView = require('./BarChartView')
 
-var BarChartView = ChartView.extend({
-  render: function() {
-    var self = this
-    this.$el.html(Mustache.render(this.template, this.model.toJSON(), {
-      title: $('#title-partial').html(),
-      toolbar: $('#toolbar-partial').html()
-    }))
-    this.$el.find('.chart-inner').css('overflow', 'hidden')
-    this.chartel = this.$el.find('.chart-inner > .the-chart').get(0)
-    this.chart = false
-    return this
-  },
-  drawChart: function() {
-    this.chart = new GeoDash.BarChartVertical(this.chartel, {
-      x: this.model.get('key')
-      , y: this.model.get('y')
-      , colors: this.colors
-      , yTickFormat: d3.format(".2s")
-      , hoverTemplate: "{{x}}: {{y}} " + this.model.get('units')
-      , opacity: 0.8
-      , barLabels: this.model.get('barLabels')
-      , legend: this.model.get('legend')
-      , legendWidth: 'auto'
-      , legendPosition: 'inside'
-      , valueFormat: this.model.get('valueFormat')
-    })
-  },
+var StackedBarChartView = BarChartView.extend({
   prepData: function(data){
     var self = this
     var row = data[0]
@@ -63,9 +37,24 @@ var BarChartView = ChartView.extend({
       }).reverse()
       this.setColors(data)
       this.model.set('data', data)
+      data = _.map(data, function(row) {
+        var i = (parseFloat(row['Total Project Cost']) - parseFloat(row['MEA Contribution']))/parseFloat(row['MEA Contribution']) || 0
+        row['Investment Leverage'] = d3.round(i, 2)
+        return row
+      })
     }
     return data
+  },
+  toTable: function(){
+    var y = ['Total Project Cost', 'MEA Contribution', 'Investment Leverage']
+    var TableView = require('./TableView')
+    var view = new TableView({
+      model: this.model,
+      y: y
+    })
+    this.$el.parent().html(view.render().el)
+    view.resize()
   }
 })
 
-module.exports = BarChartView
+module.exports = StackedBarChartView

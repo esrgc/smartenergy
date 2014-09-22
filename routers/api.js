@@ -32,6 +32,12 @@ api.get('/getTechnology', function(req, res){
   var qry = '$select=technology,count(id) as projects&$group=technology'
   qry += filter.where(req.query, qry, 'technology')
   req.socrata_req = socrataDataset.query(qry,function(data) {
+    data = _.map(data, function(r) {
+      return {
+        'Technology': r.technology,
+        'Projects': r.projects
+      }
+    })
     returnData(req, res, data)
   })
 })
@@ -48,14 +54,13 @@ api.get('/getProgramName', function(req, res){
   var qry = '$select=program_name,count(id) as projects&$group=program_name'
   qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
-    var d = []
-    _.each(data, function(r) {
-      d.push({
-        "Program Name": r.program_name,
-        "projects": r.projects
-      })
+    data = _.map(data, function(r) {
+      return {
+        'Program Name': r.program_name,
+        'Projects': r.projects
+      }
     })
-    returnData(req, res, d)
+    returnData(req, res, data)
   })
 })
 
@@ -64,13 +69,13 @@ api.get('/getCapacityByCounty', function(req, res){
   qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     var d = []
-    _.each(data, function(r) {
-      d.push({
-        county: r.county,
-        "Capacity": r.sum_capacity
-      })
+    data = _.map(data, function(r) {
+      return {
+        'County': r.county,
+        'Capacity': r.sum_capacity
+      }
     })
-    returnData(req, res, d)
+    returnData(req, res, data)
   })
 })
 
@@ -79,13 +84,13 @@ api.get('/getCapacityBySector', function(req, res){
   qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     var d = []
-    _.each(data, function(r) {
-      d.push({
-        sector: r.sector,
-        "Capacity": r.sum_capacity
-      })
+    data = _.map(data, function(r) {
+      return {
+        'Sector': r.sector,
+        'Capacity': r.sum_capacity
+      }
     })
-    returnData(req, res, d)
+    returnData(req, res, data)
   })
 })
 
@@ -93,6 +98,12 @@ api.get('/getSector', function(req, res){
   var qry = '$select=sector,count(id)%20as%20projects&$group=sector'
   qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
+    data = _.map(data, function(r) {
+      return {
+        'Sector': r.sector,
+        'Projects': r.projects
+      }
+    })
     returnData(req, res, data)
   })
 })
@@ -107,17 +118,17 @@ api.get('/getStats', function(req, res){
 
 api.get('/getContribution', function(req, res){
   var qry = '$select=sum(mea_award)%20as%20mea_contribution,sum(total_project_cost)%20as%20project_cost,county&$group=county'
-  qry += filter.where(req.query, qry)
+  qry += filter.where(req.query, qry, 'county')
   req.socrata_req = socrataDataset.query(qry, function(data) {
-    var d = []
-    _.each(data, function(r) {
-      d.push({
-        county: r.county,
-        "Total Project Cost": +r.project_cost - +r.mea_contribution,
-        "MEA Contribution": +r.mea_contribution
-      })
+    data = _.map(data, function(r) {
+      return {
+        'County': r.county,
+        'Other Contributions': +r.project_cost - +r.mea_contribution,
+        'MEA Contribution': +r.mea_contribution,
+        'Total Project Cost': +r.project_cost
+      }
     })
-    returnData(req, res, d)
+    returnData(req, res, data)
   })
 })
 
@@ -181,6 +192,12 @@ api.get('/getStationTechnology', function(req, res){
   var qry = '$select=charging_fueling_station_technology as technology,count(id) as projects&$group=charging_fueling_station_technology'
   qry += filter.where(req.query, qry, 'charging_fueling_station_technology')
   req.socrata_req = socrataDataset.query(qry, function(data) {
+    data = _.map(data, function(r) {
+      return {
+        'Technology': r.technology,
+        'Projects': +r.projects
+      }
+    })
     returnData(req, res, data)
   })
 })
@@ -197,6 +214,12 @@ api.get('/getReductions', function(req, res){
   var qry = '$select=county,sum(co2_emissions_reductions_tons) as reduction&$group=county'
   qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
+    data = _.map(data, function(r) {
+      return {
+        'County': r.county,
+        'Reduction': +r.reduction
+      }
+    })
     returnData(req, res, data)
   })
 })
@@ -205,6 +228,12 @@ api.get('/getSavings', function(req, res){
   var qry = '$select=county,sum(electricity_savings_kwh) as savings&$group=county'
   qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
+    data = _.map(data, function(r) {
+      return {
+        'County': r.county,
+        'Savings': +r.savings
+      }
+    })
     returnData(req, res, data)
   })
 })
@@ -232,14 +261,13 @@ api.get('/getCapacityOverTime', function(req, res){
     function(callback) { getPerYear(2014, callback) }
   ], function(err, results) {
     var data = _.flatten(results)
-    var d = []
-    _.each(data, function(r) {
-      d.push({
-        year: r.year,
-        "Capacity": r.sum_capacity
-      })
+    data = _.map(data, function(r) {
+      return {
+        'Year': r.year,
+        'Capacity': r.sum_capacity
+      }
     })
-    returnData(req, res, d)
+    returnData(req, res, data)
   })
 })
 
@@ -266,6 +294,12 @@ api.get('/getReductionOverTime', function(req, res){
     function(callback) { getPerYear(2014, callback) }
   ], function(err, results) {
     var data = _.flatten(results)
+    data = _.map(data, function(r) {
+      return {
+        'Reduction': r.reduction,
+        'Year': r.year
+      }
+    })
     returnData(req, res, data)
   })
 })

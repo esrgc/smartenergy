@@ -12,10 +12,6 @@ var TableView = ChartView.extend({
   render: function() {
     var self = this
     var attrs = this.model.toJSON()
-    console.log(attrs)
-    // if(attrs.data) {
-    //   attrs.data = this.prepData(attrs.data)
-    // }
     this.$el.html(Mustache.render(this.template, attrs, {
       title: $('#title-partial').html(),
       toolbar: $('#toolbar-partial').html()
@@ -37,29 +33,40 @@ var TableView = ChartView.extend({
     this.resize()
   },
   drawTable: function(data) {
+    if (this.options.y) {
+      var y = this.options.y
+    } else {
+      var  y = this.model.get('y')
+    }
     var self = this
     var table = this.$el.find('table')
-    console.log(table)
     table.empty()
     var html = '<thead><tr>'
     var keys = []
     html += '<th>' + this.model.get('key') + '</th>'
-    if (typeof this.model.get('y') === 'string') {
-      keys.push(this.model.get('y'))
-      html += '<th>' + this.model.get('y') + '</th>'
-    } else if (typeof this.model.get('y') === 'object') {
-      this.model.get('y').forEach(function(y) {
-        html += '<th>' + y + '</th>'
-        keys.push(y)
-      })
+    if (typeof y === 'string') {
+      y = [y]
     }
+    y.forEach(function(_y) {
+      html += '<th>' + _y
+      if (self.model.get('showUnitsInTable')) {
+        html += ' (' + self.model.get('units') + ')'
+      }
+      html += '</th>'
+      keys.push(_y)
+    })
     html += '</tr></thead><tbody>'
-    //var data = this.model.get('data')
     _.each(data, function(row, idx) {
       html += '<tr>'
       html += '<td>' + self.model.get('labelFormat')(row[self.model.get('key')]) + '</td>'
         _.each(keys, function(key) {
-          html += '<td>' + self.model.get('valueFormat')(row[key]) + '</td>'
+          html += '<td>'
+          if (self.model.get('dontFormat').indexOf(key) < 0) {
+            html += self.model.get('valueFormat')(row[key])
+          } else {
+            html += row[key]
+          }
+          html += '</td>'
         })
       html += '</tr>'
     })
@@ -90,9 +97,7 @@ var TableView = ChartView.extend({
   },
   sortByHeader: function(e) {
     var column = $(e.target).html()
-    console.log(column)
     var data = this.model.sortByKey(this.model.get('data'), column)
-    console.log(data)
     this.drawTable(data)
     //this.model.set('data', data)
   },
@@ -114,27 +119,7 @@ var TableView = ChartView.extend({
     }
   },
   toChart: function(){
-    if(this.model.get('chart_type') === 'bar' || this.model.get('chart_type') === 'table') {
-      var BarChartView = require('./BarChartView')
-      var view = new BarChartView({
-        model: this.model
-      })
-    } else if(this.model.get('chart_type') === 'line') {
-      var LineChartView = require('./LineChartView')
-      var view = new LineChartView({
-        model: this.model
-      })
-    } else if(this.model.get('chart_type') === 'hbar') {
-      var HorizontalBarChartView = require('./HorizontalBarChartView')
-      var view = new HorizontalBarChartView({
-        model: this.model
-      })
-    } else if(this.model.get('chart_type') === 'pie') {
-      var PieChartView = require('./PieChartView')
-      var view = new PieChartView({
-        model: this.model
-      })
-    }
+    var view = Dashboard.makeChartView(this.model)
     this.$el.parent().html(view.render().el)
     view.update()
   }

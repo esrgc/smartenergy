@@ -26,7 +26,7 @@ var StatView = ChartView.extend({
     stat.investment_leverage = d3.round(i, 2)
     stat.contribution = this.format(data.contribution)
     stat.project_cost = this.format(data.project_cost)
-    var html = '<table class="table table-condensed">'
+    var html = '<table class="table table-condensed statview">'
     html += '<tr><td>Total Projects</td><td><strong>' + d3.format(',')(data.total_projects) + '</strong></td></tr>'
     html += '<tr><td>Total Project Cost</td><td><strong>' + stat.project_cost + '</strong></td></tr>'
     html += '<tr><td>MEA Contribution</td><td><strong>' + stat.contribution + '</strong></td></tr>'

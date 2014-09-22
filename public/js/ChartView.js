@@ -2,7 +2,8 @@ var ChartView = Backbone.View.extend({
   template: $('#chart-template').html(),
   events: {
     "click .download":  "download",
-    "click .code":  "code"
+    "click .code":  "code",
+    "click .totable": "toTable"
   },
   initialize: function(options) {
     var self = this
@@ -33,7 +34,7 @@ var ChartView = Backbone.View.extend({
     this.chart.update(d)
   },
   resize: function() {
-    var height = this.$el.find('.chart').innerHeight() - this.$el.find('.title').outerHeight(true) - parseInt(this.$el.find('.chart').css('padding'))*2 - 2
+    var height = this.$el.find('.chart').innerHeight() - this.$el.find('.title').outerHeight(true) - parseInt(this.$el.find('.chart').css('padding'))*2
     this.$el.find('.chart-inner').css('height', height + 'px')
   },
   remove: function() {
@@ -74,6 +75,15 @@ var ChartView = Backbone.View.extend({
   code: function(e) {
     var url = this.model.makeQuery()
     window.open(url)
+  },
+  toTable: function(){
+    var TableView = require('./TableView')
+    var view = new TableView({
+      model: this.model,
+      y: this.model.get('y')
+    })
+    this.$el.parent().html(view.render().el)
+    view.resize()
   }
 })
 

@@ -2,6 +2,7 @@
 var MapView = require('./MapView')
   , ChartModel = require('./ChartModel')
   , BarChartView = require('./BarChartView')
+  , StackedBarChartView = require('./StackedBarChartView')
   , HorizontalBarChartView = require('./HorizontalBarChartView')
   , TableView = require('./TableView')
   , LineChartView = require('./LineChartView')
@@ -35,25 +36,25 @@ var Dashboard = Backbone.View.extend({
     this.chart_hash = {
       'energyeffiency': [
         {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
-        {title: "Program", api: 'api/getProgramName', key: 'Program Name', chart_type: 'bar', y: 'projects', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
-        {title: "Sector", api: 'api/getSector', key: 'sector', y: 'projects', chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
-        {title: "Electricity Savings", api: 'api/getSavings', key: 'county', y: 'savings', chart_type: 'pie', units: 'kWh'},
-        {title: "CO2 Emissions Reductions", api: 'api/getReductions', key: 'county', y: 'reduction', chart_type: 'pie', units: 'tons'}
+        {title: "Program", api: 'api/getProgramName', key: 'Program Name', chart_type: 'bar', y: 'Projects', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
+        {title: "Sector", api: 'api/getSector', key: 'Sector', y: 'Projects', chart_type: 'bar', units: 'Projects', barLabels: true, valueFormat: d3.format(',.0f')},
+        {title: "Electricity Savings", api: 'api/getSavings', key: 'County', y: 'Savings', chart_type: 'pie', units: 'kWh'},
+        {title: "CO2 Emissions Reductions", api: 'api/getReductions', key: 'County', y: 'Reduction', chart_type: 'pie', units: 'tons'}
       ],
       'renewableenergy': [
         {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
-        {title: "Technology Type", api: 'api/getTechnology', y: 'projects', key: 'technology', chart_type: 'pie', units: 'projects'},
-        {title: "MEA Contribution By County", api: 'api/getContribution', key: 'county', y: ['Total Project Cost', 'MEA Contribution'], chart_type: 'bar', group: 'geo', units: '', valueFormat: d3.format('$,'), width: 'col-md-6 col-sm-12', legend: true},
-        {title: "Program", api: 'api/getProgramName', key: 'Program Name', y: 'projects', chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
-        {title: "Sector", api: 'api/getSector', key: 'sector', y: 'projects', chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
-        {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'year', y: 'reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%Y")}
+        {title: "Technology Type", api: 'api/getTechnology', y: 'Projects', key: 'Technology', chart_type: 'pie', units: 'projects'},
+        {title: "MEA Contribution By County", api: 'api/getContribution', key: 'County', y: ['Other Contributions', 'MEA Contribution'], chart_type: 'stacked', group: 'geo', units: '', valueFormat: d3.format('$,'), width: 'col-md-6 col-sm-12', legend: true, dontFormat: ['Investment Leverage']},
+        {title: "Program", api: 'api/getProgramName', key: 'Program Name', y: 'Projects', chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
+        {title: "Sector", api: 'api/getSector', key: 'Sector', y: 'Projects', chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
+        {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'Year', y: 'Reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%Y"), showUnitsInTable: true}
       ],
       'transportation': [
         {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
         //{title: "Vehicle Technology", api: 'api/getVehicleTechnology', key: 'vehicle_technology', chart_type: 'pie'},
-        {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'technology', y: 'projects', chart_type: 'pie'},
-        {title: "Program", api: 'api/getProgramName', key: 'Program Name', y: 'projects', chart_type: 'bar', units: 'projects', barLabels: true},
-        {title: "Sector", api: 'api/getSector', key: 'sector', y: 'projects', chart_type: 'bar', units: 'projects', barLabels: true}
+        {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie'},
+        {title: "Program", api: 'api/getProgramName', key: 'Program Name', y: 'Projects', chart_type: 'bar', units: 'projects', barLabels: true},
+        {title: "Sector", api: 'api/getSector', key: 'Sector', y: 'Projects', chart_type: 'bar', units: 'projects', barLabels: true}
       ]
     }
   },
@@ -125,44 +126,54 @@ var Dashboard = Backbone.View.extend({
       mapView.makeMap()
       chart.update()
     } else {
-      switch (chart.get('chart_type')) {
-        case 'bar':
-          view = new BarChartView({
-            model: chart
-          })
-          break
-        case 'line':
-          view = new LineChartView({
-            model: chart
-          })
-          break
-        case 'pie':
-          view = new PieChartView({
-            model: chart
-          })
-          break
-        case 'hbar':
-          view = new HorizontalBarChartView({
-            model: chart
-          })
-          break
-        case 'table':
-          view = new TableView({
-            model: chart
-          })
-          break
-        case 'stat':
-          view = new StatView({
-            model: chart
-          })
-          break
-      }
+      view = this.makeChartView(chart)
       var container = $('<div class="chart-container"/>')
       container.append(view.render().el)
       this.$el.find('.charts > .row').append(container)
       setTimeout(function(){view.resize()}, 100)
       chart.update()
     }
+  },
+  makeChartView: function(chart) {
+    var view
+    switch (chart.get('chart_type')) {
+      case 'bar':
+        view = new BarChartView({
+          model: chart
+        })
+        break
+      case 'stacked':
+        view = new StackedBarChartView({
+          model: chart
+        })
+        break
+      case 'line':
+        view = new LineChartView({
+          model: chart
+        })
+        break
+      case 'pie':
+        view = new PieChartView({
+          model: chart
+        })
+        break
+      case 'hbar':
+        view = new HorizontalBarChartView({
+          model: chart
+        })
+        break
+      case 'table':
+        view = new TableView({
+          model: chart
+        })
+        break
+      case 'stat':
+        view = new StatView({
+          model: chart
+        })
+        break
+    }
+    return view
   },
   render: function() {
     this.$el.html(Mustache.render(this.template))
@@ -181,9 +192,9 @@ var Dashboard = Backbone.View.extend({
   update: function(e) {
     var self = this
     var capacity_charts = [
-      {title: "Capacity By County", api: 'api/getCapacityByCounty', key: 'county', y: 'Capacity', chart_type: 'pie'},
-      {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'sector', y: 'Capacity', chart_type: 'bar'},
-      {title: "Capacity Growth", api: 'api/getCapacityOverTime', key: 'year', y: 'Capacity', chart_type: 'line', labelFormat: d3.time.format("%Y")},
+      {title: "Capacity By County", api: 'api/getCapacityByCounty', key: 'County', y: 'Capacity', chart_type: 'pie', showUnitsInTable: true},
+      {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'Sector', y: 'Capacity', chart_type: 'bar', showUnitsInTable: true},
+      {title: "Capacity Growth", api: 'api/getCapacityOverTime', key: 'Year', y: 'Capacity', chart_type: 'line', labelFormat: d3.time.format("%Y"), showUnitsInTable: true  },
     ]
     capacity_charts.forEach(function(chart) {
       var tech_filters = self.filterCollection.where({active: true, type: 'technology'})

@@ -9,16 +9,26 @@
       border: none;
       thead tr th {
         border-top: none;
+        font-weight: bold;
+        color: @alternate3;
       }
 
-      td:first-child {
+      &.statview tr td:first-child {
         font-weight: bold;
+        color: @alternate3;
+      }
+
+      tr {
+        border-bottom: 1px solid @tableBorder;
+      }
+
+      tbody tr:last-child {
+        /*border-bottom: none;*/
       }
 
       td, th {
         border-left: 1px solid @tableBorder;
         border-right: 1px solid @tableBorder;
-        border-bottom: 1px solid @tableBorder;
         &:first-child {
           border-left: none;
         }
@@ -32,7 +42,8 @@
       }
 
       td {
-        text-align: right;
+        text-align: left;
+        font-weight: normal;
         &.grouper {
           text-align: left;
          a {

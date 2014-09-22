@@ -19,7 +19,9 @@ var ChartModel = Backbone.Model.extend({
       barLabels: false,
       legend: false,
       valueFormat: d3.format(',.2f'),
-      labelFormat: function(d) { return d }
+      labelFormat: function(d) { return d },
+      dontFormat: [],
+      showUnitsInTable: false
     }
   },
   initialize: function() {
