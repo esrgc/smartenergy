@@ -91,37 +91,37 @@ var MapView = Backbone.View.extend({
           onEachFeature: self.onEachFeature.bind(self),
           name: 'county'
         })
+      }),
+      $.getJSON('data/maryland-legislative-districts.json', function(json) {
+        self.legislativeDistricts = L.geoJson(json, {
+          style: self.style,
+          onEachFeature: self.onEachFeature.bind(self),
+          name: 'legislative'
+        })
+      }),
+      $.getJSON('data/maryland-congressional-districts.json', function(json) {
+        self.congressionalDistricts = L.geoJson(json, {
+          style: self.style,
+          onEachFeature: self.onEachFeature.bind(self),
+          name: 'congressional'
+        })
+      }),
+      $.getJSON('data/maryland-zips.json', function(json) {
+        self.zips = L.geoJson(json, {
+          style: self.style,
+          onEachFeature: self.onEachFeature.bind(self),
+          name: 'zipcode'
+        })
       })
-      // $.getJSON('data/maryland-legislative-districts.json', function(json) {
-      //   self.legislativeDistricts = L.geoJson(json, {
-      //     style: self.style,
-      //     onEachFeature: self.onEachFeature.bind(self),
-      //     name: 'legislative'
-      //   })
-      // }),
-      // $.getJSON('data/maryland-congressional-districts.json', function(json) {
-      //   self.congressionalDistricts = L.geoJson(json, {
-      //     style: self.style,
-      //     onEachFeature: self.onEachFeature.bind(self),
-      //     name: 'congressional'
-      //   })
-      // }),
-      // $.getJSON('data/maryland-zips.json', function(json) {
-      //   self.zips = L.geoJson(json, {
-      //     style: self.style,
-      //     onEachFeature: self.onEachFeature.bind(self),
-      //     name: 'zipcode'
-      //   })
-      // })
     ).then(function() {
 
       self.layer_switcher = {layers: [
         {name: "Maryland", id: "maryland", layer: self.maryland, type: 'base'},
-        {name: "Counties", id: "county", layer: self.counties, type: 'base'}
-        // {name: "Leg. Dist.", id: "legislative", layer: self.legislativeDistricts, type: 'base'},
-        // {name: "Cong. Dist.", id: "congressional", layer: self.congressionalDistricts, type: 'base'},
-        // {name: "Zip Codes", id: "zipcode", layer: self.zips, type: 'base'},
-        // {name: "Individual Projects", id: "projects", layer: self.projects, type: 'overlay'}
+        {name: "Counties", id: "county", layer: self.counties, type: 'base'},
+        {name: "Leg. Dist.", id: "legislative", layer: self.legislativeDistricts, type: 'base'},
+        {name: "Cong. Dist.", id: "congressional", layer: self.congressionalDistricts, type: 'base'},
+        {name: "Zip Codes", id: "zipcode", layer: self.zips, type: 'base'},
+        {name: "Individual Projects", id: "projects", layer: self.projects, type: 'overlay'}
       ]}
       var layers_html = Mustache.render(self.layers_template, self.layer_switcher)
       self.$el.find('.map').find('.leaflet-bottom.leaflet-left').html(layers_html)
