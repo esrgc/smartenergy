@@ -226,25 +226,27 @@ var MapView = Backbone.View.extend({
   update: function() {
     var self = this
     self.projects.clearLayers()
-    _.each(this.model.get('data'), function(features) {
-      var feature = features[0]
-      if (feature.point) {
-        var latlng = feature.point.split(',').map(parseFloat)
+    _.each(this.model.get('data').points, function(point) {
+      if (point.point) {
+        var latlng = point.point.split(',').map(parseFloat)
         if (latlng.length == 2) {
-          if (features.length > 1) {
+          if (point.projects.length > 1) {
             var myIcon = L.divIcon({
               className: 'div-icon projects-icon',
-              html: features.length,
+              html: point.projects.length,
               iconSize: L.point(30, 30)
             })
-            var marker = L.marker(latlng, {icon: myIcon, projects: features.length})
+            var marker = L.marker(latlng, {icon: myIcon, projects: point.projects.length})
           } else {
-            if (feature.technology) {
-              var filter = Dashboard.filterCollection.where({value: feature.technology})
+            var technology = point.projects[0]
+            if (point.projects[0]) {
+              var filter = Dashboard.filterCollection.where({value: technology})
               if (filter.length) {
                 self.circlestyle.fillColor = filter[0].get('color')
                 self.circlestyle.radius = 4
               }
+            } else {
+              self.circlestyle.fillColor = '#333'
             }
             var marker = L.circleMarker(latlng, self.circlestyle)
           }
@@ -259,7 +261,7 @@ var MapView = Backbone.View.extend({
             $.getJSON(url, function(res){
               popup.setContent(self.makePopup(res, latlng))
             })
-          }.bind(this, feature, latlng))
+          }.bind(this, point, latlng))
           self.projects.addLayer(marker)
         }
       }

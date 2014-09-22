@@ -148,7 +148,14 @@ api.get('/getPoints', function(req, res){
     },
     function(err) {
       var points = _.groupBy(data, 'point')
-      returnData(req, res, points)
+      var response = { points: [] }
+      for (var p in points) {
+        response.points.push({
+          point: p,
+          projects: _.pluck(points[p], 'technology')
+        })
+      }
+      returnData(req, res, response)
     }
   )
 })
