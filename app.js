@@ -13,6 +13,7 @@ var express = require('express')
   , cors = require('cors')
   , path = require('path')
   , config = require('./config/config')
+  , mongo = require('./lib/mongo')
 
 var app = express()
 
@@ -30,5 +31,13 @@ if ('development' == env) {
 
 app.use('/',    require('./routers/index'))
 app.use('/api', require('./routers/api'))
+
+// Initialize DB connections
+app.init = function(next) {
+  mongo.init(function(err) {
+    if (err) throw err;
+    next()
+  })
+}
 
 module.exports = app

@@ -243,16 +243,16 @@ var MapView = Backbone.View.extend({
       if (point.point) {
         var latlng = point.point.split(',').map(parseFloat)
         if (latlng.length == 2) {
-          if (point.projects.length > 1) {
+          if (point.projects > 1) {
             var myIcon = L.divIcon({
               className: 'div-icon projects-icon',
-              html: point.projects.length,
+              html: point.projects,
               iconSize: L.point(30, 30)
             })
-            var marker = L.marker(latlng, {icon: myIcon, projects: point.projects.length})
+            var marker = L.marker(latlng, {icon: myIcon, projects: point.projects})
           } else {
-            var technology = point.projects[0]
-            if (point.projects[0]) {
+            var technology = point.technology
+            if (technology) {
               var filter = Dashboard.filterCollection.where({value: technology})
               if (filter.length) {
                 self.circlestyle.fillColor = filter[0].get('color')

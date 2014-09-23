@@ -5,6 +5,7 @@ var express = require('express')
   , async = require('async')
   , _ = require('lodash')
   , config = require('../config/config')
+  , mongo = require('../lib/mongo')
 
 var socrataDataset = new Socrata.Dataset()
 socrataDataset.setHost('https://data.maryland.gov')
@@ -12,6 +13,7 @@ socrataDataset.setAppToken(config.socrata.apptoken)
 socrataDataset.setUID(config.socrata.uid)
 socrataDataset.setCredentials(config.socrata.user, config.socrata.password)
 
+var CACHE = true
 
 function addGeoType(obj, geotype, row) {
   console.log(geotype, typeof geotype)
@@ -150,38 +152,65 @@ api.get('/getPoints', function(req, res){
     , limit = 10000
     , offset = 0
     , qry = ''
-  if (req.query.tab === 'renewableenergy') {
-    qry = '$select=point,technology&$order=id%20desc'
-  } else if (req.query.tab === 'energyeffiency') {
-    qry = '$select=point&$order=id%20desc'
-  } else if (req.query.tab === 'transportation') {
-    qry = '$select=point,charging_fueling_station_technology as technology&$order=id%20desc'
-  }
-  qry += '&$limit=' + limit
-  qry += filter.where(req.query, qry, 'point')
-  async.whilst(
-    function() { return limit == 10000 },
-    function(next) {
-      var _qry = qry + '&$offset=' + offset
-      req.socrata_req = socrataDataset.query(_qry, function(_data) {
-        data = data.concat(_data)
-        limit = _data.length
-        offset += 10000
-        next()
-      })
-    },
-    function(err) {
+    console.log(req.query)
+  if (CACHE) {
+    var technology_field = 'technology'
+    if (req.query.tab === 'energyeffiency') {
+      technology_field = 'program_name'
+    }
+    mongo.db.collection(req.query.tab).find({point: {$exists: true}}).toArray(function(err, data) {
       var points = _.groupBy(data, 'point')
       var response = { points: [] }
       for (var p in points) {
-        response.points.push({
+        var obj = {
           point: p,
-          projects: _.pluck(points[p], 'technology')
-        })
+          projects: points[p].length
+        }
+        if (req.query.tab === 'energyeffiency') {
+          obj.projects = points[p].length
+        } else {
+          if (points[p].length === 1) {
+            obj.technology = points[p][0].technology
+          }
+        }
+        response.points.push(obj)
       }
       returnData(req, res, response)
+    })
+  } else {
+    if (req.query.tab === 'renewableenergy') {
+      qry = '$select=point,technology&$order=id%20desc'
+    } else if (req.query.tab === 'energyeffiency') {
+      qry = '$select=point&$order=id%20desc'
+    } else if (req.query.tab === 'transportation') {
+      qry = '$select=point,charging_fueling_station_technology as technology&$order=id%20desc'
     }
-  )
+    qry += '&$limit=' + limit
+    qry += filter.where(req.query, qry, 'point')
+    async.whilst(
+      function() { return limit == 10000 },
+      function(next) {
+        var _qry = qry + '&$offset=' + offset
+        req.socrata_req = socrataDataset.query(_qry, function(_data) {
+          data = data.concat(_data)
+          limit = _data.length
+          offset += 10000
+          next()
+        })
+      },
+      function(err) {
+        var points = _.groupBy(data, 'point')
+        var response = { points: [] }
+        for (var p in points) {
+          response.points.push({
+            point: p,
+            projects: _.pluck(points[p], 'technology')
+          })
+        }
+        returnData(req, res, response)
+      }
+    )
+  }
 })
 
 api.get('/getProjectsByPoint', function(req, res){
