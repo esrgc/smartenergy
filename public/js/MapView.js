@@ -170,16 +170,16 @@ var MapView = Backbone.View.extend({
   },
   layerToggle: function(e) {
     var self = this
-    var id = $(e.target).parent().attr('id')
+    var id = $(e.currentTarget).attr('id')
     var layer = _.findWhere(this.layer_switcher.layers, {id: id})
     if (layer && layer.type === 'overlay') {
       if (self.map.hasLayer(layer.layer)) {
         this.map.removeLayer(layer.layer)
-        $(e.target).removeClass('active')
+        $(e.currentTarget).find('p').removeClass('active')
         this.model.set('visible', false)
       } else {
         this.map.addLayer(layer.layer)
-        $(e.target).addClass('active')
+        $(e.currentTarget).find('p').addClass('active')
         this.model.set('visible', true)
       }
     } else if (layer.type === 'base') {
@@ -192,7 +192,7 @@ var MapView = Backbone.View.extend({
         var geofilters = Dashboard.filterCollection.where({geo: true})
         Dashboard.filterCollection.remove(geofilters)
         this.map.addLayer(layer.layer)
-        $(e.target).addClass('active')
+        $(e.currentTarget).find('p').addClass('active')
         Dashboard.filterCollection.findWhere({type: 'geotype'}).set('value', layer.id)
       }
     }
