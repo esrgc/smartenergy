@@ -1,6 +1,11 @@
 var BarChartView = require('./BarChartView')
 
 var PieChartView = BarChartView.extend({
+  changeKey: function() {
+    if (this.chart) {
+      this.chart.options.label = this.model.get('key')
+    }
+  },
   drawChart: function() {
     this.chart = new GeoDash.PieChart(this.chartel, {
       label: this.model.get('key')

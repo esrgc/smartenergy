@@ -42,6 +42,9 @@ var StackedBarChartView = BarChartView.extend({
         row['Investment Leverage'] = d3.round(i, 2)
         return row
       })
+      if (data.length > self.dataLimit) {
+        data = data.splice(0, self.dataLimit)
+      }
     }
     return data
   },

@@ -12,6 +12,17 @@ socrataDataset.setAppToken(config.socrata.apptoken)
 socrataDataset.setUID(config.socrata.uid)
 socrataDataset.setCredentials(config.socrata.user, config.socrata.password)
 
+
+function addGeoType(obj, geotype, row) {
+  console.log(geotype, typeof geotype)
+  if (geotype === 'state' || !geotype || typeof geotype === 'undefined') {
+    obj['state'] = 'Maryland'
+  } else {
+    obj[geotype] = row[geotype]
+  }
+  return obj
+}
+
 var api = new express.Router()
 
 /* Return dummy data */
@@ -64,16 +75,17 @@ api.get('/getProgramName', function(req, res){
   })
 })
 
-api.get('/getCapacityByCounty', function(req, res){
-  var qry = '$select=county,sum(capacity)&$group=county'
+api.get('/getCapacityByArea', function(req, res){
+  var qry = '$select=sum(capacity)'
+  qry += filter.geotype(req.query)
   qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     var d = []
     data = _.map(data, function(r) {
-      return {
-        'County': r.county,
+      var obj =  {
         'Capacity': r.sum_capacity
       }
+      return addGeoType(obj, req.query.geotype, r)
     })
     returnData(req, res, data)
   })
@@ -117,16 +129,17 @@ api.get('/getStats', function(req, res){
 })
 
 api.get('/getContribution', function(req, res){
-  var qry = '$select=sum(mea_award)%20as%20mea_contribution,sum(total_project_cost)%20as%20project_cost,county&$group=county'
-  qry += filter.where(req.query, qry, 'county')
+  var qry = '$select=sum(mea_award)%20as%20mea_contribution,sum(total_project_cost)%20as%20project_cost'
+  qry += filter.geotype(req.query)
+  qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     data = _.map(data, function(r) {
-      return {
-        'County': r.county,
+      var obj = {
         'Other Contributions': +r.project_cost - +r.mea_contribution,
         'MEA Contribution': +r.mea_contribution,
         'Total Project Cost': +r.project_cost
       }
+      return addGeoType(obj, req.query.geotype, r)
     })
     returnData(req, res, data)
   })
@@ -211,28 +224,30 @@ api.get('/getVehicleTechnology', function(req, res){
 })
 
 api.get('/getReductions', function(req, res){
-  var qry = '$select=county,sum(co2_emissions_reductions_tons) as reduction&$group=county'
+  var qry = '$select=sum(co2_emissions_reductions_tons) as reduction'
+  qry += filter.geotype(req.query)
   qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     data = _.map(data, function(r) {
-      return {
-        'County': r.county,
+      var obj = {
         'Reduction': +r.reduction
       }
+      return addGeoType(obj, req.query.geotype, r)
     })
     returnData(req, res, data)
   })
 })
 
 api.get('/getSavings', function(req, res){
-  var qry = '$select=county,sum(electricity_savings_kwh) as savings&$group=county'
+  var qry = '$select=sum(electricity_savings_kwh) as savings'
+  qry += filter.geotype(req.query)
   qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(data) {
     data = _.map(data, function(r) {
-      return {
-        'County': r.county,
+      var obj = {
         'Savings': +r.savings
       }
+      return addGeoType(obj, req.query.geotype, r)
     })
     returnData(req, res, data)
   })

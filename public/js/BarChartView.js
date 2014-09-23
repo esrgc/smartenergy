@@ -63,6 +63,9 @@ var BarChartView = ChartView.extend({
       }).reverse()
       this.setColors(data)
       this.model.set('data', data, {silent: true})
+      if (data.length > self.dataLimit) {
+        data = data.splice(0, self.dataLimit)
+      }
     }
     return data
   }

@@ -21,11 +21,15 @@ var ChartModel = Backbone.Model.extend({
       valueFormat: d3.format(',.2f'),
       labelFormat: function(d) { return d },
       dontFormat: [],
-      showUnitsInTable: false
+      showUnitsInTable: false,
+      geo: false
     }
   },
   initialize: function() {
     this.listenTo(this, 'change:visible', this.update)
+    if (this.geo) {
+      Dashboard.filterCollection.on('change:value', this.update, this)
+    }
   },
   update: function() {
     var self = this
@@ -42,6 +46,7 @@ var ChartModel = Backbone.Model.extend({
     }
   },
   makeQuery: function(url) {
+    var self = this
     url += '?'
     Dashboard.filterCollection.each(function(filter) {
       if (filter.get('active')) {
@@ -49,6 +54,15 @@ var ChartModel = Backbone.Model.extend({
       }
     })
     url += 'tab=' + Dashboard.activetab
+    if (this.get('geo')) {
+      var geotype = ''
+      var geofilters = Dashboard.filterCollection.where({type: 'geotype'})
+      if (geofilters.length > 0) {
+        geotype = geofilters[0].get('value')
+      }
+      url += '&geotype=' + geotype
+      self.set('key', geotype)
+    }
     return url
   },
   clearData: function() {

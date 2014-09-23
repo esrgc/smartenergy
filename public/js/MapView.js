@@ -82,8 +82,17 @@ var MapView = Backbone.View.extend({
       $.getJSON('data/maryland-single.json', function(json) {
         self.maryland = L.geoJson(json, {
           style: self.style,
-          name: 'maryland'
+          name: 'state'
         }).addTo(self.map)
+        var f = new FilterModel({
+          value: self.maryland.options.name,
+          type: 'geotype'
+        }).on('change:value', function(e) {
+          _.each(Dashboard.chartCollection.where({geo: true}), function(chart) {
+            chart.update()
+          })
+        })
+        Dashboard.filterCollection.add(f)
       }),
       $.getJSON('data/maryland-counties.json', function(json) {
         self.counties = L.geoJson(json, {
@@ -116,7 +125,7 @@ var MapView = Backbone.View.extend({
     ).then(function() {
 
       self.layer_switcher = {layers: [
-        {name: "Maryland", id: "maryland", layer: self.maryland, type: 'base'},
+        {name: "Maryland", id: "state", layer: self.maryland, type: 'base'},
         {name: "Counties", id: "county", layer: self.counties, type: 'base'},
         {name: "Leg. Dist.", id: "legislative", layer: self.legislativeDistricts, type: 'base'},
         {name: "Cong. Dist.", id: "congressional", layer: self.congressionalDistricts, type: 'base'},
@@ -125,7 +134,7 @@ var MapView = Backbone.View.extend({
       ]}
       var layers_html = Mustache.render(self.layers_template, self.layer_switcher)
       self.$el.find('.map').find('.leaflet-bottom.leaflet-left').html(layers_html)
-      self.$el.find('#maryland').find('p').addClass('active')
+      self.$el.find('#state').find('p').addClass('active')
       self.$el.find('#projects').find('p').addClass('active')
     })
   },
@@ -184,6 +193,7 @@ var MapView = Backbone.View.extend({
         Dashboard.filterCollection.remove(geofilters)
         this.map.addLayer(layer.layer)
         $(e.target).addClass('active')
+        Dashboard.filterCollection.findWhere({type: 'geotype'}).set('value', layer.id)
       }
     }
   },

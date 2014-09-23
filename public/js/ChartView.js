@@ -1,5 +1,6 @@
 var ChartView = Backbone.View.extend({
   template: $('#chart-template').html(),
+  dataLimit: 30,
   events: {
     "click .download":  "download",
     "click .code":  "code",
@@ -14,6 +15,7 @@ var ChartView = Backbone.View.extend({
     })
     this.listenTo(this.model, 'change:data', this.update)
     this.listenTo(this.model, 'change:loading', this.loading)
+    this.listenTo(this.model, 'change:key', this.changeKey)
     this.listenTo(this.model, 'remove', this.remove)
     this.colors = Dashboard.colors
     this.hoverTemplate = '{{label}}: {{value}} ' + this.model.get('units')
@@ -23,6 +25,9 @@ var ChartView = Backbone.View.extend({
       title: $('#title-partial').html()
     }))
     return this
+  },
+  changeKey: function() {
+    if (this.chart) this.chart.options.x = this.model.get('key')
   },
   update: function() {
     if(!this.chart) {
