@@ -44,7 +44,7 @@ var Dashboard = Backbone.View.extend({
       'renewableenergy': [
         {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
         {title: "Technology Type", api: 'api/getTechnology', y: 'Projects', key: 'Technology', chart_type: 'pie', units: 'projects'},
-        {title: "MEA Contribution By Area", api: 'api/getContribution', key: 'County', y: ['Other Contributions', 'MEA Contribution'], chart_type: 'stacked', group: 'geo', units: '', valueFormat: d3.format('$,'), width: 'col-md-6 col-sm-12', legend: true, dontFormat: ['Investment Leverage'], geo: true},
+        {title: "MEA Contribution By Area", api: 'api/getContribution', key: 'County', y: ['Other Contributions', 'MEA Contribution'], chart_type: 'stacked', group: 'geo', units: '', valueFormat: d3.format('$,.2f'), width: 'col-md-6 col-sm-12', legend: true, dontFormat: ['Investment Leverage'], geo: true},
         {title: "Program", api: 'api/getProgramName', key: 'Program Name', y: 'Projects', chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
         {title: "Sector", api: 'api/getSector', key: 'Sector', y: 'Projects', chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
         {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'Year', y: 'Reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%Y"), showUnitsInTable: true}
