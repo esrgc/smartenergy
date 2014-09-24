@@ -46,7 +46,6 @@ api.use(function(req, res, next) {
 
 api.get('/getTechnology', function(req, res){
   function handleData(err, data) {
-    console.log('done')
     data = _.map(data, function(r) {
       return {
         'Technology': r.technology,
@@ -57,7 +56,6 @@ api.get('/getTechnology', function(req, res){
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query)
-    console.log('querying mongo...')
     req.cursor = mongo.db.collection(req.query.tab).group(['technology'], conditions, {"projects":0}, "function (obj, prev) { prev.projects++; }", handleData)
   } else {
     var qry = '$select=technology,count(id) as projects&$group=technology'
@@ -232,6 +230,14 @@ api.get('/getPoints', function(req, res){
     if (req.query.tab === 'energyeffiency') {
       technology_field = 'program_name'
     }
+    if (req.query.tab === 'renewableenergy') {
+      technology_field = 'technology'
+    } else if (req.query.tab === 'energyeffiency') {
+      technology_field = 'program_name'
+    } else if (req.query.tab === 'transportation') {
+      technology_field = 'charging_fueling_station_technology'
+    }
+
     var conditions = filter.conditions(req.query, 'point')
     mongo.db.collection(req.query.tab).find(conditions).toArray(function(err, data) {
       var points = _.groupBy(data, 'point')
@@ -245,7 +251,7 @@ api.get('/getPoints', function(req, res){
           obj.projects = points[p].length
         } else {
           if (points[p].length === 1) {
-            obj.technology = points[p][0].technology
+            obj.technology = points[p][0][technology_field]
           }
         }
         response.points.push(obj)
@@ -292,8 +298,23 @@ api.get('/getProjectsByPoint', function(req, res){
   var qry = ''
 
   if (CACHE) {
+    if (req.query.tab === 'renewableenergy') {
+      technology_field = 'technology'
+    } else if (req.query.tab === 'energyeffiency') {
+      technology_field = 'program_name'
+    } else if (req.query.tab === 'transportation') {
+      technology_field = 'charging_fueling_station_technology'
+    }
     var conditions = filter.conditions(req.query)
     mongo.db.collection(req.query.tab).find(conditions).toArray(function(err, data) {
+      data = _.map(data, function(r) {
+        if (r.charging_fueling_station_technology) {
+          r.technology = r.charging_fueling_station_technology
+        } else if (r.vehicle_technology) {
+          r.technology = r.vehicle_technology
+        }
+        return r
+      })
       returnData(req, res, data)
     })
   } else {
