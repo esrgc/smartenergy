@@ -136,7 +136,7 @@ var Dashboard = Backbone.View.extend({
       container.append(view.render().el)
       this.$el.find('.charts > .row').append(container)
       setTimeout(function(){view.resize()}, 100)
-      chart.update()
+      //chart.update()
     }
   },
   makeChartView: function(chart) {
@@ -237,11 +237,17 @@ var Dashboard = Backbone.View.extend({
     this.chartCollection.findWhere({chart_type: 'map'}).update()
     this.chartCollection.each(function(chart, idx) {
       if (chart.get('chart_type') !== 'map') {
+        chart.abort()
         charts.push(chart)
       }
     })
     this.chartCollection.remove(charts)
     this.chartCollection.add(this.chart_hash[this.activetab])
+    this.chartCollection.each(function(chart, idx) {
+      if (chart.get('chart_type') !== 'map') {
+        chart.update()
+      }
+    })
   }
 })
 

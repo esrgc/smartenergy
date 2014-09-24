@@ -2,7 +2,7 @@ var ChartView = require('./ChartView')
 
 var StatView = ChartView.extend({
   template: $('#stat-template').html(),
-  format: d3.format('$,'),
+  format: d3.format('$,.2f'),
   events: function(){
     return _.extend({}, ChartView.prototype.events,{
       

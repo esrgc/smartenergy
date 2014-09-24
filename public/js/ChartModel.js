@@ -35,14 +35,17 @@ var ChartModel = Backbone.Model.extend({
     var self = this
     if (this.get('visible')) {
       this.set('loading', true)
-      if (this.request && this.request.readyState !== 4) {
-        this.request.abort()
-      }
+      this.abort()
       var url = this.makeQuery(this.get('api'))
       this.request = $.getJSON(url, function(res){
         self.set('loading', false)
         self.set('data', res)
       })
+    }
+  },
+  abort: function() {
+    if (this.request && this.request.readyState !== 4) {
+      this.request.abort()
     }
   },
   makeQuery: function(url) {
