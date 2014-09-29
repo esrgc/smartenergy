@@ -188,9 +188,10 @@ api.get('/getContribution', function(req, res){
   function handleData(err, data) {
     data = _.map(data, function(r) {
       var obj = {
-        'Other Contributions': +r.project_cost - +r.mea_contribution,
+        'Other Contributions': +r.project_cost - +r.mea_contribution - +r.sum_other_agency_dollars,
         'MEA Contribution': +r.mea_contribution,
-        'Total Project Cost': +r.project_cost
+        'Total Project Cost': +r.project_cost,
+        'Other Agency Dollars': +r.sum_other_agency_dollars
       }
       return addGeoType(obj, req.query.geotype, r)
     })
@@ -206,14 +207,16 @@ api.get('/getContribution', function(req, res){
     var aggregate = function (obj, prev) {
       prev.mea_contribution += +obj.mea_award || 0
       prev.project_cost += +obj.total_project_cost || 0
+      prev.sum_other_agency_dollars += +obj.sum_other_agency_dollars || 0
     }
     var sums = {
       project_cost: 0,
       mea_contribution:0,
+      sum_other_agency_dollars: 0
     }
     mongo.db.collection(req.query.tab).group([group], conditions, sums, aggregate, handleData)
   } else {
-    var qry = '$select=sum(mea_award)%20as%20mea_contribution,sum(total_project_cost)%20as%20project_cost'
+    var qry = '$select=sum(mea_award)%20as%20mea_contribution,sum(other_agency_dollars) as sum_other_agency_dollars, sum(total_project_cost)%20as%20project_cost'
     qry += filter.geotype(req.query)
     qry += filter.where(req.query, qry)
     req.socrata_req = socrataDataset.query(qry, handleData)

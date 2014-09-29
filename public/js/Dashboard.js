@@ -38,8 +38,9 @@ var Dashboard = Backbone.View.extend({
         {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
         {title: "Program", api: 'api/getProgramName', key: 'Program Name', chart_type: 'bar', y: 'Projects', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
         {title: "Sector", api: 'api/getSector', key: 'Sector', y: 'Projects', chart_type: 'bar', units: 'Projects', barLabels: true, valueFormat: d3.format(',.0f')},
-        {title: "Electricity Savings", api: 'api/getSavings', key: 'County', y: 'Savings', chart_type: 'pie', units: 'kWh', geo: true},
-        {title: "CO2 Emissions Reductions", api: 'api/getReductions', key: 'County', y: 'Reduction', chart_type: 'pie', units: 'tons', geo: true}
+        {title: "MEA Contribution By Area", api: 'api/getContribution', key: 'County', y: ['Other Contributions', 'MEA Contribution'], chart_type: 'stacked', group: 'geo', units: '', valueFormat: d3.format('$,.2f'), width: 'col-md-6 col-sm-12', legend: true, dontFormat: ['Investment Leverage'], geo: true},
+        {title: "Electricity Savings", api: 'api/getSavings', key: 'County', y: 'Savings', chart_type: 'bar', units: 'kWh', geo: true, width: 'col-md-6 col-sm-12'},
+        {title: "CO2 Emissions Reductions", api: 'api/getReductions', key: 'County', y: 'Reduction', chart_type: 'bar', units: 'tons', geo: true, width: 'col-md-6 col-sm-12'}
       ],
       'renewableenergy': [
         {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
@@ -123,12 +124,12 @@ var Dashboard = Backbone.View.extend({
   renderChart: function(chart) {
     var view = {}
     if (chart.get('chart_type') === 'map') {
-      var mapView = new MapView({
+      this.mapView = new MapView({
         model: chart
       })
 
-      this.$el.find('.charts > .row').append(mapView.render().el)
-      mapView.makeMap()
+      this.$el.find('.charts > .row').append(this.mapView.render().el)
+      this.mapView.makeMap()
       chart.update()
     } else {
       view = this.makeChartView(chart)

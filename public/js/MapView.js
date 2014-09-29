@@ -282,6 +282,9 @@ var MapView = Backbone.View.extend({
   },
   loading: function() {
     this.$el.find('.map').find('.loader').toggle()
+  },
+  reset: function() {
+    this.map.setView([39, -77], 7)
   }
 })
 

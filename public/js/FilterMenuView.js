@@ -52,9 +52,9 @@ var FilterMenuView = ChartView.extend({
 
   },
   resetFilters: function() {
+    Dashboard.mapView.reset()
     var geofilters = Dashboard.filterCollection.where({geo: true})
     Dashboard.filterCollection.remove(geofilters)
-    //Dashboard.filterCollection.findWhere({type: 'geotype'}).set({value: 'state'})
     Dashboard.filterCollection.each(function(filter) {
       if (filter.get('active')) filter.set({'active': false})
     })
