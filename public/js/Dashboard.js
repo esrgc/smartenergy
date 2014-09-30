@@ -101,6 +101,22 @@ var Dashboard = Backbone.View.extend({
       {value: 'Tax Credit', type: 'program_type'},
       {value: 'Other', type: 'program_type'}
     ]
+    this.program_names = [
+      {value: 'Energy Efficient Appliance Rebate Program', type: 'program_name'},
+      {value: 'EmPOWER Maryland Challenge - C&I Grant Program', type: 'program_name'},
+      {value: 'EECBG Building Retrofit', type: 'program_name'},
+      {value: 'Maryland Statewide Farm Energy Audit Program', type: 'program_name'},
+      {value: 'Home Performance Rebate Program', type: 'program_name'},
+      {value: 'EmPOWER Clean Energy Communities Low-to-Moderate Income Grant Program', type: 'program_name'},
+      {value: 'Kathleen A.P. Mathias Agriculture Energy Efficiency Grant Program', type: 'program_name'},
+      {value: 'MEEHA - Multifamily', type: 'program_name'},
+      {value: 'Maryland Home Energy Loan Program', type: 'program_name'},
+      {value: 'Maryland Smart Energy Communities', type: 'program_name'},
+      {value: 'Energy and Water Conservation in Maryland State Parks', type: 'program_name'},
+      {value: 'Energy Performance Contracting', type: 'program_name'},
+      {value: 'State Agency Loan Program', type: 'program_name'},
+      {value: 'Maryland Save Energy Now', type: 'program_name'}
+    ]
     this.sectors = [
       {value: 'Residential', type: 'sector'},
       {value: 'Commercial', type: 'sector'},
@@ -109,17 +125,11 @@ var Dashboard = Backbone.View.extend({
       {value: 'State Government', type: 'sector'}
     ]
     this.filter_hash = {
-      'energyeffiency': this.sectors,
+      'energyeffiency': this.sectors.concat(this.program_names),
       'renewableenergy': this.sectors.concat(this.renewables),
       'transportation': this.sectors.concat(this.stations)
     }
     this.filterCollection.add(this.filter_hash[this.activetab])
-    // var groupfilter = {
-    //   value: '',
-    //   type: 'group',
-    //   active: true
-    // }
-    // this.filterCollection.add(groupfilter)
   },
   renderChart: function(chart) {
     var view = {}
@@ -130,14 +140,12 @@ var Dashboard = Backbone.View.extend({
 
       this.$el.find('.charts > .row').append(this.mapView.render().el)
       this.mapView.makeMap()
-      chart.update()
     } else {
       view = this.makeChartView(chart)
       var container = $('<div class="chart-container"/>')
       container.append(view.render().el)
       this.$el.find('.charts > .row').append(container)
       setTimeout(function(){view.resize()}, 100)
-      //chart.update()
     }
   },
   makeChartView: function(chart) {
@@ -235,7 +243,7 @@ var Dashboard = Backbone.View.extend({
 
     var charts = []
     this.chartCollection.findWhere({chart_type: 'map'}).set('data', [])
-    this.chartCollection.findWhere({chart_type: 'map'}).update()
+    //this.chartCollection.findWhere({chart_type: 'map'}).update()
     this.chartCollection.each(function(chart, idx) {
       if (chart.get('chart_type') !== 'map') {
         chart.abort()
@@ -244,11 +252,12 @@ var Dashboard = Backbone.View.extend({
     })
     this.chartCollection.remove(charts)
     this.chartCollection.add(this.chart_hash[this.activetab])
-    this.chartCollection.each(function(chart, idx) {
-      if (chart.get('chart_type') !== 'map') {
-        chart.update()
-      }
-    })
+    this.update()
+    // this.chartCollection.each(function(chart, idx) {
+    //   if (chart.get('chart_type') !== 'map') {
+    //     chart.update()
+    //   }
+    // })
   }
 })
 

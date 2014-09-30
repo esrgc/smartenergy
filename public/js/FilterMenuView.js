@@ -1,11 +1,12 @@
 var ChartView = require('./ChartView')
+  , FilterLabelView = require('./FilterLabelView')
   , TechnologyFilter = require('./TechnologyFilter')
-  , SectorFilter = require('./SectorFilter')
 
 var FilterMenuView = ChartView.extend({
   template: $('#filter-menu-template').html(),
   events: {
-    'click .reset': 'resetFilters'
+    'click .reset': 'resetFilters',
+    'change select': 'changeDropdown'
   },
   initialize: function(){
     Dashboard.filterCollection.on('change:active', this.changeSummary, this)
@@ -28,6 +29,7 @@ var FilterMenuView = ChartView.extend({
     self.$el.find('.vehicle-technology').hide()
     self.$el.find('.sector').hide()
     self.$el.find('.program').hide()
+    self.$el.find('.charging_fueling_station_technology').hide()
     $('.the-filters').empty()
     Dashboard.filterCollection.each(function(filter) {
       if (filter.get('type') === 'technology') {
@@ -41,12 +43,40 @@ var FilterMenuView = ChartView.extend({
         self.$el.find('.charging_fueling_station_technology .the-filters').append(new TechnologyFilter({model: filter}).render().el)
       } else if (filter.get('type') === 'sector') {
         self.$el.find('.sector').show()
-        self.$el.find('.sector .the-filters').append(new SectorFilter({model: filter}).render().el)
+        self.$el.find('.sector .the-filters').append(new FilterLabelView({model: filter}).render().el)
       } else if (filter.get('type') === 'program_type') {
         self.$el.find('.program').show()
-        self.$el.find('.program .the-filters').append(new SectorFilter({model: filter}).render().el)
+        self.$el.find('.program .the-filters').append(new FilterLabelView({model: filter}).render().el)
       }
     })
+    var program_names = Dashboard.filterCollection.where({type: 'program_name'})
+    if (program_names.length) {
+      var dropdown = this.makeDropDown('program_name', program_names)
+      self.$el.find('.program').show()
+      self.$el.find('.program .the-filters').append(dropdown)
+    }
+  },
+  makeDropDown: function(type, filters) {
+    var html = '<select class="form-control" id="' + type + '">'
+    html += '<option value="">All</option>'
+    _.each(filters, function(filter) {
+      html += '<option value="' + filter.get('value') + '">' + filter.get('value') + '</option>'
+    })
+    html += '</select>'
+    return html
+  },
+  changeDropdown: function(e) {
+    var value = $(e.currentTarget).val()
+    var type = $(e.currentTarget).attr('id')
+    _.each(Dashboard.filterCollection.where({type: type}), function(f) {
+      f.set('active', false, {silent: true})
+    })
+    var filter = Dashboard.filterCollection.findWhere({type: type, value: value})
+    if (filter) {
+      filter.set('active', true, {silent: true})
+    }
+    this.changeSummary()
+    Dashboard.update()
   },
   removeFilter: function(filter) {
 
@@ -58,6 +88,7 @@ var FilterMenuView = ChartView.extend({
     Dashboard.filterCollection.each(function(filter) {
       if (filter.get('active')) filter.set({'active': false})
     })
+    this.$el.find('select').val('')
   },
   changeSummary: function() {
     $('.dashboard .filter-summary').html('')
@@ -126,6 +157,18 @@ var FilterMenuView = ChartView.extend({
           summary += ' funded by '
             + _.initial(x).join(', ')
             + ' and ' + _.last(x)
+        }
+      }
+      var filters = Dashboard.filterCollection.where({active: true, type: 'program_name'})
+      if (filters.length) {
+        var x = []
+        _.each(filters, function(f) {
+          x.push(f.get('value'))
+        })
+        if (filters.length == 1) {
+          summary += ' in the ' + x.join(', ').replace('Program', '') + ' program'
+        } else {
+
         }
       }
       var filters = Dashboard.filterCollection.where({active: true, type: 'sector'})

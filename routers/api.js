@@ -30,6 +30,7 @@ var api = new express.Router()
 
 api.use(function(req, res, next) {
   if (CACHE) {
+    console.log(req.url)
     next()
   } else {
     if (req.query.tab) {
@@ -155,7 +156,9 @@ api.get('/getSector', function(req, res){
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query)
-    mongo.db.collection(req.query.tab).group(['sector'], conditions, {"projects":0}, "function (obj, prev) { prev.projects++; }", handleData)
+    setTimeout(function() {
+      mongo.db.collection(req.query.tab).group(['sector'], conditions, {"projects":0}, "function (obj, prev) { prev.projects++; }", handleData)
+    }, 5000)
   } else {
     var qry = '$select=sector,count(id)%20as%20projects&$group=sector'
     qry += filter.where(req.query, qry)
@@ -188,10 +191,14 @@ api.get('/getContribution', function(req, res){
   function handleData(err, data) {
     data = _.map(data, function(r) {
       var obj = {
-        'Other Contributions': +r.project_cost - +r.mea_contribution - +r.sum_other_agency_dollars,
         'MEA Contribution': +r.mea_contribution,
         'Total Project Cost': +r.project_cost,
         'Other Agency Dollars': +r.sum_other_agency_dollars
+      }
+      if (+r.project_cost > 0) {
+        obj['Other Contributions'] = +r.project_cost - +r.mea_contribution - +r.sum_other_agency_dollars
+      } else {
+        obj['Other Contributions'] = 0
       }
       return addGeoType(obj, req.query.geotype, r)
     })
@@ -242,7 +249,8 @@ api.get('/getPoints', function(req, res){
     }
 
     var conditions = filter.conditions(req.query, 'point')
-    mongo.db.collection(req.query.tab).find(conditions).toArray(function(err, data) {
+    var cursor = mongo.db.collection(req.query.tab).find(conditions)
+    cursor.toArray(function(err, data) {
       var points = _.groupBy(data, 'point')
       var response = { points: [] }
       for (var p in points) {
