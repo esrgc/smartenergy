@@ -26,8 +26,6 @@ function addGeoType(obj, geotype, row) {
 
 var api = new express.Router()
 
-/* Return dummy data */
-
 api.use(function(req, res, next) {
   if (CACHE) {
     console.log(req.url)
@@ -78,14 +76,23 @@ api.get('/getProgramName', function(req, res){
     data = _.map(data, function(r) {
       return {
         'Program Name': r.program_name,
-        'Projects': r.projects
+        'Projects': r.projects,
+        'Contribution': r.contribution
       }
     })
     returnData(req, res, data)
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query)
-    mongo.db.collection(req.query.tab).group(['program_name'], conditions, {"projects":0}, "function (obj, prev) { prev.projects++; }", handleData)
+    var sums = {
+      'projects':0,
+      'contribution': 0
+    }
+    var aggregate = function (obj, prev) {
+      prev.projects++;
+      prev.contribution += +obj.mea_award || 0
+    }
+    mongo.db.collection(req.query.tab).group(['program_name'], conditions, sums, aggregate, handleData)
   } else {
     var qry = '$select=program_name,count(id) as projects&$group=program_name'
     qry += filter.where(req.query, qry)
@@ -149,15 +156,24 @@ api.get('/getSector', function(req, res){
     data = _.map(data, function(r) {
       return {
         'Sector': r.sector,
-        'Projects': r.projects
+        'Projects': r.projects,
+        'Contribution': r.contribution
       }
     })
     returnData(req, res, data)
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query)
+    var sums = {
+      'projects':0,
+      'contribution': 0
+    }
+    var aggregate = function (obj, prev) {
+      prev.projects++;
+      prev.contribution += +obj.mea_award || 0
+    }
     setTimeout(function() {
-      mongo.db.collection(req.query.tab).group(['sector'], conditions, {"projects":0}, "function (obj, prev) { prev.projects++; }", handleData)
+      mongo.db.collection(req.query.tab).group(['sector'], conditions, sums, aggregate, handleData)
     }, 5000)
   } else {
     var qry = '$select=sector,count(id)%20as%20projects&$group=sector'

@@ -4,7 +4,8 @@ var ChartView = Backbone.View.extend({
   events: {
     "click .download":  "download",
     "click .code":  "code",
-    "click .totable": "toTable"
+    "click .totable": "toTable",
+    "change .chart-tools input": 'changeChartTools'
   },
   initialize: function(options) {
     var self = this
@@ -26,6 +27,41 @@ var ChartView = Backbone.View.extend({
     }))
     return this
   },
+  updateChartTools: function() {
+    if (this.model.get('tools')) {
+      this.$el.find('.chart-tools label:first-child input').attr('checked', 'checked')
+    } else {
+      this.$el.find('.chart-tools').hide()
+    }
+  },
+  changeChartTools: function(e) {
+    var value = $(e.currentTarget).val()
+
+    this.chart.options.barLabelFormat = this.model.get('valueFormat')
+    this.chart.options.hoverTemplate = "{{x}}: {{y}} " + this.model.get('units')
+    this.chart.options.barLabels = this.model.get('barLabels')
+
+    if (value === 'all') {
+      this.chart.options.y = this.model.get('y')
+      this.colors = Dashboard.colors
+    } else {
+      if (typeof this.chart.options.y === 'object') {
+        var idx = _.indexOf(this.chart.options.y, value)
+        if (idx > -1) this.colors = [this.chart.options.colors[idx]]
+      }
+      var type = _.findWhere(this.model.get('tools'), {value: value}).type
+      if (type) {
+        if (type === 'money') {
+          this.chart.options.barLabelFormat = d3.format('$.2s')
+          this.chart.options.valueFormat = d3.format('$,.2f')
+          this.chart.options.hoverTemplate = '{{x}}: {{y}}'
+          //this.chart.options.barLabels = false
+        }
+      }
+      this.chart.options.y = value
+    }
+    this.update()
+  },
   changeKey: function() {
     if (this.chart) this.chart.options.x = this.model.get('key')
   },
@@ -39,7 +75,9 @@ var ChartView = Backbone.View.extend({
     this.chart.update(d)
   },
   resize: function() {
-    var height = this.$el.find('.chart').innerHeight() - this.$el.find('.title').outerHeight(true) - parseInt(this.$el.find('.chart').css('padding'))*2
+    var height = this.$el.find('.chart').innerHeight()
+      - this.$el.find('.title').outerHeight(true)
+      - parseInt(this.$el.find('.chart').css('padding'))*2
     this.$el.find('.chart-inner').css('height', height + 'px')
   },
   remove: function() {

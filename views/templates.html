@@ -38,6 +38,11 @@
   <div class="chart">
     {{> title }}
     <div class="chart-inner">
+      <div class="chart-tools">
+      {{#tools}}
+        <label><input type="radio" name="{{cid}}-chart-tools" value="{{value}}"> {{text}}</label>
+      {{/tools}}
+      </div>
       <div class="loader"><i class="fa fa-circle-o-notch fa-spin"></i></div>
       <div class="the-chart"></div>
     </div>

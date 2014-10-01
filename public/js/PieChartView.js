@@ -10,6 +10,7 @@ var PieChartView = BarChartView.extend({
     this.chart = new GeoDash.PieChart(this.chartel, {
       label: this.model.get('key')
       , value: this.model.get('y')
+      , y: this.model.get('y')
       , colors: this.colors
       , opacity: 1
       , arclabels: true

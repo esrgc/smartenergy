@@ -5,16 +5,16 @@ var StackedBarChartView = BarChartView.extend({
     var self = this
     var row = data[0]
     if (row) {
-      if (this.model.get('y').length < 1) {
-        var keys = _.without(_.keys(row), this.model.get('key'))
-        if (keys.length === 1) {
-          this.chart.options.y = keys[0]
-        } else {
-          this.chart.options.y = keys
-        }
-      } else {
-        this.chart.options.y = this.model.get('y')
-      }
+      // if (this.model.get('y').length < 1) {
+      //   var keys = _.without(_.keys(row), this.model.get('key'))
+      //   if (keys.length === 1) {
+      //     this.chart.options.y = keys[0]
+      //   } else {
+      //     this.chart.options.y = keys
+      //   }
+      // } else {
+      //   this.chart.options.y = this.model.get('y')
+      // }
       var totals = []
       data.forEach(function(row, i) {
         if (!row[self.model.get('key')]) {

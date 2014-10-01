@@ -7,6 +7,7 @@ var BarChartView = ChartView.extend({
       title: $('#title-partial').html(),
       toolbar: $('#toolbar-partial').html()
     }))
+    this.updateChartTools()
     this.$el.find('.chart-inner').css('overflow', 'hidden')
     this.chartel = this.$el.find('.chart-inner > .the-chart').get(0)
     this.chart = false
@@ -31,16 +32,16 @@ var BarChartView = ChartView.extend({
     var self = this
     var row = data[0]
     if (row) {
-      if (this.model.get('y').length < 1) {
-        var keys = _.without(_.keys(row), this.model.get('key'))
-        if (keys.length === 1) {
-          this.chart.options.y = keys[0]
-        } else {
-          this.chart.options.y = keys
-        }
-      } else {
-        this.chart.options.y = this.model.get('y')
-      }
+      // if (this.model.get('y').length < 1) {
+      //   var keys = _.without(_.keys(row), this.model.get('key'))
+      //   if (keys.length === 1) {
+      //     this.chart.options.y = keys[0]
+      //   } else {
+      //     this.chart.options.y = keys
+      //   }
+      // } else {
+      //   this.chart.options.y = this.model.get('y')
+      // }
       var totals = []
       data.forEach(function(row, i) {
         if (!row[self.model.get('key')]) {

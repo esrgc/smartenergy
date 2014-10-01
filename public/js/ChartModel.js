@@ -31,6 +31,11 @@ var ChartModel = Backbone.Model.extend({
       Dashboard.filterCollection.on('change:value', this.update, this)
     }
   },
+  toJSON: function() {
+    var json = Backbone.Model.prototype.toJSON.apply(this, arguments);
+    json.cid = this.cid;
+    return json;
+  },
   update: function() {
     var self = this
     if (this.get('visible')) {

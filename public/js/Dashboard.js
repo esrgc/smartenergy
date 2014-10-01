@@ -32,32 +32,24 @@ var Dashboard = Backbone.View.extend({
     this.makeCharts()
   },
   makeCharts: function() {
+    var self = this
     this.mapModel = {title: "Map", api: 'api/getPoints', key: 'geo', chart_type: 'map'}
+    this.charts = {
+      stats: {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
+      technology: {title: "Technology Type", api: 'api/getTechnology', y: 'Projects', key: 'Technology', chart_type: 'pie', units: 'projects'},
+      mea_contribution: {title: "MEA Contribution By Area", api: 'api/getContribution', key: 'County', y: ['Other Contributions', 'MEA Contribution'], chart_type: 'stacked', group: 'geo', units: '', valueFormat: d3.format('$,.2f'), width: 'col-md-6 col-sm-12', legend: true, dontFormat: ['Investment Leverage'], geo: true, tools: [{value: 'all', text: 'All Contributions'}, {value: 'MEA Contribution', text: 'MEA Contribution'}]},
+      program: {title: "Program", api: 'api/getProgramName', key: 'Program Name', y: ['Projects'], chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f'), tools: [{value: 'Projects', text: 'Projects'}, {value: 'Contribution', text: 'Contribution', type: 'money'}]},
+      sector: {title: "Sector", api: 'api/getSector', key: 'Sector', y: 'Projects', chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f'), tools: [{value: 'Projects', text: 'Projects'}, {value: 'Contribution', text: 'Contribution', type: 'money'}]},
+      electricity: {title: "Electricity Savings", api: 'api/getSavings', key: 'County', y: 'Savings', chart_type: 'bar', units: 'kWh', geo: true, width: 'col-md-6 col-sm-12'},
+      reduction: {title: "CO2 Emissions Reductions", api: 'api/getReductions', key: 'County', y: 'Reduction', chart_type: 'bar', units: 'tons', geo: true, width: 'col-md-6 col-sm-12'},
+      reductionTime: {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'Year', y: 'Reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%Y"), showUnitsInTable: true},
+      station_technology: {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie'},
+    }
     this.chart_hash = {
-      'energyeffiency': [
-        {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
-        {title: "Program", api: 'api/getProgramName', key: 'Program Name', chart_type: 'bar', y: 'Projects', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
-        {title: "Sector", api: 'api/getSector', key: 'Sector', y: 'Projects', chart_type: 'bar', units: 'Projects', barLabels: true, valueFormat: d3.format(',.0f')},
-        {title: "MEA Contribution By Area", api: 'api/getContribution', key: 'County', y: ['Other Contributions', 'MEA Contribution'], chart_type: 'stacked', group: 'geo', units: '', valueFormat: d3.format('$,.2f'), width: 'col-md-6 col-sm-12', legend: true, dontFormat: ['Investment Leverage'], geo: true},
-        {title: "Electricity Savings", api: 'api/getSavings', key: 'County', y: 'Savings', chart_type: 'bar', units: 'kWh', geo: true, width: 'col-md-6 col-sm-12'},
-        {title: "CO2 Emissions Reductions", api: 'api/getReductions', key: 'County', y: 'Reduction', chart_type: 'bar', units: 'tons', geo: true, width: 'col-md-6 col-sm-12'}
-      ],
-      'renewableenergy': [
-        {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
-        {title: "Technology Type", api: 'api/getTechnology', y: 'Projects', key: 'Technology', chart_type: 'pie', units: 'projects'},
-        {title: "MEA Contribution By Area", api: 'api/getContribution', key: 'County', y: ['Other Contributions', 'MEA Contribution'], chart_type: 'stacked', group: 'geo', units: '', valueFormat: d3.format('$,.2f'), width: 'col-md-6 col-sm-12', legend: true, dontFormat: ['Investment Leverage'], geo: true},
-        {title: "Program", api: 'api/getProgramName', key: 'Program Name', y: 'Projects', chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
-        {title: "Sector", api: 'api/getSector', key: 'Sector', y: 'Projects', chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
-        {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'Year', y: 'Reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%Y"), showUnitsInTable: true}
-      ],
-      'transportation': [
-        {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
-        //{title: "Vehicle Technology", api: 'api/getVehicleTechnology', key: 'vehicle_technology', chart_type: 'pie'},
-        {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie'},
-        {title: "Program", api: 'api/getProgramName', key: 'Program Name', y: 'Projects', chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')},
-        {title: "Sector", api: 'api/getSector', key: 'Sector', y: 'Projects', chart_type: 'bar', units: 'projects', barLabels: true, valueFormat: d3.format(',.0f')}
-      ],
-      'capacity_charts': [
+      energyeffiency: [this.charts.stats, this.charts.mea_contribution, this.charts.program, this.charts.sector, this.charts.electricity, this.charts.reduction],
+      renewableenergy: [this.charts.stats, this.charts.technology, this.charts.mea_contribution, this.charts.program, this.charts.sector, this.charts.reductionTime],
+      transportation: [this.charts.stats, this.charts.station_technology, this.charts.mea_contribution, this.charts.program, this.charts.sector],
+      capacity_charts: [
         {title: "Capacity By Area", api: 'api/getCapacityByArea', key: 'County', y: 'Capacity', chart_type: 'pie', showUnitsInTable: true, geo: true},
         {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'Sector', y: 'Capacity', chart_type: 'bar', showUnitsInTable: true},
         {title: "Capacity Growth", api: 'api/getCapacityOverTime', key: 'Year', y: 'Capacity', chart_type: 'line', labelFormat: d3.time.format("%Y"), showUnitsInTable: true},
@@ -243,7 +235,6 @@ var Dashboard = Backbone.View.extend({
 
     var charts = []
     this.chartCollection.findWhere({chart_type: 'map'}).set('data', [])
-    //this.chartCollection.findWhere({chart_type: 'map'}).update()
     this.chartCollection.each(function(chart, idx) {
       if (chart.get('chart_type') !== 'map') {
         chart.abort()
@@ -253,11 +244,6 @@ var Dashboard = Backbone.View.extend({
     this.chartCollection.remove(charts)
     this.chartCollection.add(this.chart_hash[this.activetab])
     this.update()
-    // this.chartCollection.each(function(chart, idx) {
-    //   if (chart.get('chart_type') !== 'map') {
-    //     chart.update()
-    //   }
-    // })
   }
 })
 
