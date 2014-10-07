@@ -55,7 +55,12 @@ api.get('/getTechnology', function(req, res){
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query)
-    req.cursor = mongo.db.collection(req.query.tab).group(['technology'], conditions, {"projects":0}, "function (obj, prev) { prev.projects++; }", handleData)
+    mongo.db.collection(req.query.tab).aggregate(
+      {$match: conditions},
+      {$project: {technology: 1}},
+      {$group: {_id: {technology: '$technology'}, projects:{$sum: 1}}},
+      {$project: {_id: 0,technology: "$_id.technology", projects: 1}},
+      {$sort: {projects: -1}}, handleData)
   } else {
     var qry = '$select=technology,count(id) as projects&$group=technology'
     qry += filter.where(req.query, qry, 'technology')
@@ -84,15 +89,12 @@ api.get('/getProgramName', function(req, res){
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query)
-    var sums = {
-      'projects':0,
-      'contribution': 0
-    }
-    var aggregate = function (obj, prev) {
-      prev.projects++;
-      prev.contribution += +obj.mea_award || 0
-    }
-    mongo.db.collection(req.query.tab).group(['program_name'], conditions, sums, aggregate, handleData)
+    mongo.db.collection(req.query.tab).aggregate(
+      {$match: conditions},
+      {$project: {program_name: 1, mea_award: 1}},
+      {$group: {_id: {program_name: '$program_name'}, projects:{$sum: 1}, contribution: {$sum: '$mea_award'}}},
+      {$project: {_id: 0,program_name: "$_id.program_name", projects: 1, contribution: 1}},
+      {$sort: {projects: -1}}, handleData)
   } else {
     var qry = '$select=program_name,count(id) as projects&$group=program_name'
     qry += filter.where(req.query, qry)
@@ -113,15 +115,21 @@ api.get('/getCapacityByArea', function(req, res){
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query)
+    var id = null
+    var project = {_id: 0, sum_capacity: 1}
     if (req.query.geotype) {
-      var group = [req.query.geotype]
-    } else {
-      var group = []
+      var id = {}
+      id[req.query.geotype] =  '$' + req.query.geotype
+      project[req.query.geotype] = '$_id.' + req.query.geotype
     }
-    var aggregate = function (obj, prev) {
-      prev.sum_capacity += +obj.capacity || 0
-    }
-    mongo.db.collection(req.query.tab).group([group], conditions, {"sum_capacity":0}, aggregate, handleData)
+    mongo.db.collection(req.query.tab).aggregate(
+      {$match: conditions},
+      {$group: {
+        _id: id,
+        sum_capacity: {$sum: '$capacity'}
+      }},
+      {$project: project},
+      handleData)
   } else {
     var qry = '$select=sum(capacity)'
     qry += filter.geotype(req.query)
@@ -143,7 +151,12 @@ api.get('/getCapacityBySector', function(req, res){
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     var aggregate = function (obj, prev) { prev.sum_capacity += +obj.capacity || 0; }
-    mongo.db.collection(req.query.tab).group(['sector'], conditions, {"sum_capacity":0}, aggregate, handleData)
+    mongo.db.collection(req.query.tab).aggregate(
+      {$match: conditions},
+      {$project: {capacity: 1, sector: 1}},
+      {$group: {_id: {sector: '$sector'}, sum_capacity: {$sum: '$capacity'}}},
+      {$project: {_id: 0,sector: "$_id.sector", sum_capacity: 1}},
+      handleData)
   } else {
     var qry = '$select=sector,sum(capacity)&$group=sector'
     qry += filter.where(req.query, qry)
@@ -164,17 +177,12 @@ api.get('/getSector', function(req, res){
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query)
-    var sums = {
-      'projects':0,
-      'contribution': 0
-    }
-    var aggregate = function (obj, prev) {
-      prev.projects++;
-      prev.contribution += +obj.mea_award || 0
-    }
-    setTimeout(function() {
-      mongo.db.collection(req.query.tab).group(['sector'], conditions, sums, aggregate, handleData)
-    }, 5000)
+    mongo.db.collection(req.query.tab).aggregate(
+      {$match: conditions},
+      {$project: {sector: 1, mea_award: 1}},
+      {$group: {_id: {sector: '$sector'}, projects:{$sum: 1}, contribution: {$sum: '$mea_award'}}},
+      {$project: {_id: 0,sector: "$_id.sector", projects: 1, contribution: 1}},
+      {$sort: {projects: -1}}, handleData)
   } else {
     var qry = '$select=sector,count(id)%20as%20projects&$group=sector'
     qry += filter.where(req.query, qry)
@@ -188,12 +196,12 @@ api.get('/getStats', function(req, res){
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query)
-    var aggregate = function (obj, prev) {
-      prev.contribution += (+obj.mea_award || 0);
-      prev.project_cost += (+obj.total_project_cost || 0);
-      prev.total_projects++;
-    }
-    mongo.db.collection(req.query.tab).group([], conditions, {contribution:0, project_cost: 0, total_projects: 0}, aggregate, handleData)
+    mongo.db.collection(req.query.tab).aggregate(
+      {$match: conditions},
+      {$project: {mea_award: 1, total_project_cost: 1}},
+      {$group: {_id: null, total_projects:{$sum: 1}, project_cost: {$sum: '$total_project_cost'}, contribution: {$sum: '$mea_award'}}},
+      {$project: {_id: 0, total_projects: 1, project_cost: 1, contribution: 1}},
+      handleData)
   } else {
     var qry = '$select=sum(mea_award)%20as%20contribution,sum(total_project_cost)%20as%20project_cost,sum(other_agency_dollars),count(id)%20as%20total_projects'
     qry += filter.where(req.query, qry)
@@ -222,22 +230,24 @@ api.get('/getContribution', function(req, res){
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query)
+    var id = null
+    var project = {_id: 0, projects: 1, mea_contribution: 1, project_cost: 1, sum_other_agency_dollars: 1}
     if (req.query.geotype) {
-      var group = [req.query.geotype]
-    } else {
-      var group = []
+      var id = {}
+      id[req.query.geotype] =  '$' + req.query.geotype
+      project[req.query.geotype] = '$_id.' + req.query.geotype
     }
-    var aggregate = function (obj, prev) {
-      prev.mea_contribution += +obj.mea_award || 0
-      prev.project_cost += +obj.total_project_cost || 0
-      prev.sum_other_agency_dollars += +obj.sum_other_agency_dollars || 0
-    }
-    var sums = {
-      project_cost: 0,
-      mea_contribution:0,
-      sum_other_agency_dollars: 0
-    }
-    mongo.db.collection(req.query.tab).group([group], conditions, sums, aggregate, handleData)
+    mongo.db.collection(req.query.tab).aggregate(
+      {$match: conditions},
+      {$group: {
+        _id: id,
+        projects:{$sum: 1},
+        mea_contribution: {$sum: '$mea_award'},
+        project_cost: {$sum: '$total_project_cost'},
+        sum_other_agency_dollars: {$sum: '$sum_other_agency_dollars'}
+      }},
+      {$project: project},
+      {$sort: {projects: -1}}, handleData)
   } else {
     var qry = '$select=sum(mea_award)%20as%20mea_contribution,sum(other_agency_dollars) as sum_other_agency_dollars, sum(total_project_cost)%20as%20project_cost'
     qry += filter.geotype(req.query)
@@ -365,14 +375,19 @@ api.get('/getStationTechnology', function(req, res){
     data = _.map(data, function(r) {
       return {
         'Technology': r.charging_fueling_station_technology,
-        'Projects': +r.projects
+        'Projects': r.projects
       }
     })
     returnData(req, res, data)
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query)
-    mongo.db.collection(req.query.tab).group(['charging_fueling_station_technology'], conditions, {"projects":0}, "function (obj, prev) { prev.projects++; }", handleData)
+    mongo.db.collection(req.query.tab).aggregate(
+      {$match: conditions},
+      {$project: {capacity: 1, sector: 1}},
+      {$group: {_id: {charging_fueling_station_technology: '$charging_fueling_station_technology'}, projects: {$sum: 1}}},
+      {$project: {_id: 0,charging_fueling_station_technology: "$_id.charging_fueling_station_technology", projects: 1}},
+      handleData)
   } else {
     var qry = '$select=charging_fueling_station_technology,count(id) as projects&$group=charging_fueling_station_technology'
     qry += filter.where(req.query, qry, 'charging_fueling_station_technology')
@@ -401,15 +416,17 @@ api.get('/getReductions', function(req, res){
 
   if (CACHE) {
     var conditions = filter.conditions(req.query)
+    var id = null
+    var project = {_id: 0, reduction: 1}
     if (req.query.geotype) {
-      var group = [req.query.geotype]
-    } else {
-      var group = []
+      var id = {}
+      id[req.query.geotype] =  '$' + req.query.geotype
+      project[req.query.geotype] = '$_id.' + req.query.geotype
     }
-    var aggregate = function (obj, prev) {
-      prev.reduction += (+obj.co2_emissions_reductions_tons || 0);
-    }
-    mongo.db.collection(req.query.tab).group(group, conditions, {reduction:0}, aggregate, handleData)
+    mongo.db.collection(req.query.tab).aggregate(
+      {$match: conditions},
+      {$group: {_id: id, reduction: {$sum: '$co2_emissions_reductions_tons'}}},
+      {$project: project}, handleData)
   } else {
     var qry = '$select=sum(co2_emissions_reductions_tons) as reduction'
     qry += filter.geotype(req.query)
@@ -431,15 +448,21 @@ api.get('/getSavings', function(req, res){
 
   if (CACHE) {
     var conditions = filter.conditions(req.query)
+    var id = null
+    var project = {_id: 0, savings: 1}
     if (req.query.geotype) {
-      var group = [req.query.geotype]
-    } else {
-      var group = []
+      var id = {}
+      id[req.query.geotype] =  '$' + req.query.geotype
+      project[req.query.geotype] = '$_id.' + req.query.geotype
     }
-    var aggregate = function (obj, prev) {
-      prev.savings += (+obj.electricity_savings_kwh || 0);
-    }
-    mongo.db.collection(req.query.tab).group(group, conditions, {savings:0}, aggregate, handleData)
+    mongo.db.collection(req.query.tab).aggregate(
+      {$match: conditions},
+      {$group: {
+        _id: id,
+        savings: {$sum: '$electricity_savings_kwh'}
+      }},
+      {$project: project},
+      handleData)
   } else {
     var qry = '$select=sum(electricity_savings_kwh) as savings'
     qry += filter.geotype(req.query)
@@ -455,7 +478,7 @@ api.get('/getCapacityOverTime', function(req, res){
     data = _.map(data, function(r) {
       return {
         'Year': r.year,
-        'Capacity': r.sum_capacity || 0
+        'Capacity': r.sum_capacity
       }
     })
     returnData(req, res, data)
@@ -464,13 +487,14 @@ api.get('/getCapacityOverTime', function(req, res){
   if (CACHE) {
     var getPerYear = function(year, callback) {
       var conditions = filter.conditions(req.query)
-      conditions.date = {$gt: year + '-01-01T12:00:00', $lt: year+1 + '-01-01T12:00:00'}
-      var aggregate = function (obj, prev) {
-        prev.sum_capacity += (+obj.capacity || 0);
-      }
-      mongo.db.collection(req.query.tab).group([], conditions, {sum_capacity:0}, aggregate, function(err, data) {
-        data[0].year = year.toString()
-        callback(err, data)
+      conditions.date = {$gt: new Date(year + '-01-01T12:00:00'), $lt: new Date(year+1 + '-01-01T12:00:00')}
+      mongo.db.collection(req.query.tab).aggregate(
+        {$match: conditions},
+        {$project: {capacity: 1}},
+        {$group: {_id: null, sum_capacity:{$sum: '$capacity'}}},
+        function(err, data) {
+          if (data.length) data[0].year = year.toString()
+          callback(err, data)
       })
     }
   } else {
@@ -502,7 +526,7 @@ api.get('/getReductionOverTime', function(req, res){
     data = _.map(data, function(r) {
       return {
         'Year': r.year,
-        'Reduction': r.reduction || 0,
+        'Reduction': r.reduction,
       }
     })
     returnData(req, res, data)
@@ -511,13 +535,14 @@ api.get('/getReductionOverTime', function(req, res){
   if (CACHE) {
     var getPerYear = function(year, callback) {
       var conditions = filter.conditions(req.query)
-      conditions.date = {$gt: year + '-01-01T12:00:00', $lt: year+1 + '-01-01T12:00:00'}
-      var aggregate = function (obj, prev) {
-        prev.reduction += (+obj.co2_emissions_reductions_tons || 0);
-      }
-      mongo.db.collection(req.query.tab).group([], conditions, {reduction:0}, aggregate, function(err, data) {
-        data[0].year = year.toString()
-        callback(err, data)
+      conditions.date = {$gt: new Date(year + '-01-01T12:00:00'), $lt: new Date(year+1 + '-01-01T12:00:00')}
+      mongo.db.collection(req.query.tab).aggregate(
+        {$match: conditions},
+        {$project: {co2_emissions_reductions_tons: 1}},
+        {$group: {_id: null, reduction:{$sum: '$co2_emissions_reductions_tons'}}},
+        function(err, data) {
+          if (data.length) data[0].year = year.toString()
+          callback(err, data)
       })
     }
   } else {

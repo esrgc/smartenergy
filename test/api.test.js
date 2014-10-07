@@ -4,11 +4,12 @@ var root = 'http://localhost:3011/api/'
 var tab = '?tab=renewableenergy'
 
 testAPI('getSector')
-//testAPI('getTechnology')
-//testAPI('getProgramName')
+testAPI('getTechnology')
+testAPI('getProgramName')
 testAPI('getContribution')
 testAPI('getReductionOverTime')
 testAPI('getStats')
+testAPI('getPoints')
 
 function testAPI(path) {
   console.time(path)
