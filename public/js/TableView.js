@@ -33,8 +33,11 @@ var TableView = ChartView.extend({
     this.resize()
   },
   drawTable: function(data) {
+    var self = this
     if (this.options.y) {
       var y = this.options.y
+    } else if (this.options.chart.options.y) {
+      var y = this.options.chart.options.y
     } else {
       var  y = this.model.get('y')
     }
@@ -62,7 +65,7 @@ var TableView = ChartView.extend({
         _.each(keys, function(key) {
           html += '<td>'
           if (self.model.get('dontFormat').indexOf(key) < 0) {
-            html += self.model.get('valueFormat')(row[key])
+            html += self.options.chart.options.valueFormat(row[key])
           } else {
             html += row[key]
           }

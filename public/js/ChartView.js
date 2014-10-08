@@ -129,7 +129,7 @@ var ChartView = Backbone.View.extend({
     var TableView = require('./TableView')
     var view = new TableView({
       model: this.model,
-      y: this.model.get('y')
+      chart: this.chart
     })
     this.$el.parent().html(view.render().el)
     view.resize()

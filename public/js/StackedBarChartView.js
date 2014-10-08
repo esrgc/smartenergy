@@ -53,7 +53,8 @@ var StackedBarChartView = BarChartView.extend({
     var TableView = require('./TableView')
     var view = new TableView({
       model: this.model,
-      y: y
+      y: y,
+      chart: this.chart
     })
     this.$el.parent().html(view.render().el)
     view.resize()
