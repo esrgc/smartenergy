@@ -1,6 +1,6 @@
 {
   "name": "smartenergy",
-  "version": "0.2.864",
+  "version": "0.2.880",
   "description": "",
   "main": "server.js",
   "scripts": {

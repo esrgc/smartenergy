@@ -41,10 +41,20 @@ var ChartView = Backbone.View.extend({
   },
   changeChartOptionsOnKey: function(key) {
 
-    this.chart.options.valueFormat = d3.format(',.2f')
-    this.chart.options.barLabelFormat = d3.format('.1s')
+    this.chart.options.valueFormat = d3.format(',.0f')
+    this.chart.options.barLabelFormat = d3.format(',.0f')
     this.chart.options.hoverTemplate = "{{x}}: {{y}} " + this.model.get('units')
     this.chart.options.barLabels = this.model.get('barLabels')
+
+    var tool = _.findWhere(this.model.get('tools'), {value: key})
+    if (tool) {
+      if (tool.type) {
+        if (tool.type === 'money') {
+          this.chart.options.barLabelFormat = d3.format('$,.2s')
+          this.chart.options.valueFormat = d3.format('$,.0f')
+        }
+      }
+    }
 
     if (key === 'all') {
       this.chart.options.y = this.model.get('y')
@@ -53,14 +63,6 @@ var ChartView = Backbone.View.extend({
       if (typeof this.chart.options.y === 'object') {
         var idx = _.indexOf(this.chart.options.y, key)
         if (idx > -1) this.colors = [this.chart.options.colors[idx]]
-      }
-      var tool = _.findWhere(this.model.get('tools'), {value: key})
-      if (tool) {
-        if (tool.type) {
-          if (tool.type === 'money') {
-            this.chart.options.barLabelFormat = d3.format('$,.2s')
-          }
-        }
       }
       this.chart.options.y = key
     }

@@ -36,7 +36,7 @@ var Dashboard = Backbone.View.extend({
     this.mapModel = {title: "Map", api: 'api/getPoints', key: 'geo', chart_type: 'map'}
     this.charts = {
       stats: {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
-      technology: {title: "Technology Type", api: 'api/getTechnology', y: 'Projects', key: 'Technology', chart_type: 'pie', units: 'projects'},
+      technology: {title: "Technology Type", api: 'api/getTechnology', y: 'Projects', key: 'Technology', chart_type: 'pie', units: 'projects', valueFormat: d3.format(',.0f')},
       mea_contribution: {
         title: "MEA Contribution By Area",
         api: 'api/getContribution',
@@ -47,12 +47,12 @@ var Dashboard = Backbone.View.extend({
         chart_type: 'stacked',
         group: 'geo',
         units: '',
-        valueFormat: d3.format('$,.2f'),
+        valueFormat: d3.format('$,.0f'),
         width: 'col-md-6 col-sm-12',
         legend: true,
         dontFormat: ['Investment Leverage'],
         geo: true,
-        tools: [{value: 'all', text: 'All Contributions'}, {value: 'MEA Contribution', text: 'MEA Contribution'}]
+        tools: [{value: 'all', text: 'All Contributions', type: 'money'}, {value: 'MEA Contribution', text: 'MEA Contribution', type: 'money'}]
       },
       program: {
         title: "Program",
@@ -82,7 +82,7 @@ var Dashboard = Backbone.View.extend({
       electricity: {title: "Electricity Savings", api: 'api/getSavings', key: 'County', y: 'Savings', chart_type: 'bar', units: 'kWh', geo: true, width: 'col-md-6 col-sm-12'},
       reduction: {title: "CO2 Emissions Reductions", api: 'api/getReductions', key: 'County', y: 'Reduction', chart_type: 'bar', units: 'tons', geo: true, width: 'col-md-6 col-sm-12'},
       reductionTime: {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'Year', y: 'Reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%Y"), showUnitsInTable: true},
-      station_technology: {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie', units: 'stations'},
+      station_technology: {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie', units: 'stations', valueFormat: d3.format(',.0f')},
     }
     this.charts.program2 = _.clone(this.charts.program)
     this.charts.program2.width = 'col-md-6 col-sm-12'
@@ -91,7 +91,7 @@ var Dashboard = Backbone.View.extend({
       renewableenergy: [this.charts.stats, this.charts.technology, this.charts.mea_contribution, this.charts.program, this.charts.sector, this.charts.reductionTime],
       transportation: [this.charts.stats, this.charts.station_technology, this.charts.mea_contribution, this.charts.program, this.charts.sector],
       capacity_charts: [
-        {title: "Capacity By Area", api: 'api/getCapacityByArea', key: 'County', y: 'Capacity', chart_type: 'pie', showUnitsInTable: true, geo: true},
+        {title: "Capacity By Area", api: 'api/getCapacityByArea', key: 'County', y: 'Capacity', chart_type: 'pie', showUnitsInTable: true, geo: true, valueFormat: d3.format(',.2f')},
         {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'Sector', y: 'Capacity', chart_type: 'bar', showUnitsInTable: true},
         {title: "Capacity Growth", api: 'api/getCapacityOverTime', key: 'Year', y: 'Capacity', chart_type: 'line', labelFormat: d3.time.format("%Y"), showUnitsInTable: true},
       ]
