@@ -38,7 +38,7 @@ var Dashboard = Backbone.View.extend({
       stats: {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
       technology: {title: "Technology Type", api: 'api/getTechnology', y: 'Projects', key: 'Technology', chart_type: 'pie', units: 'projects', valueFormat: d3.format(',.0f')},
       mea_contribution: {
-        title: "MEA Contribution By Area",
+        title: "Contribution By Area",
         api: 'api/getContribution',
         key: 'County',
         y: ['Other Contributions',
