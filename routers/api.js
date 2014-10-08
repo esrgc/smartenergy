@@ -198,9 +198,15 @@ api.get('/getStats', function(req, res){
     var conditions = filter.conditions(req.query)
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
-      {$project: {mea_award: 1, total_project_cost: 1}},
-      {$group: {_id: null, total_projects:{$sum: 1}, project_cost: {$sum: '$total_project_cost'}, contribution: {$sum: '$mea_award'}}},
-      {$project: {_id: 0, total_projects: 1, project_cost: 1, contribution: 1}},
+      {$project: {mea_award: 1, total_project_cost: 1, other_agency_dollars: 1}},
+      {$group: {
+        _id: null,
+        total_projects:{$sum: 1},
+        project_cost: {$sum: '$total_project_cost'},
+        contribution: {$sum: '$mea_award'},
+        sum_other_agency_dollars: {$sum: '$other_agency_dollars'}
+      }},
+      {$project: {_id: 0, total_projects: 1, project_cost: 1, contribution: 1, sum_other_agency_dollars: 1}},
       handleData)
   } else {
     var qry = '$select=sum(mea_award)%20as%20contribution,sum(total_project_cost)%20as%20project_cost,sum(other_agency_dollars),count(id)%20as%20total_projects'
@@ -215,12 +221,12 @@ api.get('/getContribution', function(req, res){
   function handleData(err, data) {
     data = _.map(data, function(r) {
       var obj = {
-        'MEA Contribution': +r.mea_contribution,
-        'Total Project Cost': +r.project_cost,
-        'Other Agency Dollars': +r.sum_other_agency_dollars
+        'MEA Contribution': r.mea_contribution,
+        'Total Project Cost': r.project_cost,
+        'Other Agency Dollars': r.sum_other_agency_dollars
       }
-      if (+r.project_cost > 0) {
-        obj['Other Contributions'] = +r.project_cost - +r.mea_contribution - +r.sum_other_agency_dollars
+      if (r.project_cost > 0) {
+        obj['Other Contributions'] = r.project_cost - r.mea_contribution - r.sum_other_agency_dollars
       } else {
         obj['Other Contributions'] = 0
       }
@@ -244,7 +250,7 @@ api.get('/getContribution', function(req, res){
         projects:{$sum: 1},
         mea_contribution: {$sum: '$mea_award'},
         project_cost: {$sum: '$total_project_cost'},
-        sum_other_agency_dollars: {$sum: '$sum_other_agency_dollars'}
+        sum_other_agency_dollars: {$sum: '$other_agency_dollars'}
       }},
       {$project: project},
       {$sort: {projects: -1}}, handleData)
@@ -381,10 +387,10 @@ api.get('/getStationTechnology', function(req, res){
     returnData(req, res, data)
   }
   if (CACHE) {
-    var conditions = filter.conditions(req.query)
+    var conditions = filter.conditions(req.query, 'charging_fueling_station_technology')
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
-      {$project: {capacity: 1, sector: 1}},
+      {$project: {charging_fueling_station_technology: 1}},
       {$group: {_id: {charging_fueling_station_technology: '$charging_fueling_station_technology'}, projects: {$sum: 1}}},
       {$project: {_id: 0,charging_fueling_station_technology: "$_id.charging_fueling_station_technology", projects: 1}},
       handleData)
@@ -407,7 +413,7 @@ api.get('/getReductions', function(req, res){
   function handleData(err, data) {
     data = _.map(data, function(r) {
       var obj = {
-        'Reduction': +r.reduction
+        'Reduction': r.reduction
       }
       return addGeoType(obj, req.query.geotype, r)
     })
@@ -439,7 +445,7 @@ api.get('/getSavings', function(req, res){
   function handleData(err, data) {
       data = _.map(data, function(r) {
         var obj = {
-          'Savings': +r.savings
+          'Savings': r.savings
         }
         return addGeoType(obj, req.query.geotype, r)
       })
