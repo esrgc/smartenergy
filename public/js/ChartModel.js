@@ -10,7 +10,7 @@ var ChartModel = Backbone.Model.extend({
       key: 'Name',
       y: [],
       loading: false,
-      hoverTemplate: '{{label}}: {{value}}',
+      hoverTemplate: '{{x}}: {{y}}',
       units: '',
       visible: true,
       toolbar: true,
@@ -20,6 +20,7 @@ var ChartModel = Backbone.Model.extend({
       legend: false,
       valueFormat: d3.format(',.2f'),
       labelFormat: function(d) { return d },
+      barLabelFormat: d3.format(',.2s'),
       dontFormat: [],
       showUnitsInTable: false,
       geo: false

@@ -38,6 +38,7 @@ var TableView = ChartView.extend({
     } else {
       var  y = this.model.get('y')
     }
+    console.log(y)
     var self = this
     var table = this.$el.find('table')
     table.empty()

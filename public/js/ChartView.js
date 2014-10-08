@@ -36,31 +36,34 @@ var ChartView = Backbone.View.extend({
   },
   changeChartTools: function(e) {
     var value = $(e.currentTarget).val()
+    this.changeChartOptionsOnKey(value)
+    this.update()
+  },
+  changeChartOptionsOnKey: function(key) {
 
-    this.chart.options.barLabelFormat = this.model.get('valueFormat')
+    this.chart.options.valueFormat = d3.format(',.2f')
+    this.chart.options.barLabelFormat = d3.format('.1s')
     this.chart.options.hoverTemplate = "{{x}}: {{y}} " + this.model.get('units')
     this.chart.options.barLabels = this.model.get('barLabels')
 
-    if (value === 'all') {
+    if (key === 'all') {
       this.chart.options.y = this.model.get('y')
       this.colors = Dashboard.colors
     } else {
       if (typeof this.chart.options.y === 'object') {
-        var idx = _.indexOf(this.chart.options.y, value)
+        var idx = _.indexOf(this.chart.options.y, key)
         if (idx > -1) this.colors = [this.chart.options.colors[idx]]
       }
-      var type = _.findWhere(this.model.get('tools'), {value: value}).type
-      if (type) {
-        if (type === 'money') {
-          this.chart.options.barLabelFormat = d3.format('$.2s')
-          this.chart.options.valueFormat = d3.format('$,.2f')
-          this.chart.options.hoverTemplate = '{{x}}: {{y}}'
-          //this.chart.options.barLabels = false
+      var tool = _.findWhere(this.model.get('tools'), {value: key})
+      if (tool) {
+        if (tool.type) {
+          if (tool.type === 'money') {
+            this.chart.options.barLabelFormat = d3.format('$,.2s')
+          }
         }
       }
-      this.chart.options.y = value
+      this.chart.options.y = key
     }
-    this.update()
   },
   changeKey: function() {
     if (this.chart) this.chart.options.x = this.model.get('key')
@@ -69,6 +72,7 @@ var ChartView = Backbone.View.extend({
     if(!this.chart) {
       this.resize()
       this.drawChart()
+      //this.changeChartOptionsOnKey(this.model.get('y'))
     }
     var d = this.prepData(this.model.get('data'))
     this.chart.setColor(this.colors)

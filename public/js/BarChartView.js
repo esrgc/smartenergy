@@ -22,6 +22,7 @@ var BarChartView = ChartView.extend({
       , hoverTemplate: "{{x}}: {{y}} " + this.model.get('units')
       , opacity: 0.8
       , barLabels: this.model.get('barLabels')
+      , barLabelFormat: this.model.get('barLabelFormat')
       , legend: this.model.get('legend')
       , legendWidth: 'auto'
       , legendPosition: 'inside'
