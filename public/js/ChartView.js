@@ -84,7 +84,7 @@ var ChartView = Backbone.View.extend({
     var height = this.$el.find('.chart').innerHeight()
       - this.$el.find('.title').outerHeight(true)
       - parseInt(this.$el.find('.chart').css('padding'))*2
-    this.$el.find('.chart-inner').css('height', height + 'px')
+    this.$el.find('.chart-inner').css('height', height)
   },
   remove: function() {
     this.$el.parent().remove()
