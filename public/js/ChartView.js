@@ -83,8 +83,9 @@ var ChartView = Backbone.View.extend({
   resize: function() {
     var height = this.$el.find('.chart').innerHeight()
       - this.$el.find('.title').outerHeight(true)
-      - parseInt(this.$el.find('.chart').css('padding'))*2
-      console.log(height)
+    // var padding = parseInt(this.$el.find('.chart').css('padding'))*2
+    // if (!isNaN(padding)) height -= padding
+    // console.log(height, padding)
     this.$el.find('.chart-inner').css('height', height)
   },
   remove: function() {
