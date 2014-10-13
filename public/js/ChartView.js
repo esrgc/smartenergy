@@ -74,7 +74,6 @@ var ChartView = Backbone.View.extend({
     if(!this.chart) {
       this.resize()
       this.drawChart()
-      //this.changeChartOptionsOnKey(this.model.get('y'))
     }
     var d = this.prepData(this.model.get('data'))
     this.chart.setColor(this.colors)
@@ -83,9 +82,6 @@ var ChartView = Backbone.View.extend({
   resize: function() {
     var height = this.$el.find('.chart').innerHeight()
       - this.$el.find('.title').outerHeight(true)
-    // var padding = parseInt(this.$el.find('.chart').css('padding'))*2
-    // if (!isNaN(padding)) height -= padding
-    // console.log(height, padding)
     this.$el.find('.chart-inner').css('height', height)
   },
   remove: function() {

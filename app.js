@@ -14,7 +14,7 @@ var express = require('express')
   , path = require('path')
   , config = require('./config/config')
   , mongo = require('./lib/mongo')
-
+  , admin = require('./routers/admin')
 var app = express()
 
 app.set('port', process.env.PORT || 3000)
@@ -31,6 +31,12 @@ if ('development' == env) {
 
 app.use('/',    require('./routers/index'))
 app.use('/api', require('./routers/api'))
+app.use('/update', function(req, res) { 
+  admin.update(req.query.p, function(err) {
+    if (err) res.send('error updating')
+    else res.send('update succusseful')
+  })
+})
 
 // Initialize DB connections
 app.init = function(next) {
