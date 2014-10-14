@@ -18,7 +18,6 @@ var ChartView = Backbone.View.extend({
     this.listenTo(this.model, 'change:loading', this.loading)
     this.listenTo(this.model, 'change:key', this.changeKey)
     this.listenTo(this.model, 'remove', this.remove)
-    this.colors = Dashboard.colors
     this.hoverTemplate = '{{label}}: {{value}} ' + this.model.get('units')
   },
   render: function() {
@@ -28,8 +27,18 @@ var ChartView = Backbone.View.extend({
     return this
   },
   updateChartTools: function() {
+    var self = this
     if (this.model.get('tools')) {
-      this.$el.find('.chart-tools label:first-child input').attr('checked', 'checked')
+      this.$el.find('.chart-tools input').each(function(idx) {
+        if (typeof self.model.get('y') === 'string') {
+          var y = [self.model.get('y')]
+        } else {
+          var y = self.model.get('y')
+        }
+        if ($(this).val().split(',').join(',') === y.join(',')) {
+          $(this).attr('checked', 'checked')
+        }
+      })
     } else {
       this.$el.find('.chart-tools').hide()
     }
@@ -40,12 +49,15 @@ var ChartView = Backbone.View.extend({
     this.update()
   },
   changeChartOptionsOnKey: function(key) {
-
+    var self = this
     this.chart.options.valueFormat = d3.format(',.0f')
     this.chart.options.barLabelFormat = d3.format(',.0f')
     this.chart.options.barLabels = this.model.get('barLabels')
 
-    var tool = _.findWhere(this.model.get('tools'), {value: key})
+    var colors = []
+      , keys = key.split(',')
+      , tool = _.findWhere(this.model.get('tools'), {value: key})
+
     if (tool) {
       if (tool.type) {
         if (tool.type === 'money') {
@@ -53,19 +65,29 @@ var ChartView = Backbone.View.extend({
           this.chart.options.valueFormat = d3.format('$,.0f')
         }
       }
-    }
-
-    if (key === 'all') {
-      this.chart.options.y = this.model.get('y')
-      this.colors = Dashboard.colors
-    } else {
-      if (typeof this.chart.options.y === 'object') {
-        var idx = _.indexOf(this.chart.options.y, key)
-        if (idx > -1) this.colors = [this.chart.options.colors[idx]]
+      if (tool.color) {
+        colors = tool.color
+      } else {
+        if (keys.length < this.chart.options.y.length) {
+          keys.forEach(function(key, i) {
+            var idx = _.indexOf(self.chart.options.y, key)
+            if (idx > -1) {
+              colors.push(Dashboard.colors[idx])
+            }
+          })
+        } else {
+          colors = Dashboard.colors
+        }
       }
-      this.chart.options.y = key
-      this.model.set('y', key)
     }
+    console.log(colors)
+
+    this.chart.options.y = keys
+    this.model.set('y', keys)
+    this.model.set('colors', colors)
+    this.model.set('barLabelFormat', this.chart.options.barLabelFormat)
+    this.model.set('valueFormat', this.chart.options.valueFormat)
+
   },
   changeKey: function() {
     if (this.chart) this.chart.options.x = this.model.get('key')
@@ -76,7 +98,7 @@ var ChartView = Backbone.View.extend({
       this.drawChart()
     }
     var d = this.prepData(this.model.get('data'))
-    this.chart.setColor(this.colors)
+    this.chart.setColor(this.model.get('colors'))
     this.chart.update(d)
   },
   resize: function() {
@@ -100,7 +122,7 @@ var ChartView = Backbone.View.extend({
       }
     })
     if (colors.length) {
-      self.colors = colors
+      self.model.set('colors', colors)
     }
   },
   loading: function(e) {

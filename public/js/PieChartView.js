@@ -11,7 +11,7 @@ var PieChartView = BarChartView.extend({
       label: this.model.get('key')
       , value: this.model.get('y')
       , y: this.model.get('y')
-      , colors: this.colors
+      , colors: this.model.get('colors')
       , arclabels: true
       , arclabelsMin: 8
       , opacity: 1

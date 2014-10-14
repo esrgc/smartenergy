@@ -23,7 +23,8 @@ var ChartModel = Backbone.Model.extend({
       barLabelFormat: d3.format(',.2s'),
       dontFormat: [],
       showUnitsInTable: false,
-      geo: false
+      geo: false,
+      colors: Dashboard.colors
     }
   },
   initialize: function() {
