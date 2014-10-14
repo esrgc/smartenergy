@@ -48,7 +48,8 @@ api.get('/getTechnology', function(req, res){
     data = _.map(data, function(r) {
       return {
         'Technology': r.technology,
-        'Projects': r.projects
+        'Projects': r.projects,
+        'Contribution': r.contribution
       }
     })
     returnData(req, res, data)
@@ -57,9 +58,9 @@ api.get('/getTechnology', function(req, res){
     var conditions = filter.conditions(req.query)
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
-      {$project: {technology: 1}},
-      {$group: {_id: {technology: '$technology'}, projects:{$sum: 1}}},
-      {$project: {_id: 0,technology: "$_id.technology", projects: 1}},
+      {$project: {technology: 1, mea_award: 1}},
+      {$group: {_id: {technology: '$technology'}, projects:{$sum: 1}, contribution: {$sum: '$mea_award'}}},
+      {$project: {_id: 0,technology: "$_id.technology", projects: 1, contribution: 1}},
       {$sort: {projects: -1}}, handleData)
   } else {
     var qry = '$select=technology,count(id) as projects&$group=technology'

@@ -12,10 +12,9 @@ var PieChartView = BarChartView.extend({
       , value: this.model.get('y')
       , y: this.model.get('y')
       , colors: this.colors
-      , opacity: 1
       , arclabels: true
       , arclabelsMin: 8
-      , opacity: 0.9
+      , opacity: 1
       , hoverTemplate: '{{label}}: {{value}} ' + this.model.get('units')
       , valueFormat: this.model.get('valueFormat')
       , arcstrokewidth: 0
@@ -23,7 +22,25 @@ var PieChartView = BarChartView.extend({
       , innerRadius: 50
       , legend: this.model.get('legend')
     })
-  }
+  },
+  changeChartOptionsOnKey: function(key) {
+
+    this.chart.options.valueFormat = d3.format(',.0f')
+
+    var tool = _.findWhere(this.model.get('tools'), {value: key})
+    if (tool) {
+      if (tool.type) {
+        if (tool.type === 'money') {
+          this.chart.options.valueFormat = d3.format('$,.0f')
+        }
+      }
+    }
+
+    this.chart.options.value = key
+    this.chart.options.y = key
+    this.model.set('value', key)
+    this.model.set('y', key)
+  },
 })
 
 module.exports = PieChartView

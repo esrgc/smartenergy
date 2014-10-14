@@ -35,8 +35,25 @@ var Dashboard = Backbone.View.extend({
     var self = this
     this.mapModel = {title: "Map", api: 'api/getPoints', key: 'geo', chart_type: 'map'}
     this.charts = {
-      stats: {title: "Investment Stats", api: 'api/getStats', key: 'contribution', chart_type: 'stat', format: d3.format('$,'), toolbar: false, sort: false},
-      technology: {title: "Technology Type", api: 'api/getTechnology', y: 'Projects', key: 'Technology', chart_type: 'pie', units: 'projects', valueFormat: d3.format(',.0f')},
+      stats: {
+        title: "Investment Stats",
+        api: 'api/getStats',
+        key: 'contribution',
+        chart_type: 'stat',
+        format: d3.format('$,'),
+        toolbar: false,
+        sort: false
+      },
+      technology: {
+        title: "Technology Type",
+        api: 'api/getTechnology',
+        y: 'Contribution',
+        key: 'Technology',
+        chart_type: 'pie',
+        units: '',
+        valueFormat: d3.format('$,.0f'),
+        tools: [{value: 'Contribution', text: 'Contribution', type: 'money'}, {value: 'Projects', text: 'Projects'}]
+      },
       mea_contribution: {
         title: "Contribution By Area",
         api: 'api/getContribution',
@@ -88,7 +105,8 @@ var Dashboard = Backbone.View.extend({
     this.charts.program2.width = 'col-md-6 col-sm-12'
     this.chart_hash = {
       energyeffiency: [this.charts.stats, this.charts.sector, this.charts.mea_contribution, this.charts.program2, this.charts.electricity, this.charts.reduction],
-      renewableenergy: [this.charts.stats, this.charts.technology, this.charts.mea_contribution, this.charts.program, this.charts.sector, this.charts.reductionTime],
+      renewableenergy: [this.charts.stats, this.charts.technology, this.charts.mea_contribution, this.charts.program, this.charts.sector, this.charts.reductionTime
+      ],
       transportation: [this.charts.stats, this.charts.station_technology, this.charts.mea_contribution, this.charts.program, this.charts.sector],
       capacity_charts: [
         {title: "Capacity By Area", api: 'api/getCapacityByArea', key: 'County', y: 'Capacity', chart_type: 'pie', showUnitsInTable: true, geo: true, valueFormat: d3.format(',.2f')},

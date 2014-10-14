@@ -43,7 +43,6 @@ var ChartView = Backbone.View.extend({
 
     this.chart.options.valueFormat = d3.format(',.0f')
     this.chart.options.barLabelFormat = d3.format(',.0f')
-    this.chart.options.hoverTemplate = "{{x}}: {{y}} " + this.model.get('units')
     this.chart.options.barLabels = this.model.get('barLabels')
 
     var tool = _.findWhere(this.model.get('tools'), {value: key})
@@ -65,6 +64,7 @@ var ChartView = Backbone.View.extend({
         if (idx > -1) this.colors = [this.chart.options.colors[idx]]
       }
       this.chart.options.y = key
+      this.model.set('y', key)
     }
   },
   changeKey: function() {

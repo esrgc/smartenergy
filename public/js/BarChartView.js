@@ -33,20 +33,10 @@ var BarChartView = ChartView.extend({
     var self = this
     var row = data[0]
     if (row) {
-      // if (this.model.get('y').length < 1) {
-      //   var keys = _.without(_.keys(row), this.model.get('key'))
-      //   if (keys.length === 1) {
-      //     this.chart.options.y = keys[0]
-      //   } else {
-      //     this.chart.options.y = keys
-      //   }
-      // } else {
-      //   this.chart.options.y = this.model.get('y')
-      // }
       var totals = []
       data.forEach(function(row, i) {
         if (!row[self.model.get('key')]) {
-          row[self.model.get('key')] = 'Other'
+          data.splice(i, 1)
         }
         totals[i] = 0
         if (typeof self.chart.options.y === 'string') {
