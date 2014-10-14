@@ -22,10 +22,15 @@ var Admin = function() {
 }
 
 Admin.prototype = {
-  update: function(pass, next) {
+  update: function(pass, tab, next) {
     if (pass === config.adminpass) {
       var self = this
-      async.eachSeries(Object.keys(self.columns), 
+      if (tab) {
+        var tabs = [tab]
+      } else {
+        var tabs = Object.keys(self.columns)
+      }
+      async.eachSeries(tabs, 
         function(tab, next){
           console.log('dload ' + tab)
           downloader.downloadTable(tab, function(err, res) {

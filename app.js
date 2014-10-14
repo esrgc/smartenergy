@@ -32,7 +32,7 @@ if ('development' == env) {
 app.use('/',    require('./routers/index'))
 app.use('/api', require('./routers/api'))
 app.use('/update', function(req, res) { 
-  admin.update(req.query.p, function(err) {
+  admin.update(req.query.p, req.query.tab, function(err) {
     if (err) res.send('error updating')
     else res.send('update succusseful')
   })
