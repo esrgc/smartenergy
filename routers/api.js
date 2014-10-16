@@ -294,9 +294,8 @@ api.get('/getPoints', function(req, res){
         if (req.query.tab === 'energyeffiency') {
           obj.projects = points[p].length
         } else {
-          if (points[p].length === 1) {
-            obj.technology = points[p][0][technology_field]
-          }
+          var techs = _.uniq(_.pluck(points[p], technology_field))
+          obj.technology = _.uniq(_.pluck(points[p], technology_field))
         }
         response.points.push(obj)
       }

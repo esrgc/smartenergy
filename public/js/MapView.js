@@ -71,7 +71,7 @@ var MapView = Backbone.View.extend({
           if (m.options.projects) num_projects += m.options.projects
         })
         return new L.DivIcon({
-          className: 'div-icon',
+          className: 'div-icon multiple',
           html: num_projects,
           iconSize: L.point(30, 30)
         })
@@ -244,8 +244,18 @@ var MapView = Backbone.View.extend({
         var latlng = point.point.split(',').map(parseFloat)
         if (latlng.length == 2) {
           if (point.projects > 1) {
+            var technology = point.technology
+            var className = 'div-icon projects-icon '
+            if (technology && technology.length === 1) {
+              var filter = Dashboard.filterCollection.where({value: technology[0]})
+              var color = filter[0].get('color')
+              //self.createCSSSelector('.' + technology[0].replace(/ /g, ''), 'background: ' + color)
+              className += technology[0].replace(/ /g, '')
+            } else {
+              className += 'multiple'
+            }
             var myIcon = L.divIcon({
-              className: 'div-icon projects-icon',
+              className: className,
               html: point.projects,
               iconSize: L.point(30, 30)
             })
@@ -253,7 +263,7 @@ var MapView = Backbone.View.extend({
           } else {
             var technology = point.technology
             if (technology) {
-              var filter = Dashboard.filterCollection.where({value: technology})
+              var filter = Dashboard.filterCollection.where({value: technology[0]})
               if (filter.length) {
                 self.circlestyle.fillColor = filter[0].get('color')
                 self.circlestyle.radius = 4
