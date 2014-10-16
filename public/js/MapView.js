@@ -67,11 +67,25 @@ var MapView = Backbone.View.extend({
       iconCreateFunction: function(cluster) {
         var markers = cluster.getAllChildMarkers()
         var num_projects = 0
+        var tech = []
         _.each(markers, function(m) {
-          if (m.options.projects) num_projects += m.options.projects
+          if (m.options.projects) {
+            num_projects += m.options.projects
+          }
+          if (m.options.tech) tech.push(m.options.tech)
         })
+        tech = _.uniq(tech)
+        if (tech.indexOf('multiple') > -1) {
+          className = 'multiple'
+        } else {
+          if (tech.length === 1) {
+            className = tech[0]
+          } else {
+            className = 'multiple'
+          }
+        }
         return new L.DivIcon({
-          className: 'div-icon multiple',
+          className: 'div-icon ' + className,
           html: num_projects,
           iconSize: L.point(30, 30)
         })
@@ -246,23 +260,26 @@ var MapView = Backbone.View.extend({
           if (point.projects > 1) {
             var technology = point.technology
             var className = 'div-icon projects-icon '
+            var marker_props = {projects: point.projects}
             if (technology && technology.length === 1) {
               var filter = Dashboard.filterCollection.where({value: technology[0]})
               var color = filter[0].get('color')
-              //self.createCSSSelector('.' + technology[0].replace(/ /g, ''), 'background: ' + color)
               className += technology[0].replace(/ /g, '')
+              marker_props.tech = technology[0].replace(/ /g, '')
             } else {
+              marker_props.tech = 'multiple'
               className += 'multiple'
             }
-            var myIcon = L.divIcon({
+            marker_props.icon = L.divIcon({
               className: className,
               html: point.projects,
               iconSize: L.point(30, 30)
             })
-            var marker = L.marker(latlng, {icon: myIcon, projects: point.projects})
+            var marker = L.marker(latlng, marker_props)
           } else {
             var technology = point.technology
             if (technology) {
+              self.circlestyle.tech = technology[0].replace(/ /g, '')
               var filter = Dashboard.filterCollection.where({value: technology[0]})
               if (filter.length) {
                 self.circlestyle.fillColor = filter[0].get('color')
