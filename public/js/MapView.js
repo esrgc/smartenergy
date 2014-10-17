@@ -286,6 +286,7 @@ var MapView = Backbone.View.extend({
                 self.circlestyle.radius = 4
               }
             } else {
+              self.circlestyle.tech = ''
               self.circlestyle.fillColor = '#333'
             }
             var marker = L.circleMarker(latlng, self.circlestyle)
