@@ -145,6 +145,39 @@
     <li><b>Total Project Cost:</b> {{total_project_cost}}</li>
     <li><b>Investment Leverage:</b> {{investment_leverage}}</li>
     <li><b>Capacity:</b> {{capacity}} {{capacity_units}}</li>
+    {{#notes}}<li><b>Notes:</b> {{.}}</li>{{/notes}}
+  </ul>
+</div>
+</script>
+
+<script type="text/template" id="energyeffiency-popup">
+<div class="map-project" style="background: {{color}}">
+  <ul class="list-unstyled">
+    <li><b>Program Name:</b> <a href="{{link}}">{{program_name}}</a></li>
+    <li><b>Project Name:</b> {{project_name}}</li>
+    <li><b>MEA Contribution:</b> {{mea_award}}</li>
+    <li><b>Other State Contributions:</b> {{other_agency_dollars}}</li>
+    <li><b>Total Project Cost:</b> {{total_project_cost}}</li>
+    <li><b>Investment Leverage:</b> {{investment_leverage}}</li>
+    <li><b>Electricity Savings (kWh):</b> {{electricity_savings_kwh}}</li>
+    <li><b>CO2 Emissions Reductions:</b> {{co2_emissions_reductions_tons}}</li>
+    {{#notes}}<li><b>Notes:</b> {{.}}</li>{{/notes}}
+  </ul>
+</div>
+</script>
+
+<script type="text/template" id="transportation-popup">
+<div class="map-project" style="background: {{color}}">
+  <ul class="list-unstyled">
+    {{#technology}}<li><b>Charging Station Technology:</b> {{.}}</li>{{/technology}}
+    {{#vehicle_technology}}<li><b>Vehicle Technology:</b> {{.}}</li>{{/vehicle_technology}}
+    <li><b>Program Name:</b> <a href="{{link}}">{{program_name}}</a></li>
+    <li><b>Project Name:</b> {{project_name}}</li>
+    <li><b>MEA Contribution:</b> {{mea_award}}</li>
+    <li><b>Other State Contributions:</b> {{other_agency_dollars}}</li>
+    <li><b>Total Project Cost:</b> {{total_project_cost}}</li>
+    <li><b>Investment Leverage:</b> {{investment_leverage}}</li>
+    <li><b>Gallons of Gasoline Equivalent Avoided:</b> {{gallons_of_gasoline_equivalent_avoided}} {{capacity_units}}</li>
     <li><b>Notes:</b> {{notes}}</li>
   </ul>
 </div>

@@ -3,7 +3,11 @@ var ChartModel = require('./ChartModel')
 
 var MapView = Backbone.View.extend({
   template: $('#map-template').html(),
-  renewables_template: $('#renewable-popup').html(),
+  templates: {
+    'renewableenergy': $('#renewable-popup').html(),
+    'energyeffiency': $('#energyeffiency-popup').html(),
+    'transportation': $('#transportation-popup').html()
+  },
   layers_template: $('#layers-template').html(),
   events: {
     'click .layerToggle': 'layerToggle'
@@ -177,7 +181,14 @@ var MapView = Backbone.View.extend({
           feature.color = filter[0].get('color')
         }
       }
-      content += Mustache.render(self.renewables_template, feature)
+      if (feature.charging_fueling_station_technology) {
+        var filter = Dashboard.filterCollection.where({value: feature.charging_fueling_station_technology})
+        if (filter.length) {
+          feature.color = filter[0].get('color')
+        }
+      }
+      console.log(feature)
+      content += Mustache.render(self.templates[Dashboard.activetab], feature)
     })
     content += '</div>'
     return content
@@ -264,8 +275,9 @@ var MapView = Backbone.View.extend({
             if (technology && technology.length === 1) {
               var filter = Dashboard.filterCollection.where({value: technology[0]})
               var color = filter[0].get('color')
-              className += technology[0].replace(/ /g, '')
-              marker_props.tech = technology[0].replace(/ /g, '')
+              var tech_filter = technology[0].replace(/ /g, '').replace('(', '').replace(')', '')
+              className += tech_filter
+              marker_props.tech = tech_filter
             } else {
               marker_props.tech = 'multiple'
               className += 'multiple'
@@ -279,14 +291,14 @@ var MapView = Backbone.View.extend({
           } else {
             var technology = point.technology
             if (technology) {
-              self.circlestyle.tech = technology[0].replace(/ /g, '')
+              self.circlestyle.tech = tech_filter
               var filter = Dashboard.filterCollection.where({value: technology[0]})
               if (filter.length) {
                 self.circlestyle.fillColor = filter[0].get('color')
                 self.circlestyle.radius = 4
               }
             } else {
-              self.circlestyle.tech = ''
+              self.circlestyle.tech = 'multiple'
               self.circlestyle.fillColor = '#333'
             }
             var marker = L.circleMarker(latlng, self.circlestyle)

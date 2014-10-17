@@ -270,9 +270,6 @@ api.get('/getPoints', function(req, res){
     , qry = ''
   if (CACHE) {
     var technology_field = 'technology'
-    if (req.query.tab === 'energyeffiency') {
-      technology_field = 'program_name'
-    }
     if (req.query.tab === 'renewableenergy') {
       technology_field = 'technology'
     } else if (req.query.tab === 'energyeffiency') {
@@ -282,7 +279,9 @@ api.get('/getPoints', function(req, res){
     }
 
     var conditions = filter.conditions(req.query, 'point')
-    var cursor = mongo.db.collection(req.query.tab).find(conditions)
+    var project = {point: 1}
+    project[technology_field] = 1
+    var cursor = mongo.db.collection(req.query.tab).find(conditions, project)
     cursor.toArray(function(err, data) {
       var points = _.groupBy(data, 'point')
       var response = { points: [] }
@@ -291,11 +290,9 @@ api.get('/getPoints', function(req, res){
           point: p,
           projects: points[p].length
         }
-        if (req.query.tab === 'energyeffiency') {
-          obj.projects = points[p].length
-        } else {
-          var techs = _.uniq(_.pluck(points[p], technology_field))
-          obj.technology = _.uniq(_.pluck(points[p], technology_field))
+        if (req.query.tab !== 'energyeffiency') {
+          var techs = _.filter(_.uniq(_.pluck(points[p], technology_field)), null)
+          obj.technology = techs
         }
         response.points.push(obj)
       }
@@ -353,8 +350,6 @@ api.get('/getProjectsByPoint', function(req, res){
       data = _.map(data, function(r) {
         if (r.charging_fueling_station_technology) {
           r.technology = r.charging_fueling_station_technology
-        } else if (r.vehicle_technology) {
-          r.technology = r.vehicle_technology
         }
         return r
       })

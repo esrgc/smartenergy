@@ -34,7 +34,7 @@ app.use('/api', require('./routers/api'))
 app.use('/update', function(req, res) { 
   admin.update(req.query.p, req.query.tab, function(err) {
     if (err) res.send('error updating')
-    else res.send('update succusseful')
+    else res.send('update successfull')
   })
 })
 
