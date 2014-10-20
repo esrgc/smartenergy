@@ -8,6 +8,11 @@ var MapView = Backbone.View.extend({
     'energyeffiency': $('#energyeffiency-popup').html(),
     'transportation': $('#transportation-popup').html()
   },
+  color_fields: {
+    'renewableenergy': 'technology',
+    'energyeffiency': 'sector',
+    'transportation': 'charging_fueling_station_technology'
+  },
   layers_template: $('#layers-template').html(),
   events: {
     'click .layerToggle': 'layerToggle'
@@ -77,9 +82,16 @@ var MapView = Backbone.View.extend({
           if (m.options.projects) {
             num_projects += m.options.projects
           }
+          if (m.options.tech) tech.push(m.options.tech)
         })
+        tech = _.uniq(tech)
+        if (tech.length === 1) {
+          var className = tech[0]
+        } else {
+          var className = 'multiple'
+        }
         return new L.DivIcon({
-          className: 'div-icon multiple',
+          className: 'div-icon ' + className,
           html: num_projects,
           iconSize: L.point(30, 30)
         })
@@ -165,14 +177,9 @@ var MapView = Backbone.View.extend({
         feature.total_project_cost = money(feature.total_project_cost)
       }
       feature.color = '#bbb'
-      if (feature.technology) {
-        var filter = Dashboard.filterCollection.where({value: feature.technology})
-        if (filter.length) {
-          feature.color = filter[0].get('color')
-        }
-      }
-      if (feature.charging_fueling_station_technology) {
-        var filter = Dashboard.filterCollection.where({value: feature.charging_fueling_station_technology})
+      var color_field = self.color_fields[Dashboard.activetab]
+      if (feature[color_field]) {
+        var filter = Dashboard.filterCollection.where({value: feature[color_field]})
         if (filter.length) {
           feature.color = filter[0].get('color')
         }

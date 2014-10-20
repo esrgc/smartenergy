@@ -16,7 +16,9 @@ var FilterLabelView = Backbone.View.extend({
     return this
   },
   style: function() {
-
+    if (this.model.get('color')) {
+      this.$el.find('button').css('background-color', this.model.get('color'))
+    }
   },
   activate: function(filter, e){
     var active = this.model.get('active')

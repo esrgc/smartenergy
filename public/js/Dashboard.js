@@ -76,11 +76,12 @@ var Dashboard = Backbone.View.extend({
         api: 'api/getProgramName',
         key: 'Program Name',
         y: ['Contribution'],
+        colors: [self.colors[0]],
         chart_type: 'bar',
         units: '',
         barLabels: true,
         valueFormat: d3.format('$,.0f'),
-        tools: [{value: 'Contribution', text: 'Contribution', type: 'money'}, {value: 'Projects', text: 'Projects', color: [self.colors[1]]}],
+        tools: [{value: 'Contribution', text: 'Contribution', type: 'money', color: [self.colors[0]]}, {value: 'Projects', text: 'Projects', color: [self.colors[1]]}],
         barLabelFormat: d3.format('$.2s')
       },
       sector: {
@@ -169,11 +170,11 @@ var Dashboard = Backbone.View.extend({
       {value: 'Maryland Save Energy Now', type: 'program_name'}
     ]
     this.sectors = [
-      {value: 'Residential', type: 'sector'},
-      {value: 'Commercial', type: 'sector'},
-      {value: 'Agriculture', type: 'sector'},
-      {value: 'Local Government', type: 'sector'},
-      {value: 'State Government', type: 'sector'}
+      {value: 'Residential', color: '#cc6060', type: 'sector'},
+      {value: 'Commercial', color: '#62a8c4', type: 'sector'},
+      {value: 'Agriculture', color: '#93cf6e', type: 'sector'},
+      {value: 'Local Government', color: '#ced25d', type: 'sector'},
+      {value: 'State Government', color: '#d46e12', type: 'sector'}
     ]
     this.filter_hash = {
       'energyeffiency': this.sectors.concat(this.program_names),

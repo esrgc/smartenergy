@@ -80,7 +80,6 @@ var ChartView = Backbone.View.extend({
         }
       }
     }
-    console.log(colors)
 
     this.chart.options.y = keys
     this.model.set('y', keys)
