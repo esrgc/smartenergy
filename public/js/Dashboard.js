@@ -286,23 +286,30 @@ var Dashboard = Backbone.View.extend({
   switchTab: function(e) {
     var self = this
     this.activetab = e.target.hash.replace('#', '')
-    var filters = []
-    var geos = this.filterCollection.where({geo: true})
-    var geotype = this.filterCollection.where({type: 'geotype'})
-    this.filterCollection.reset(this.filter_hash[this.activetab].concat(geos).concat(geotype))
-    this.filterMenuView.update()
+    if (this.activetab === 'home') {
+      $('.charts').hide()
+      $('.filter-summary').hide()
+    } else {
+      $('.charts').show()
+      $('.filter-summary').show()
+      var filters = []
+      var geos = this.filterCollection.where({geo: true})
+      var geotype = this.filterCollection.where({type: 'geotype'})
+      this.filterCollection.reset(this.filter_hash[this.activetab].concat(geos).concat(geotype))
+      this.filterMenuView.update()
 
-    var charts = []
-    this.chartCollection.findWhere({chart_type: 'map'}).set('data', [])
-    this.chartCollection.each(function(chart, idx) {
-      if (chart.get('chart_type') !== 'map') {
-        chart.abort()
-        charts.push(chart)
-      }
-    })
-    this.chartCollection.remove(charts)
-    this.chartCollection.add(this.chart_hash[this.activetab])
-    this.update()
+      var charts = []
+      this.chartCollection.findWhere({chart_type: 'map'}).set('data', [])
+      this.chartCollection.each(function(chart, idx) {
+        if (chart.get('chart_type') !== 'map') {
+          chart.abort()
+          charts.push(chart)
+        }
+      })
+      this.chartCollection.remove(charts)
+      this.chartCollection.add(this.chart_hash[this.activetab])
+      this.update()
+    }
   }
 })
 

@@ -273,13 +273,13 @@ api.get('/getPoints', function(req, res){
     if (req.query.tab === 'renewableenergy') {
       technology_field = 'technology'
     } else if (req.query.tab === 'energyeffiency') {
-      technology_field = 'program_name'
+      technology_field = 'sector'
     } else if (req.query.tab === 'transportation') {
       technology_field = 'charging_fueling_station_technology'
     }
 
     var conditions = filter.conditions(req.query, 'point')
-    var project = {point: 1}
+    var project = {point: 1, _id: 0}
     project[technology_field] = 1
     var cursor = mongo.db.collection(req.query.tab).find(conditions, project)
     cursor.toArray(function(err, data) {
@@ -290,10 +290,16 @@ api.get('/getPoints', function(req, res){
           point: p,
           projects: points[p].length
         }
-        if (req.query.tab !== 'energyeffiency') {
-          var techs = _.filter(_.uniq(_.pluck(points[p], technology_field)), null)
-          obj.technology = techs
-        }
+        var techs = _.filter(_.uniq(_.pluck(points[p], technology_field)), null)
+        var techcount = []
+        techs.forEach(function(tech) {
+          var where = {}
+          where[technology_field] = tech
+          var x = {t: tech}
+          x.p = _.where(points[p], where).length
+          techcount.push(x)
+        })
+        obj.techcount = techcount
         response.points.push(obj)
       }
       returnData(req, res, response)
@@ -341,11 +347,14 @@ api.get('/getProjectsByPoint', function(req, res){
     if (req.query.tab === 'renewableenergy') {
       technology_field = 'technology'
     } else if (req.query.tab === 'energyeffiency') {
-      technology_field = 'program_name'
+      technology_field = 'sector'
     } else if (req.query.tab === 'transportation') {
       technology_field = 'charging_fueling_station_technology'
     }
+    var tech = req.query.tech
+    delete req.query.tech
     var conditions = filter.conditions(req.query)
+    conditions[technology_field] = tech
     mongo.db.collection(req.query.tab).find(conditions).toArray(function(err, data) {
       data = _.map(data, function(r) {
         if (r.charging_fueling_station_technology) {

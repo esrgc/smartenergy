@@ -61,11 +61,12 @@ var MapView = Backbone.View.extend({
     this.projects = L.markerClusterGroup({
       maxClusterRadius: 50,
       showCoverageOnHover: false,
-      disableClusteringAtZoom: 10,
+      spiderfyOnMaxZoom: true,
+      //disableClusteringAtZoom: 10,
       polygonOptions: {
         color: '#2B4E72',
         weight: 2,
-        fillColor: '#2B4E72',
+        fillColor: '#333',
         fillOpacity: 0.1
       },
       iconCreateFunction: function(cluster) {
@@ -76,20 +77,9 @@ var MapView = Backbone.View.extend({
           if (m.options.projects) {
             num_projects += m.options.projects
           }
-          if (m.options.tech) tech.push(m.options.tech)
         })
-        tech = _.uniq(tech)
-        if (tech.indexOf('multiple') > -1) {
-          className = 'multiple'
-        } else {
-          if (tech.length === 1) {
-            className = tech[0]
-          } else {
-            className = 'multiple'
-          }
-        }
         return new L.DivIcon({
-          className: 'div-icon ' + className,
+          className: 'div-icon multiple',
           html: num_projects,
           iconSize: L.point(30, 30)
         })
@@ -187,7 +177,6 @@ var MapView = Backbone.View.extend({
           feature.color = filter[0].get('color')
         }
       }
-      console.log(feature)
       content += Mustache.render(self.templates[Dashboard.activetab], feature)
     })
     content += '</div>'
@@ -268,56 +257,56 @@ var MapView = Backbone.View.extend({
       if (point.point) {
         var latlng = point.point.split(',').map(parseFloat)
         if (latlng.length == 2) {
-          if (point.projects > 1) {
-            var technology = point.technology
-            var className = 'div-icon projects-icon '
-            var marker_props = {projects: point.projects}
-            if (technology && technology.length === 1) {
-              var filter = Dashboard.filterCollection.where({value: technology[0]})
+          for(var i = 0; i < point.techcount.length; i++) {
+            var technology = point.techcount[i].t
+            var projects = point.techcount[i].p
+            var tech_filter = technology.replace(/ /g, '').replace('(', '').replace(')', '')
+            if (projects > 1) {
+              var className = 'div-icon projects-icon '
+              var marker_props = {projects: projects}
+              var filter = Dashboard.filterCollection.where({value: technology})
               var color = filter[0].get('color')
-              var tech_filter = technology[0].replace(/ /g, '').replace('(', '').replace(')', '')
               className += tech_filter
               marker_props.tech = tech_filter
+              marker_props.icon = L.divIcon({
+                className: className,
+                html: projects,
+                iconSize: L.point(30, 30)
+              })
+              var marker = L.marker(latlng, marker_props)
             } else {
-              marker_props.tech = 'multiple'
-              className += 'multiple'
-            }
-            marker_props.icon = L.divIcon({
-              className: className,
-              html: point.projects,
-              iconSize: L.point(30, 30)
-            })
-            var marker = L.marker(latlng, marker_props)
-          } else {
-            var technology = point.technology
-            if (technology) {
-              self.circlestyle.tech = tech_filter
-              var filter = Dashboard.filterCollection.where({value: technology[0]})
-              if (filter.length) {
-                self.circlestyle.fillColor = filter[0].get('color')
-                self.circlestyle.radius = 4
+              if (technology) {
+                self.circlestyle.tech = tech_filter
+                var filter = Dashboard.filterCollection.where({value: technology})
+                if (filter.length) {
+                  self.circlestyle.fillColor = filter[0].get('color')
+                  self.circlestyle.radius = 6
+                }
+              } else {
+                self.circlestyle.tech = 'multiple'
+                self.circlestyle.fillColor = '#000'
               }
-            } else {
-              self.circlestyle.tech = 'multiple'
-              self.circlestyle.fillColor = '#333'
+              var marker = L.circleMarker(latlng, self.circlestyle)
             }
-            var marker = L.circleMarker(latlng, self.circlestyle)
+            marker.on('click', self.markerClick.bind(self, technology, point, latlng))
+            self.projects.addLayer(marker)
           }
-          marker.on('click', function(point, latlng, e) {
-            var url = 'api/getProjectsByPoint'
-            url = self.model.makeQuery(url)
-            url += '&point=' + point.point
-            var popup = L.popup()
-            .setLatLng(latlng)
-            .setContent('Loading')
-            .openOn(self.map)
-            $.getJSON(url, function(res){
-              popup.setContent(self.makePopup(res, latlng))
-            })
-          }.bind(this, point, latlng))
-          self.projects.addLayer(marker)
         }
       }
+    })
+  },
+  markerClick: function(technology, point, latlng, e) {
+    var self = this
+    var url = 'api/getProjectsByPoint'
+    url = self.model.makeQuery(url)
+    url += '&point=' + point.point
+    url += '&tech=' + technology
+    var popup = L.popup()
+    .setLatLng(latlng)
+    .setContent('Loading')
+    .openOn(self.map)
+    $.getJSON(url, function(res){
+      popup.setContent(self.makePopup(res, latlng))
     })
   },
   loading: function() {
