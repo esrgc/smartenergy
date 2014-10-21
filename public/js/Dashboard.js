@@ -120,9 +120,9 @@ var Dashboard = Backbone.View.extend({
     this.effiency = []
     this.renewables = [
       {value: 'Solar PV', color: '#f39c12', type: 'technology', units: 'kW'},
-      {value: 'Solar Hot Water', color: '#f1c40f', type: 'technology', units: 'sqft'},
+      {value: 'Solar Hot Water', color: '#16a085', type: 'technology', units: 'sqft'},
       {value: 'Geothermal', color: '#FF4136', type: 'technology', units: 'tons'},
-      {value: 'Wood Burning Stove', color: '#d74a02', type: 'technology', units: 'BTUs/hr'},
+      {value: 'Wood Burning Stove', color: '#FFDC00', type: 'technology', units: 'BTUs/hr'},
       {value: 'Wind', color: '#3498db', type: 'technology', units: 'kW'},
       {value: 'Bioheat', color: '#9b59b6', type: 'technology', units: 'gallons'},
       {value: 'Landfill Gas', color: '#01FF70', type: 'technology', units: 'kW'}
@@ -172,7 +172,7 @@ var Dashboard = Backbone.View.extend({
     this.sectors = [
       {value: 'Residential', color: '#cc6060', type: 'sector'},
       {value: 'Commercial', color: '#62a8c4', type: 'sector'},
-      {value: 'Agriculture', color: '#93cf6e', type: 'sector'},
+      {value: 'Agriculture', color: '#91d667', type: 'sector'},
       {value: 'Local Government', color: '#ced25d', type: 'sector'},
       {value: 'State Government', color: '#d46e12', type: 'sector'}
     ]

@@ -104,6 +104,13 @@ var MapView = Backbone.View.extend({
           style: self.style,
           name: 'state'
         })
+      }),
+      $.getJSON('data/maryland-counties.json', function(json) {
+        self.counties = L.geoJson(json, {
+          style: self.style,
+          onEachFeature: self.onEachFeature.bind(self),
+          name: 'county'
+        }).addTo(self.map)
         var f = new FilterModel({
           value: self.counties.options.name,
           type: 'geotype'
@@ -113,13 +120,6 @@ var MapView = Backbone.View.extend({
           })
         })
         Dashboard.filterCollection.add(f)
-      }),
-      $.getJSON('data/maryland-counties.json', function(json) {
-        self.counties = L.geoJson(json, {
-          style: self.style,
-          onEachFeature: self.onEachFeature.bind(self),
-          name: 'county'
-        }).addTo(self.map)
       }),
       $.getJSON('data/maryland-legislative-districts.json', function(json) {
         self.legislativeDistricts = L.geoJson(json, {
