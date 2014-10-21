@@ -137,7 +137,7 @@ var ChartView = Backbone.View.extend({
   },
   download: function(e) {
     var url = this.model.makeQuery(this.model.get('api'))
-    url += '?csv=true'
+    url += '&csv=true'
     window.location.href = url
   },
   code: function(e) {

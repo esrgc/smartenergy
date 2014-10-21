@@ -199,7 +199,12 @@ api.get('/getStats', function(req, res){
     var conditions = filter.conditions(req.query)
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
-      {$project: {mea_award: 1, total_project_cost: 1, other_agency_dollars: 1}},
+      {$project: {mea_award: 1, other_agency_dollars: 1, total_project_cost: {
+        $cond: [ { $gt: ['$total_project_cost', 0] },
+          '$total_project_cost',
+          '$mea_award'
+        ]}
+      }},
       {$group: {
         _id: null,
         total_projects:{$sum: 1},
@@ -238,14 +243,21 @@ api.get('/getContribution', function(req, res){
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     var id = null
-    var project = {_id: 0, projects: 1, mea_contribution: 1, project_cost: 1, sum_other_agency_dollars: 1}
+    var project_in = {mea_award: 1, other_agency_dollars: 1, total_project_cost: {
+        $cond: [ { $gt: ['$total_project_cost', 0] },
+          '$total_project_cost',
+          '$mea_award'
+        ]}}
+    var project_out = {_id: 0, projects: 1, mea_contribution: 1, project_cost: 1, sum_other_agency_dollars: 1}
     if (req.query.geotype) {
       var id = {}
       id[req.query.geotype] =  '$' + req.query.geotype
-      project[req.query.geotype] = '$_id.' + req.query.geotype
+      project_in[req.query.geotype] = 1
+      project_out[req.query.geotype] = '$_id.' + req.query.geotype
     }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
+      {$project: project_in},
       {$group: {
         _id: id,
         projects:{$sum: 1},
@@ -253,7 +265,7 @@ api.get('/getContribution', function(req, res){
         project_cost: {$sum: '$total_project_cost'},
         sum_other_agency_dollars: {$sum: '$other_agency_dollars'}
       }},
-      {$project: project},
+      {$project: project_out},
       {$sort: {projects: -1}}, handleData)
   } else {
     var qry = '$select=sum(mea_award)%20as%20mea_contribution,sum(other_agency_dollars) as sum_other_agency_dollars, sum(total_project_cost)%20as%20project_cost'
