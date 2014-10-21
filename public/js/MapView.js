@@ -103,9 +103,9 @@ var MapView = Backbone.View.extend({
         self.maryland = L.geoJson(json, {
           style: self.style,
           name: 'state'
-        }).addTo(self.map)
+        })
         var f = new FilterModel({
-          value: self.maryland.options.name,
+          value: self.counties.options.name,
           type: 'geotype'
         }).on('change:value', function(e) {
           _.each(Dashboard.chartCollection.where({geo: true}), function(chart) {
@@ -119,7 +119,7 @@ var MapView = Backbone.View.extend({
           style: self.style,
           onEachFeature: self.onEachFeature.bind(self),
           name: 'county'
-        })
+        }).addTo(self.map)
       }),
       $.getJSON('data/maryland-legislative-districts.json', function(json) {
         self.legislativeDistricts = L.geoJson(json, {
@@ -154,7 +154,7 @@ var MapView = Backbone.View.extend({
       ]}
       var layers_html = Mustache.render(self.layers_template, self.layer_switcher)
       self.$el.find('.map').find('.leaflet-bottom.leaflet-left').html(layers_html)
-      self.$el.find('#state').find('p').addClass('active')
+      self.$el.find('#county').find('p').addClass('active')
       self.$el.find('#projects').find('p').addClass('active')
     })
   },

@@ -119,12 +119,12 @@ var Dashboard = Backbone.View.extend({
   makeFilters: function() {
     this.effiency = []
     this.renewables = [
-      {value: 'Solar PV', color: '#FF851B', type: 'technology', units: 'kW'},
+      {value: 'Solar PV', color: '#f39c12', type: 'technology', units: 'kW'},
+      {value: 'Solar Hot Water', color: '#f1c40f', type: 'technology', units: 'sqft'},
       {value: 'Geothermal', color: '#FF4136', type: 'technology', units: 'tons'},
-      {value: 'Solar Hot Water', color: '#39CCCC', type: 'technology', units: 'sqft'},
-      {value: 'Wood Burning Stove', color: '#FFDC00', type: 'technology', units: 'BTUs/hr'},
-      {value: 'Wind', color: '#B10DC9', type: 'technology', units: 'kW'},
-      {value: 'Bioheat', color: '#0074D9', type: 'technology', units: 'gallons'},
+      {value: 'Wood Burning Stove', color: '#d74a02', type: 'technology', units: 'BTUs/hr'},
+      {value: 'Wind', color: '#3498db', type: 'technology', units: 'kW'},
+      {value: 'Bioheat', color: '#9b59b6', type: 'technology', units: 'gallons'},
       {value: 'Landfill Gas', color: '#01FF70', type: 'technology', units: 'kW'}
     ]
     this.transportation = [
@@ -141,7 +141,7 @@ var Dashboard = Backbone.View.extend({
     ]
     this.stations = [
       {value: 'Electric', color: '#0074D9', type: 'charging_fueling_station_technology'},
-      {value: 'Biodiesel', color: '#39CCCC', type: 'charging_fueling_station_technology'},
+      {value: 'Biodiesel', color: '#f39c12', type: 'charging_fueling_station_technology'},
       {value: 'E85', color: '#2ECC40', type: 'charging_fueling_station_technology'},
       {value: 'Natural Gas (CNG)', color: '#FFDC00', type: 'charging_fueling_station_technology'},
       {value: 'Propane', color: '#FF4136', type: 'charging_fueling_station_technology'}
