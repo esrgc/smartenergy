@@ -20,7 +20,7 @@ var BarChartView = ChartView.extend({
       , colors: this.model.get('colors')
       , yTickFormat: d3.format(".2s")
       , hoverTemplate: "{{x}}: {{y}} " + this.model.get('units')
-      , opacity: 0.8
+      , opacity: 0.9
       , barLabels: this.model.get('barLabels')
       , barLabelFormat: this.model.get('barLabelFormat')
       , legend: this.model.get('legend')

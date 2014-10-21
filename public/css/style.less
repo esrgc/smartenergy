@@ -32,7 +32,8 @@ body {
 }
 
 .block {
-  margin-bottom: 30px;
+  /*margin-bottom: 30px;*/
+  padding: 0px;
 }
 
 .tabs {
@@ -58,15 +59,22 @@ body {
   color: #333;
 }
 
+.charts > .row {
+  border-top: 1px solid @tableBorder;
+  border-left: 1px solid @tableBorder;
+  margin-bottom: 30px;
+}
+
 .chart {
   height: @chartHeight;
   /*background: @alternate;*/
-  border: 1px solid @tableBorder;
-  border-radius: 2px;
+  /*border: 1px solid @tableBorder;*/
+  border-right: 1px solid @tableBorder;
+  border-bottom: 1px solid @tableBorder;
   overflow: hidden;
   color: @textColor;
   /*box-shadow: 0 0 5px #999;*/
-  box-shadow: 5px 5px 14px -5px #c5c5c5;
+  /*box-shadow: 5px 5px 14px -5px #c5c5c5;*/
   .title {
     overflow: hidden;
     text-align: left;
@@ -77,6 +85,7 @@ body {
     h3 {
       margin: 0;
       font-size: 18px;
+      line-height: 20px;
     }
     .toolbar {
       float: right;
@@ -188,11 +197,12 @@ body {
 }
 
 .dashboard .map {
-  height: @chartHeight * 2 + 30;
+  height: @chartHeight * 2;
   margin-bottom: 0px;
   background: @main;
-  border: 1px solid @tableBorder;
-  box-shadow: 5px 5px 14px -5px #c5c5c5;
+  border-right: 1px solid @tableBorder;
+  border-bottom: 1px solid @tableBorder;
+  /*box-shadow: 5px 5px 14px -5px #c5c5c5;*/
   #mouseover {
     display: none;
     margin: 1px !important;
@@ -282,7 +292,7 @@ body {
   color: #444;
   background: #f8f8f8;
   border: 1px solid @tableBorder;
-  border-radius: 2px;
+  border-radius: 0px;
   padding: 6px;
   margin-bottom: 20px;
   p {
