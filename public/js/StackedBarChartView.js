@@ -38,7 +38,12 @@ var StackedBarChartView = BarChartView.extend({
       this.setColors(data)
       this.model.set('data', data, {silent: true})
       data = _.map(data, function(row) {
-        var i = (parseFloat(row['Total Project Cost']) - parseFloat(row['MEA Contribution']))/parseFloat(row['MEA Contribution']) || 0
+        console.log(row)
+        if (row['MEA Contribution'] === 0) {
+          var i = 0
+        } else {
+          var i = (parseFloat(row['Total Project Cost']) - parseFloat(row['MEA Contribution']))/parseFloat(row['MEA Contribution']) || 0
+        }
         row['Investment Leverage'] = d3.round(i, 2)
         return row
       })

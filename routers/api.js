@@ -199,11 +199,14 @@ api.get('/getStats', function(req, res){
     var conditions = filter.conditions(req.query)
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
-      {$project: {mea_award: 1, other_agency_dollars: 1, total_project_cost: {
-        $cond: [ { $gt: ['$total_project_cost', 0] },
-          '$total_project_cost',
-          '$mea_award'
-        ]}
+      {$project: {mea_award: 1, other_agency_dollars: 1,
+        total_project_cost: {
+          $cond: [
+            {$gt: ['$total_project_cost', 0]},
+            '$total_project_cost',
+            {$add: ['$mea_award', '$other_agency_dollars']}
+          ]
+        }
       }},
       {$group: {
         _id: null,
@@ -243,11 +246,15 @@ api.get('/getContribution', function(req, res){
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     var id = null
-    var project_in = {mea_award: 1, other_agency_dollars: 1, total_project_cost: {
-        $cond: [ { $gt: ['$total_project_cost', 0] },
+    var project_in = {mea_award: 1, other_agency_dollars: 1,
+      total_project_cost: {
+        $cond: [
+          {$gt: ['$total_project_cost', 0]},
           '$total_project_cost',
-          '$mea_award'
-        ]}}
+          {$add: ['$mea_award', '$other_agency_dollars']}
+        ]
+      }
+    }
     var project_out = {_id: 0, projects: 1, mea_contribution: 1, project_cost: 1, sum_other_agency_dollars: 1}
     if (req.query.geotype) {
       var id = {}
