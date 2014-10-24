@@ -111,6 +111,7 @@ var ChartView = Backbone.View.extend({
   setColors: function(data) {
     var self = this
     var colors = []
+    if (this.model.get('chart_type') === 'pie') {
     _.each(data, function(d) {
       var x = d[self.model.get('key')]
       var filters = Dashboard.filterCollection.where({value: x})
@@ -123,6 +124,7 @@ var ChartView = Backbone.View.extend({
     if (colors.length) {
       self.model.set('colors', colors)
     }
+  }
   },
   loading: function(e) {
     var self = this

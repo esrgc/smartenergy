@@ -89,6 +89,7 @@ var Dashboard = Backbone.View.extend({
         api: 'api/getSector',
         key: 'Sector',
         y: ['Contribution'],
+        colors: [self.colors[0]],
         chart_type: 'bar',
         units: '',
         barLabels: true,
