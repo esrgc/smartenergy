@@ -1,14 +1,15 @@
 <%- include head.ejs %>
 
-<div class="header">
-  <div class="logo">
-    <h1><%= title %><small>Beta</small></h1>
+<div class="container-fluid">
+  <div class="header">
+    <div class="logo">
+      <span>Maryland Energy Administration</span>
+      <h1>Smart Energy Investment Dashboard</h1>
+    </div>
+    <p class="sub-title">Powered by Open Data on <a href="http://data.maryland.gov">data.maryland.gov</a></p>
   </div>
-  <div class="sub-title">
-  <h3>Powered by Open Data on <a href="http://data.maryland.gov">data.maryland.gov</a></h3>
-  </div>
+  <div class="dashboard"></div>
 </div>
-<div class="dashboard"></div>
 
 <%- include templates.html %>
 <%- include footer.ejs %>

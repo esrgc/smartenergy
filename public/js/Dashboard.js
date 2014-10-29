@@ -16,7 +16,7 @@ var Dashboard = Backbone.View.extend({
   colors: ['#2790B0', '#2B4E72', '#94BA65'],
   template: $('#dashboard-template').html(),
   el: $(".dashboard"),
-  activetab: 'renewableenergy',
+  activetab: 'home',
   events: {
     'click .tabs a': 'switchTab'
   },
@@ -112,7 +112,7 @@ var Dashboard = Backbone.View.extend({
       transportation: [this.charts.stats, this.charts.station_technology, this.charts.mea_contribution, this.charts.program, this.charts.sector],
       capacity_charts: [
         {title: "Capacity By Area", api: 'api/getCapacityByArea', key: 'County', y: 'Capacity', chart_type: 'pie', showUnitsInTable: true, geo: true, valueFormat: d3.format(',.2f')},
-        {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'Sector', y: 'Capacity', chart_type: 'bar', showUnitsInTable: true},
+        {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'Sector', y: 'Capacity', chart_type: 'bar', colors: [self.colors[0]], showUnitsInTable: true},
         {title: "Capacity Growth", api: 'api/getCapacityOverTime', key: 'Year', y: 'Capacity', chart_type: 'line', labelFormat: d3.time.format("%Y"), showUnitsInTable: true},
       ]
     }
@@ -287,30 +287,36 @@ var Dashboard = Backbone.View.extend({
   },
   switchTab: function(e) {
     var self = this
-    this.activetab = e.target.hash.replace('#', '')
-    if (this.activetab === 'home') {
+    var tab = e.target.hash.replace('#', '')
+    if (tab === 'home') {
       $('.charts').hide()
       $('.filter-summary').hide()
+      $('.home').show()
     } else {
+      $('.home').hide()
       $('.charts').show()
       $('.filter-summary').show()
-      var filters = []
-      var geos = this.filterCollection.where({geo: true})
-      var geotype = this.filterCollection.where({type: 'geotype'})
-      this.filterCollection.reset(this.filter_hash[this.activetab].concat(geos).concat(geotype))
-      this.filterMenuView.update()
+      if (tab !== this.activetab) {
+        this.activetab = tab
+        this.mapView.map.invalidateSize()
+        var filters = []
+        var geos = this.filterCollection.where({geo: true})
+        var geotype = this.filterCollection.where({type: 'geotype'})
+        this.filterCollection.reset(this.filter_hash[tab].concat(geos).concat(geotype))
+        this.filterMenuView.update()
 
-      var charts = []
-      this.chartCollection.findWhere({chart_type: 'map'}).set('data', [])
-      this.chartCollection.each(function(chart, idx) {
-        if (chart.get('chart_type') !== 'map') {
-          chart.abort()
-          charts.push(chart)
-        }
-      })
-      this.chartCollection.remove(charts)
-      this.chartCollection.add(this.chart_hash[this.activetab])
-      this.update()
+        var charts = []
+        this.chartCollection.findWhere({chart_type: 'map'}).set('data', [])
+        this.chartCollection.each(function(chart, idx) {
+          if (chart.get('chart_type') !== 'map') {
+            chart.abort()
+            charts.push(chart)
+          }
+        })
+        this.chartCollection.remove(charts)
+        this.chartCollection.add(this.chart_hash[tab])
+        this.update()
+      }
     }
   }
 })

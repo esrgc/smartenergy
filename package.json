@@ -1,6 +1,6 @@
 {
   "name": "smartenergy",
-  "version": "0.2.1275",
+  "version": "0.2.1361",
   "description": "",
   "main": "server.js",
   "scripts": {
@@ -27,6 +27,7 @@
     "mongodb": "^1.4.12",
     "morgan": "1.0.0",
     "mustache": "0.8.1",
+    "request": "^2.47.0",
     "tedious": "~0.1.5"
   },
   "devDependencies": {

@@ -2,7 +2,6 @@
 @import 'overrides.less';
 @import 'tableview.less';
 @import 'header.less';
-/*@import 'print.less';*/
 
 html, body {
   height: 100%;
@@ -10,39 +9,36 @@ html, body {
 }
 
 body {
-  /*background: url('../img/white_wall_hash/white_wall_hash.png') repeat;*/
   background: #fff;
   font-family: 'Roboto', sans-serif;
 }
 
 .dashboard {
-  padding: 30px 0 0 0;
+  padding: 10px 10px;
   text-align: center;
-  /*max-width: 1300px;*/
-  /*margin: 0 auto;*/
+  clear: both;
   .row { padding: 0; margin: 0; }
 }
 
 .wrap {
-  min-height: 100%;
-  margin-bottom: -27px;
-  &:after {
-    content: "";
-    display: block;
-  }
+
 }
 
 .block {
-  /*margin-bottom: 30px;*/
   padding: 0px;
 }
 
 .tabs {
-  margin-bottom: 30px;
+  margin: 0 0 10px 0;
   text-align: left;
   a {
 
   }
+}
+
+.home {
+  padding: 10px;
+  border: 1px solid @tableBorder;
 }
 
 .loader {
@@ -60,10 +56,13 @@ body {
   color: #333;
 }
 
-.charts > .row {
-  border-top: 1px solid @tableBorder;
-  border-left: 1px solid @tableBorder;
-  margin-bottom: 30px;
+.charts {
+  display: none;
+  &> .row {
+    border-top: 1px solid @tableBorder;
+    border-left: 1px solid @tableBorder;
+    margin-bottom: 30px;
+  }
 }
 
 .chart {
@@ -301,6 +300,7 @@ body {
 }
 
 .filter-summary {
+  display: none;
   text-align: left;
   font-size: 12px;
   padding-bottom: 10px;
@@ -309,7 +309,6 @@ body {
   border: 1px solid @tableBorder;
   border-radius: 0px;
   padding: 6px;
-  margin-bottom: 20px;
   p {
     font-size: 18px;
     margin: 0;
