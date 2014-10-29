@@ -6,12 +6,12 @@ var downloader = require('../lib/downloader')
 
 var Admin = function() {
   this.columns = {
-    'energyeffiency': [
+    'efficiency': [
       'mea_award', 'leveraged_utility_funds','total_project_cost',
       'co2_emissions_reductions_tons','capacity','electricity_savings_kwh','fuel_oil_savings_gallons',
       'propane_savings_gallons','gasoline_savings_gallons','natural_gas_savings_therms'
     ],
-    'renewableenergy': [
+    'renewable': [
       'mea_award', 'total_project_cost','other_agency_dollars','co2_emissions_reductions_tons','capacity', 'date'
     ],
     'transportation': [

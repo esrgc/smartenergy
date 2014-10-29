@@ -17,10 +17,8 @@ var Dashboard = Backbone.View.extend({
   template: $('#dashboard-template').html(),
   el: $(".dashboard"),
   activetab: 'home',
-  events: {
-    'click .tabs a': 'switchTab'
-  },
   initialize: function() {
+
     this.filterCollection = new FilterCollection()
     this.makeFilters()
     this.filterCollection.on('change:active', this.update, this)
@@ -106,8 +104,8 @@ var Dashboard = Backbone.View.extend({
     this.charts.program2 = _.clone(this.charts.program)
     this.charts.program2.width = 'col-md-6 col-sm-12'
     this.chart_hash = {
-      energyeffiency: [this.charts.stats, this.charts.sector, this.charts.mea_contribution, this.charts.program2, this.charts.electricity, this.charts.reduction],
-      renewableenergy: [this.charts.stats, this.charts.technology, this.charts.mea_contribution, this.charts.program, this.charts.sector, this.charts.reductionTime
+      efficiency: [this.charts.stats, this.charts.sector, this.charts.mea_contribution, this.charts.program2, this.charts.electricity, this.charts.reduction],
+      renewable: [this.charts.stats, this.charts.technology, this.charts.mea_contribution, this.charts.program, this.charts.sector, this.charts.reductionTime
       ],
       transportation: [this.charts.stats, this.charts.station_technology, this.charts.mea_contribution, this.charts.program, this.charts.sector],
       capacity_charts: [
@@ -178,8 +176,8 @@ var Dashboard = Backbone.View.extend({
       {value: 'State Government', color: '#d46e12', type: 'sector'}
     ]
     this.filter_hash = {
-      'energyeffiency': this.sectors.concat(this.program_names),
-      'renewableenergy': this.sectors.concat(this.renewables),
+      'efficiency': this.sectors.concat(this.program_names),
+      'renewable': this.sectors.concat(this.renewables),
       'transportation': this.sectors.concat(this.stations)
     }
     this.filterCollection.add(this.filter_hash[this.activetab])
@@ -285,9 +283,10 @@ var Dashboard = Backbone.View.extend({
       if (this.capacityCharts) this.chartCollection.remove(this.capacityCharts)
     }
   },
-  switchTab: function(e) {
+  switchTab: function(tab) {
+    $('.tabs li').removeClass('active')
+    $('.tabs li a[href="#' + tab + '"]').parent().addClass('active')
     var self = this
-    var tab = e.target.hash.replace('#', '')
     if (tab === 'home') {
       $('.charts').hide()
       $('.filter-summary').hide()
