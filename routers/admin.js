@@ -55,7 +55,7 @@ Admin.prototype = {
           if (col === 'date') {
             if (doc.date) doc.date = new Date(doc.date)
           } else {
-            doc[col] = doc[col] ? parseInt(doc[col].replace(/,/g, "").replace('$', '')) : 0
+            doc[col] = doc[col] ? parseFloat(doc[col].replace(/,/g, "").replace('$', '')) : 0
             if (isNaN(doc[col])) doc[col] = 0
           }
         })
