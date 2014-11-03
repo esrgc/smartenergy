@@ -19,7 +19,7 @@ var PieChartView = BarChartView.extend({
       , valueFormat: this.model.get('valueFormat')
       , arcstrokewidth: 1
       , arcstrokecolor: '#fff'
-      , innerRadius: 30
+      , innerRadius: 0
       , legend: this.model.get('legend')
     })
   },
