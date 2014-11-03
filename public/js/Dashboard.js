@@ -243,6 +243,12 @@ var Dashboard = Backbone.View.extend({
   render: function() {
     this.$el.html(Mustache.render(this.template))
 
+    // $('#topbar').affix({
+    //   offset: {
+    //     top: 50
+    //   }
+    // })
+
     this.chartCollection.add(this.mapModel)
 
     this.filterMenuView = new FilterMenuView()
@@ -284,8 +290,8 @@ var Dashboard = Backbone.View.extend({
     }
   },
   switchTab: function(tab) {
-    $('.tabs li').removeClass('active')
-    $('.tabs li a[href="#' + tab + '"]').parent().addClass('active')
+    $('ul.nav li').removeClass('active')
+    $('ul.nav li a[href="#' + tab + '"]').parent().addClass('active')
     var self = this
     if (tab === 'home') {
       $('.charts').hide()

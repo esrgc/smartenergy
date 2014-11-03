@@ -13,10 +13,82 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+.navbar {
+  background: @alternate3;
+  color: #fff;
+  border-color: darken(@alternate3, 10%);
+  a.navbar-brand {
+    color: #fff;
+    padding: 0 10px 0 10px;
+    span {
+      font-size: 12px;
+    }
+    h1 {
+      line-height: 20px;
+      font-size: 26px;
+      display: block;
+      margin: 0;
+    }
+    &:hover {
+      color: #eee;
+    }
+  }
+  ul.nav {
+    li a {
+      color: #fff;
+      &:hover {
+        color: #eee;
+      }
+    }
+  }
+}
+
+#topbar {
+  width: 100%;
+  overflow: hidden;
+  padding: 10px 10px;
+  z-index: 2;
+  &.affix {
+    top: 0px;
+    position: fixed;
+  }
+  .tabs {
+    width: 50%;
+    float: left;
+    margin: 0 0 10px 0;
+    text-align: left;
+    a {
+
+    }
+  }
+  .filter-summary {
+    width: 50%;
+    float: right;
+    display: none;
+    text-align: left;
+    font-size: 12px;
+    padding-bottom: 10px;
+    color: #444;
+    background: #f8f8f8;
+    border: 1px solid @tableBorder;
+    border-radius: 0px;
+    padding: 6px;
+    p {
+      font-size: 18px;
+      margin: 0;
+    }
+    .filter {
+      color: #444;
+    }
+  }
+}
+
 .dashboard {
   padding: 10px 10px;
   text-align: center;
   clear: both;
+  overflow: hidden;
+  margin-top: 60px;
   .row { padding: 0; margin: 0; }
 }
 
@@ -28,13 +100,7 @@ body {
   padding: 0px;
 }
 
-.tabs {
-  margin: 0 0 10px 0;
-  text-align: left;
-  a {
 
-  }
-}
 
 .home {
   padding: 10px;
@@ -301,6 +367,7 @@ body {
 }
 
 .footer {
+  display: none;
   background: @alternate3;
   color: #efefef;
   padding: 3px 10px;
@@ -313,25 +380,6 @@ body {
   }
   .attribution {
     float: right;
-  }
-}
-
-.filter-summary {
-  display: none;
-  text-align: left;
-  font-size: 12px;
-  padding-bottom: 10px;
-  color: #444;
-  background: #f8f8f8;
-  border: 1px solid @tableBorder;
-  border-radius: 0px;
-  padding: 6px;
-  p {
-    font-size: 18px;
-    margin: 0;
-  }
-  .filter {
-    color: #444;
   }
 }
 
