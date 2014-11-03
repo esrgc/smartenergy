@@ -4,13 +4,13 @@ var ChartModel = require('./ChartModel')
 var MapView = Backbone.View.extend({
   template: $('#map-template').html(),
   templates: {
-    'renewableenergy': $('#renewable-popup').html(),
-    'energyeffiency': $('#energyeffiency-popup').html(),
+    'renewable': $('#renewable-popup').html(),
+    'efficiency': $('#energyeffiency-popup').html(),
     'transportation': $('#transportation-popup').html()
   },
   color_fields: {
-    'renewableenergy': 'technology',
-    'energyeffiency': 'sector',
+    'renewable': 'technology',
+    'efficiency': 'sector',
     'transportation': 'charging_fueling_station_technology'
   },
   layers_template: $('#layers-template').html(),

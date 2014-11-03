@@ -289,9 +289,9 @@ api.get('/getPoints', function(req, res){
     , qry = ''
   if (CACHE) {
     var technology_field = 'technology'
-    if (req.query.tab === 'renewableenergy') {
+    if (req.query.tab === 'renewable') {
       technology_field = 'technology'
-    } else if (req.query.tab === 'energyeffiency') {
+    } else if (req.query.tab === 'efficiency') {
       technology_field = 'sector'
     } else if (req.query.tab === 'transportation') {
       technology_field = 'charging_fueling_station_technology'
@@ -324,9 +324,9 @@ api.get('/getPoints', function(req, res){
       returnData(req, res, response)
     })
   } else {
-    if (req.query.tab === 'renewableenergy') {
+    if (req.query.tab === 'renewable') {
       qry = '$select=point,technology&$order=id%20desc'
-    } else if (req.query.tab === 'energyeffiency') {
+    } else if (req.query.tab === 'efficiency') {
       qry = '$select=point&$order=id%20desc'
     } else if (req.query.tab === 'transportation') {
       qry = '$select=point,charging_fueling_station_technology as technology&$order=id%20desc'
@@ -363,9 +363,9 @@ api.get('/getProjectsByPoint', function(req, res){
   var qry = ''
 
   if (CACHE) {
-    if (req.query.tab === 'renewableenergy') {
+    if (req.query.tab === 'renewable') {
       technology_field = 'technology'
-    } else if (req.query.tab === 'energyeffiency') {
+    } else if (req.query.tab === 'efficiency') {
       technology_field = 'sector'
     } else if (req.query.tab === 'transportation') {
       technology_field = 'charging_fueling_station_technology'
@@ -384,9 +384,9 @@ api.get('/getProjectsByPoint', function(req, res){
       returnData(req, res, data)
     })
   } else {
-    if (req.query.tab === 'renewableenergy') {
+    if (req.query.tab === 'renewable') {
       qry = '$select=point,program_name,project_name,other_agency_dollars,total_project_cost,capacity,capacity_units,notes,link,mea_award,technology'
-    } else if (req.query.tab === 'energyeffiency') {
+    } else if (req.query.tab === 'efficiency') {
       qry = '$select=point,program_name,link,mea_award,notes'
     } else if (req.query.tab === 'transportation') {
       qry = '$select=point,program_name,link,mea_award,charging_fueling_station_technology as technology,notes'
@@ -595,38 +595,6 @@ api.get('/getReductionOverTime', function(req, res){
     function(callback) { getPerYear(2013, callback) },
     function(callback) { getPerYear(2014, callback) }
   ], handleData)
-})
-
-api.get('/getPieData', function(req, res){
-  var data = [
-    {geo: "Allegany", value: 500},
-    {geo: "Anne Arundel", value: 7300},
-    {geo: "Baltimore", value: 8000},
-    {geo: "Baltimore City", value: 2720},
-    {geo: "Calvert", value: 1142},
-    {geo: "Prince George's", value: 3000},
-    {geo: "Queen Anne's", value: 400},
-    {geo: "Somerset", value: 100},
-    {geo: "St. Mary's", value: 1100},
-    {geo: "Talbot", value: 500},
-    {geo: "Washington", value: 760},
-    {geo: "Wicomico", value: 500},
-    {geo: "Worcester", value: 500}
-  ]
-  //var data = filter.where(req.query, data)
-  returnData(req, res, data)
-})
-
-api.get('/getPieData2', function(req, res){
-  var data = [
-    {geo: "Allegany", value: 20},
-    {geo: "Anne Arundel", value: 300},
-    {geo: "Baltimore", value: 400},
-    {geo: "Baltimore City", value: 20},
-    {geo: "Worcester", value: 50}
-  ]
-  //var data = filter.where(req.query, data)
-  returnData(req, res, data)
 })
 
 module.exports = api
