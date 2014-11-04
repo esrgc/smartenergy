@@ -35,7 +35,6 @@ var StatView = ChartView.extend({
     html += '<tr><td>Total Projects</td><td><strong>' + d3.format(',')(data.total_projects) + '</strong></td></tr>'
     html += '<tr><td>Total Project Cost</td><td><strong>' + stat.project_cost + '</strong></td></tr>'
     html += '<tr><td>MEA Contribution</td><td><strong>' + stat.contribution + '</strong></td></tr>'
-    html += '<tr><td>Other Agency Dollars</td><td><strong>' + stat.sum_other_agency_dollars + '</strong></td></tr>'
     html += '<tr><td>Investment Leverage</td><td><strong>' + stat.investment_leverage + '</strong></td></tr>'
     html += '</table>'
     this.$el.find('.stat').html(html)

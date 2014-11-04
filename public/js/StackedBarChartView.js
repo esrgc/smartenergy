@@ -43,7 +43,7 @@ var StackedBarChartView = BarChartView.extend({
     return data
   },
   toTable: function(){
-    var y = ['Total Project Cost', 'MEA Contribution', 'Other Agency Dollars', 'Investment Leverage']
+    var y = ['Total Project Cost', 'MEA Contribution', 'Investment Leverage']
     var TableView = require('./TableView')
     var view = new TableView({
       model: this.model,

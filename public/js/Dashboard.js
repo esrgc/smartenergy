@@ -57,7 +57,6 @@ var Dashboard = Backbone.View.extend({
         api: 'api/getContribution',
         key: 'County',
         y: ['Other Contributions',
-        'Other Agency Dollars',
         'MEA Contribution'],
         chart_type: 'stacked',
         group: 'geo',
@@ -67,7 +66,7 @@ var Dashboard = Backbone.View.extend({
         legend: true,
         dontFormat: ['Investment Leverage'],
         geo: true,
-        tools: [{value: 'Other Contributions,Other Agency Dollars,MEA Contribution', text: 'All Contributions', type: 'money'}, {value: 'MEA Contribution', text: 'MEA Contribution', type: 'money'}]
+        tools: [{value: 'Other Contributions,MEA Contribution', text: 'All Contributions', type: 'money'}, {value: 'MEA Contribution', text: 'MEA Contribution', type: 'money'}]
       },
       program: {
         title: "Program",

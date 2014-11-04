@@ -212,10 +212,9 @@ api.get('/getStats', function(req, res){
         _id: null,
         total_projects:{$sum: 1},
         project_cost: {$sum: '$total_project_cost'},
-        contribution: {$sum: '$mea_award'},
-        sum_other_agency_dollars: {$sum: '$other_agency_dollars'}
+        contribution: {$sum: {$add: ['$mea_award', '$other_agency_dollars']}}
       }},
-      {$project: {_id: 0, total_projects: 1, project_cost: 1, contribution: 1, sum_other_agency_dollars: 1}},
+      {$project: {_id: 0, total_projects: 1, project_cost: 1, contribution: 1}},
       handleData)
   } else {
     var qry = '$select=sum(mea_award)%20as%20contribution,sum(total_project_cost)%20as%20project_cost,sum(other_agency_dollars),count(id)%20as%20total_projects'
@@ -231,11 +230,10 @@ api.get('/getContribution', function(req, res){
     data = _.map(data, function(r) {
       var obj = {
         'MEA Contribution': r.mea_contribution,
-        'Total Project Cost': r.project_cost,
-        'Other Agency Dollars': r.sum_other_agency_dollars
+        'Total Project Cost': r.project_cost
       }
       if (r.project_cost > 0) {
-        obj['Other Contributions'] = r.project_cost - r.mea_contribution - r.sum_other_agency_dollars
+        obj['Other Contributions'] = r.project_cost - r.mea_contribution
       } else {
         obj['Other Contributions'] = 0
       }
@@ -249,13 +247,13 @@ api.get('/getContribution', function(req, res){
     var project_in = {mea_award: 1, other_agency_dollars: 1,
       total_project_cost: {
         $cond: [
-          {$gt: ['$total_project_cost', 0]},
-          '$total_project_cost',
-          {$add: ['$mea_award', '$other_agency_dollars']}
+          {$gt: ['$total_project_cost', 0]}, //conf
+          '$total_project_cost', //if
+          {$add: ['$mea_award', '$other_agency_dollars']} //else
         ]
       }
     }
-    var project_out = {_id: 0, projects: 1, mea_contribution: 1, project_cost: 1, sum_other_agency_dollars: 1}
+    var project_out = {_id: 0, projects: 1, mea_contribution: 1, project_cost: 1}
     if (req.query.geotype) {
       var id = {}
       id[req.query.geotype] =  '$' + req.query.geotype
@@ -268,9 +266,8 @@ api.get('/getContribution', function(req, res){
       {$group: {
         _id: id,
         projects:{$sum: 1},
-        mea_contribution: {$sum: '$mea_award'},
-        project_cost: {$sum: '$total_project_cost'},
-        sum_other_agency_dollars: {$sum: '$other_agency_dollars'}
+        mea_contribution: {$sum: {$add: ['$mea_award', '$other_agency_dollars']}},
+        project_cost: {$sum: '$total_project_cost'}
       }},
       {$project: project_out},
       {$sort: {projects: -1}}, handleData)
