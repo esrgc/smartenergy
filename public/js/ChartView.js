@@ -76,7 +76,7 @@ var ChartView = Backbone.View.extend({
             }
           })
         } else {
-          colors = Dashboard.colors
+          colors = [Dashboard.tab_colors[Dashboard.activetab]]
         }
       }
     }
@@ -86,7 +86,6 @@ var ChartView = Backbone.View.extend({
     this.model.set('colors', colors)
     this.model.set('barLabelFormat', this.chart.options.barLabelFormat)
     this.model.set('valueFormat', this.chart.options.valueFormat)
-
   },
   changeKey: function() {
     if (this.chart) this.chart.options.x = this.model.get('key')
@@ -111,20 +110,20 @@ var ChartView = Backbone.View.extend({
   setColors: function(data) {
     var self = this
     var colors = []
-    if (this.model.get('chart_type') === 'pie') {
-    _.each(data, function(d) {
-      var x = d[self.model.get('key')]
-      var filters = Dashboard.filterCollection.where({value: x})
-      if (filters.length) {
-        if (filters[0].get('color')) {
-          colors.push(filters[0].get('color'))
+    if (this.model.get('filter_color') === true) {
+      _.each(data, function(d) {
+        var x = d[self.model.get('key')]
+        var filters = Dashboard.filterCollection.where({value: x})
+        if (filters.length) {
+          if (filters[0].get('color')) {
+            colors.push(filters[0].get('color'))
+          }
         }
+      })
+      if (colors.length) {
+        self.model.set('colors', colors)
       }
-    })
-    if (colors.length) {
-      self.model.set('colors', colors)
     }
-  }
   },
   loading: function(e) {
     var self = this

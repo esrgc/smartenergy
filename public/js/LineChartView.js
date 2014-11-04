@@ -41,6 +41,7 @@ var LineChartView = BarChartView.extend({
         obj[key] = Math.round(x*100) / 100
       })
     })
+    //this.setColors(data)
     return res
   }
 })

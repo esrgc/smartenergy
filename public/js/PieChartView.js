@@ -41,6 +41,21 @@ var PieChartView = BarChartView.extend({
     this.model.set('value', key)
     this.model.set('y', key)
   },
+  prepData: function(data){
+    var self = this
+    var row = data[0]
+    if (row) {
+      data = _.sortBy(data, function(row, i) {
+        return row[self.chart.options.y[0]]
+      })
+      this.setColors(data)
+      this.model.set('data', data, {silent: true})
+      if (data.length > self.dataLimit) {
+        data = data.splice(0, self.dataLimit)
+      }
+    }
+    return data
+  }
 })
 
 module.exports = PieChartView

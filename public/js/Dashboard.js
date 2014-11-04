@@ -17,6 +17,16 @@ var Dashboard = Backbone.View.extend({
   template: $('#dashboard-template').html(),
   el: $(".dashboard"),
   activetab: 'home',
+  socrata_links: {
+    'renewable': 'https://data.maryland.gov/dataset/Renewable-Energy-Geocoded/mqt3-eu4s',
+    'efficiency': 'https://data.maryland.gov/dataset/Energy-Efficiency-Geocoded/3afy-8fbr',
+    'transportation': 'https://data.maryland.gov/dataset/Transportation-Geocoded/4dvs-jtxq'
+  },
+  tab_colors: {
+    'renewable': '#2790B0',
+    'efficiency': '#2B4E72',
+    'transportation': '#94BA65'
+  },
   initialize: function() {
 
     this.filterCollection = new FilterCollection()
@@ -48,6 +58,7 @@ var Dashboard = Backbone.View.extend({
         y: 'Contribution',
         key: 'Technology',
         chart_type: 'pie',
+        filter_color: true,
         units: '',
         valueFormat: d3.format('$,.0f'),
         tools: [{value: 'Contribution', text: 'Contribution', type: 'money'}, {value: 'Projects', text: 'Projects'}]
@@ -56,20 +67,20 @@ var Dashboard = Backbone.View.extend({
         title: "Contribution By Region",
         api: 'api/getContribution',
         key: 'County',
-        y: ['Other Contributions',
-        'MEA Contribution'],
+        y: ['MEA Contribution'],
         chart_type: 'stacked',
         group: 'geo',
         units: '',
         valueFormat: d3.format('$,.0f'),
         width: 'col-md-6 col-sm-12',
+        colors: [self.colors[0]],
         legend: true,
         dontFormat: ['Investment Leverage'],
         geo: true,
-        tools: [{value: 'Other Contributions,MEA Contribution', text: 'All Contributions', type: 'money'}, {value: 'MEA Contribution', text: 'MEA Contribution', type: 'money'}]
+        tools: [{value: 'MEA Contribution,Other Contributions', text: 'All Contributions', type: 'money', color: self.colors}, {value: 'MEA Contribution', text: 'MEA Contribution', type: 'money'}]
       },
       program: {
-        title: "Program",
+        title: "Investments By Program",
         api: 'api/getProgramName',
         key: 'Program Name',
         y: ['Contribution'],
@@ -78,11 +89,11 @@ var Dashboard = Backbone.View.extend({
         units: '',
         barLabels: true,
         valueFormat: d3.format('$,.0f'),
-        tools: [{value: 'Contribution', text: 'Contribution', type: 'money', color: [self.colors[0]]}, {value: 'Projects', text: 'Projects', color: [self.colors[1]]}],
+        tools: [{value: 'Contribution', text: 'Contribution', type: 'money'}, {value: 'Projects', text: 'Projects'}],
         barLabelFormat: d3.format('$.2s')
       },
       sector: {
-        title: "Sector",
+        title: "Investments By Sector",
         api: 'api/getSector',
         key: 'Sector',
         y: ['Contribution'],
@@ -92,25 +103,29 @@ var Dashboard = Backbone.View.extend({
         barLabels: true,
         valueFormat: d3.format('$,.0f'),
         tools: [{value: 'Contribution', text: 'Contribution', type: 'money'},
-        {value: 'Projects', text: 'Projects', color: [self.colors[1]]}],
+        {value: 'Projects', text: 'Projects'}],
         barLabelFormat: d3.format('$.2s')
       },
       electricity: {title: "Electricity Savings By Region", api: 'api/getSavings', key: 'County', y: ['Savings'], chart_type: 'bar', units: 'kWh', geo: true, width: 'col-md-6 col-sm-12', colors: [self.colors[0]]},
       reduction: {title: "CO2 Emissions Reductions By Region", api: 'api/getReductions', key: 'County', y: ['Reduction'], chart_type: 'bar', units: 'tons', geo: true, width: 'col-md-6 col-sm-12', colors: [self.colors[0]]},
       reductionTime: {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'Year', y: 'Reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%Y"), showUnitsInTable: true},
-      station_technology: {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie', units: 'stations', valueFormat: d3.format(',.0f')},
+      station_technology: {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie', units: 'stations', valueFormat: d3.format(',.0f'), filter_color: true},
     }
     this.charts.program2 = _.clone(this.charts.program)
     this.charts.program2.width = 'col-md-6 col-sm-12'
     this.chart_hash = {
-      efficiency: [this.charts.stats, this.charts.sector, this.charts.mea_contribution, this.charts.program2, this.charts.electricity, this.charts.reduction],
+      efficiency: [this.charts.stats, 
+      this.charts.sector, 
+      this.charts.mea_contribution, 
+      this.charts.program2, this.charts.electricity, 
+      this.charts.reduction],
       renewable: [this.charts.stats, this.charts.technology, this.charts.mea_contribution, this.charts.program, this.charts.sector, this.charts.reductionTime
       ],
       transportation: [this.charts.stats, this.charts.station_technology, this.charts.mea_contribution, this.charts.program, this.charts.sector],
       capacity_charts: [
-        {title: "Capacity By Area", api: 'api/getCapacityByArea', key: 'County', y: 'Capacity', chart_type: 'pie', showUnitsInTable: true, geo: true, valueFormat: d3.format(',.2f')},
-        {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'Sector', y: 'Capacity', chart_type: 'bar', colors: [self.colors[0]], showUnitsInTable: true},
-        {title: "Capacity Growth", api: 'api/getCapacityOverTime', key: 'Year', y: 'Capacity', chart_type: 'line', labelFormat: d3.time.format("%Y"), showUnitsInTable: true},
+        {title: "Capacity By Area", api: 'api/getCapacityByArea', key: 'County', y: ['Capacity'], chart_type: 'bar', showUnitsInTable: true, geo: true, valueFormat: d3.format(',.2f'), width: 'col-md-6 col-sm-12'},
+        {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'Sector', y: ['Capacity'], chart_type: 'bar', showUnitsInTable: true},
+        {title: "Capacity Growth", api: 'api/getCapacityOverTime', key: 'Year', y: ['Capacity'], chart_type: 'line', labelFormat: d3.time.format("%Y"), showUnitsInTable: true, filter_color: true},
       ]
     }
   },
@@ -191,6 +206,9 @@ var Dashboard = Backbone.View.extend({
       this.$el.find('.charts > .row').append(this.mapView.render().el)
       this.mapView.makeMap()
     } else {
+      if (!chart.get('filter_color') && this.tab_colors[this.activetab]) {
+        chart.set('colors', [this.tab_colors[this.activetab]])
+      }
       view = this.makeChartView(chart)
       var container = $('<div class="chart-container"/>')
       container.append(view.render().el)
@@ -241,12 +259,6 @@ var Dashboard = Backbone.View.extend({
   },
   render: function() {
     this.$el.html(Mustache.render(this.template))
-
-    // $('#topbar').affix({
-    //   offset: {
-    //     top: 50
-    //   }
-    // })
 
     this.chartCollection.add(this.mapModel)
 
@@ -302,6 +314,7 @@ var Dashboard = Backbone.View.extend({
       $('.filter-summary').show()
       if (tab !== this.activetab) {
         this.activetab = tab
+        $('.tab-info a').attr('href', self.socrata_links[tab])
         this.mapView.map.invalidateSize()
         var filters = []
         var geos = this.filterCollection.where({geo: true})

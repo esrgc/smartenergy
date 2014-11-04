@@ -33,25 +33,8 @@ var BarChartView = ChartView.extend({
     var self = this
     var row = data[0]
     if (row) {
-      var totals = []
-      data.forEach(function(row, i) {
-        if (!row[self.model.get('key')]) {
-          data.splice(i, 1)
-        }
-        totals[i] = 0
-        if (typeof self.chart.options.y === 'string') {
-          var y = +row[self.chart.options.y]
-          row[self.chart.options.y] = y
-          totals[i] += y
-        } else if (typeof self.chart.options.y === 'object') {
-          self.chart.options.y.forEach(function(y) {
-            row[y] = +row[y]
-            totals[i] += row[y]
-          })
-        }
-      })
       data = _.sortBy(data, function(row, i) {
-        return totals[i]
+        return row[self.chart.options.y[0]]
       }).reverse()
       this.setColors(data)
       this.model.set('data', data, {silent: true})
