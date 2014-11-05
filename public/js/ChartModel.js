@@ -25,7 +25,8 @@ var ChartModel = Backbone.Model.extend({
       showUnitsInTable: false,
       geo: false,
       colors: Dashboard.colors,
-      filter_color: false
+      filter_color: false,
+      yLabel: false
     }
   },
   initialize: function() {

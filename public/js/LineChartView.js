@@ -20,6 +20,7 @@ var LineChartView = BarChartView.extend({
       , showArea: true
       , accumulate: true
       , valueFormat: this.model.get('valueFormat')
+      , yLabel: this.model.get('yLabel')
     })
   },
   prepData: function(res) {

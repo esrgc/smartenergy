@@ -74,10 +74,11 @@ var Dashboard = Backbone.View.extend({
         valueFormat: d3.format('$,.0f'),
         width: 'col-md-6 col-sm-12',
         colors: [self.colors[0]],
+        yLabel: 'Dollars',
         legend: true,
         dontFormat: ['Investment Leverage'],
         geo: true,
-        tools: [{value: 'MEA Contribution,Other Contributions', text: 'All Contributions', type: 'money', color: self.colors}, {value: 'MEA Contribution', text: 'MEA Contribution', type: 'money'}]
+        tools: [{value: 'MEA Contribution,Other Contributions', text: 'All Contributions', type: 'money', yLabel: 'Dollars'}, {value: 'MEA Contribution', text: 'MEA Contribution', type: 'money', yLabel: 'Dollars'}]
       },
       program: {
         title: "Investments By Program",
@@ -88,8 +89,9 @@ var Dashboard = Backbone.View.extend({
         chart_type: 'bar',
         units: '',
         barLabels: true,
+        yLabel: 'Dollars',
         valueFormat: d3.format('$,.0f'),
-        tools: [{value: 'Contribution', text: 'Contribution', type: 'money'}, {value: 'Projects', text: 'Projects'}],
+        tools: [{value: 'Contribution', text: 'Contribution', type: 'money', yLabel: 'Dollars'}, {value: 'Projects', text: 'Projects', yLabel: 'Projects'}],
         barLabelFormat: d3.format('$.2s')
       },
       sector: {
@@ -99,16 +101,17 @@ var Dashboard = Backbone.View.extend({
         y: ['Contribution'],
         colors: [self.colors[0]],
         chart_type: 'bar',
+        yLabel: 'Dollars',
         units: '',
         barLabels: true,
         valueFormat: d3.format('$,.0f'),
-        tools: [{value: 'Contribution', text: 'Contribution', type: 'money'},
-        {value: 'Projects', text: 'Projects'}],
+        tools: [{value: 'Contribution', text: 'Contribution', type: 'money', yLabel: 'Dollars'},
+        {value: 'Projects', text: 'Projects', yLabel: 'Projects'}],
         barLabelFormat: d3.format('$.2s')
       },
-      electricity: {title: "Electricity Savings By Region", api: 'api/getSavings', key: 'County', y: ['Savings'], chart_type: 'bar', units: 'kWh', geo: true, width: 'col-md-6 col-sm-12', colors: [self.colors[0]]},
-      reduction: {title: "CO2 Emissions Reductions By Region", api: 'api/getReductions', key: 'County', y: ['Reduction'], chart_type: 'bar', units: 'tons', geo: true, width: 'col-md-6 col-sm-12', colors: [self.colors[0]]},
-      reductionTime: {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'Year', y: 'Reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%Y"), showUnitsInTable: true},
+      electricity: {title: "Electricity Savings By Region", api: 'api/getSavings', key: 'County', y: ['Savings'], chart_type: 'bar', units: 'kWh', geo: true, width: 'col-md-6 col-sm-12', colors: [self.colors[0]], yLabel: 'kWh'},
+      reduction: {title: "CO2 Emissions Reductions By Region", api: 'api/getReductions', key: 'County', y: ['Reduction'], chart_type: 'bar', units: 'tons', geo: true, width: 'col-md-6 col-sm-12', colors: [self.colors[0]], yLabel: 'Tons'},
+      reductionTime: {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'Year', y: 'Reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%Y"), showUnitsInTable: true, yLabel: 'Tons'},
       station_technology: {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie', units: 'stations', valueFormat: d3.format(',.0f'), filter_color: true},
     }
     this.charts.program2 = _.clone(this.charts.program)
@@ -140,7 +143,7 @@ var Dashboard = Backbone.View.extend({
       {value: 'Bioheat', color: '#9b59b6', type: 'technology', units: 'gallons'},
       {value: 'Landfill Gas', color: '#01FF70', type: 'technology', units: 'kW'}
     ]
-    this.transportation = [
+    this.vehicle_technology = [
       {value: 'Electric', color: '#0074D9', type: 'vehicle_technology'},
       {value: 'Biodiesel', color: '#39CCCC', type: 'vehicle_technology'},
       {value: 'E85', color: '#2ECC40', type: 'vehicle_technology'},
@@ -192,7 +195,7 @@ var Dashboard = Backbone.View.extend({
     this.filter_hash = {
       'efficiency': this.sectors.concat(this.program_names),
       'renewable': this.sectors.concat(this.renewables),
-      'transportation': this.sectors.concat(this.stations)
+      'transportation': this.sectors.concat(this.stations).concat(this.vehicle_technology)
     }
     this.filterCollection.add(this.filter_hash[this.activetab])
   },
@@ -289,6 +292,7 @@ var Dashboard = Backbone.View.extend({
         if (chart_exits.length === 0) {
           chart.title = tech_filters[0].get('value') + ' ' + chart.title
           chart.units = tech_filters[0].get('units')
+          chart.yLabel = chart.units
           if (chart.chart_type === 'line') {
             chart.colors = [tech_filters[0].get('color')]
           }

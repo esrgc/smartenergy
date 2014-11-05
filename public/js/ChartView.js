@@ -1,3 +1,5 @@
+var chromath = require('chromath')
+
 var ChartView = Backbone.View.extend({
   template: $('#chart-template').html(),
   dataLimit: 30,
@@ -17,6 +19,8 @@ var ChartView = Backbone.View.extend({
     this.listenTo(this.model, 'change:data', this.update)
     this.listenTo(this.model, 'change:loading', this.loading)
     this.listenTo(this.model, 'change:key', this.changeKey)
+    this.listenTo(this.model, 'change:colors', this.changeColors)
+    this.listenTo(this.model, 'change:yLabel', this.changeLabels)
     this.listenTo(this.model, 'remove', this.remove)
     this.hoverTemplate = '{{label}}: {{value}} ' + this.model.get('units')
   },
@@ -65,27 +69,37 @@ var ChartView = Backbone.View.extend({
           this.chart.options.valueFormat = d3.format('$,.0f')
         }
       }
+      if (tool.yLabel) {
+        this.chart.options.yLabel = tool.yLabel
+        console.log(this.chart.options.yLabel)
+      }
       if (tool.color) {
         colors = tool.color
       } else {
-        if (keys.length < this.chart.options.y.length) {
-          keys.forEach(function(key, i) {
-            var idx = _.indexOf(self.chart.options.y, key)
-            if (idx > -1) {
-              colors.push(Dashboard.colors[idx])
-            }
-          })
+        var new_colors = _.without(Dashboard.colors, Dashboard.tab_colors[Dashboard.activetab])
+        if (keys.length === 2 ) {
+          colors.push(Dashboard.tab_colors[Dashboard.activetab])
+          colors.push(chromath.complement(Dashboard.tab_colors[Dashboard.activetab]).toString())
         } else {
-          colors = [Dashboard.tab_colors[Dashboard.activetab]]
+          keys.forEach(function(key, i) {
+            colors.push(
+              chromath.lighten(
+                Dashboard.tab_colors[Dashboard.activetab],
+                (i * 30)/100
+              ).toString()
+            )
+          })
         }
       }
     }
+    console.log(colors)
 
     this.chart.options.y = keys
     this.model.set('y', keys)
     this.model.set('colors', colors)
     this.model.set('barLabelFormat', this.chart.options.barLabelFormat)
     this.model.set('valueFormat', this.chart.options.valueFormat)
+    this.model.set('yLabel', this.chart.options.yLabel)
   },
   changeKey: function() {
     if (this.chart) this.chart.options.x = this.model.get('key')
@@ -96,7 +110,6 @@ var ChartView = Backbone.View.extend({
       this.drawChart()
     }
     var d = this.prepData(this.model.get('data'))
-    this.chart.setColor(this.model.get('colors'))
     this.chart.update(d)
   },
   resize: function() {
@@ -106,6 +119,12 @@ var ChartView = Backbone.View.extend({
   },
   remove: function() {
     this.$el.parent().remove()
+  },
+  changeLabels: function() {
+    this.chart.setYAxisLabel(this.model.get('yLabel'))
+  },
+  changeColors: function() {
+    this.chart.setColor(this.model.get('colors'))
   },
   setColors: function(data) {
     var self = this
