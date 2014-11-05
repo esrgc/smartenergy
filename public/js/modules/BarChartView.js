@@ -3,10 +3,7 @@ var ChartView = require('./ChartView')
 var BarChartView = ChartView.extend({
   render: function() {
     var self = this
-    this.$el.html(Mustache.render(this.template, this.model.toJSON(), {
-      title: $('#title-partial').html(),
-      toolbar: $('#toolbar-partial').html()
-    }))
+    this.$el.html(this.template(this.model.toJSON()))
     this.updateChartTools()
     this.$el.find('.chart-inner').css('overflow', 'hidden')
     this.chartel = this.$el.find('.chart-inner > .the-chart').get(0)

@@ -1,7 +1,8 @@
 var ChartView = require('./ChartView')
+  , templates = require('./templates')(Handlebars)
 
 var TableView = ChartView.extend({
-  template: $('#table-empty-template').html(),
+  template: templates['table-empty'],
   events: function(){
     return _.extend({},ChartView.prototype.events,{
       'click th' : 'sortByHeader',
@@ -11,11 +12,7 @@ var TableView = ChartView.extend({
   },
   render: function() {
     var self = this
-    var attrs = this.model.toJSON()
-    this.$el.html(Mustache.render(this.template, attrs, {
-      title: $('#title-partial').html(),
-      toolbar: $('#toolbar-partial').html()
-    }))
+    this.$el.html(this.template(this.model.toJSON()))
     this.drawTable(this.model.get('data'))
     this.$el.find('th').each(function(idx, th){
       if(th.innerHTML === self.model.get('sort_key')) {

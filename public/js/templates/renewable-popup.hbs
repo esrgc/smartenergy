@@ -1,0 +1,13 @@
+<div class="map-project" style="background: {{color}}">
+  <ul class="list-unstyled">
+    <li><b>Technology:</b> {{technology}}</li>
+    <li><b>Program Name:</b> <a href="{{link}}">{{program_name}}</a></li>
+    <li><b>Project Name:</b> {{project_name}}</li>
+    <li><b>MEA Contribution:</b> {{mea_award}}</li>
+    <li><b>Other State Contributions:</b> {{other_agency_dollars}}</li>
+    <li><b>Total Project Cost:</b> {{total_project_cost}}</li>
+    <li><b>Investment Leverage:</b> {{investment_leverage}}</li>
+    <li><b>Capacity:</b> {{capacity}} {{capacity_units}}</li>
+    {{#notes}}<li><b>Notes:</b> {{.}}</li>{{/notes}}
+  </ul>
+</div>

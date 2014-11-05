@@ -1,7 +1,8 @@
 var ChartView = require('./ChartView')
+  , templates = require('./templates')(Handlebars)
 
 var StatView = ChartView.extend({
-  template: $('#stat-template').html(),
+  template: templates.stat,
   format: d3.format('$,.0f'),
   events: function(){
     return _.extend({}, ChartView.prototype.events,{
@@ -10,9 +11,7 @@ var StatView = ChartView.extend({
   },
   render: function() {
     var self = this
-    this.$el.html(Mustache.render(this.template, this.model.toJSON(), {
-      title: $('#title-partial').html()
-    }))
+    this.$el.html(this.template(this.model.toJSON()))
     this.$el.find('.chart-inner').css('overflow', 'hidden')
     this.chart = false
     return this

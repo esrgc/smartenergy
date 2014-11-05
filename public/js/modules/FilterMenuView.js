@@ -1,9 +1,10 @@
 var ChartView = require('./ChartView')
   , FilterLabelView = require('./FilterLabelView')
   , TechnologyFilter = require('./TechnologyFilter')
+  , templates = require('./templates')(Handlebars)  
 
 var FilterMenuView = ChartView.extend({
-  template: $('#filter-menu-template').html(),
+  template: templates['filter-menu'],
   events: {
     'click .reset': 'resetFilters',
     'change select': 'changeDropdown'
@@ -16,9 +17,7 @@ var FilterMenuView = ChartView.extend({
   },
   render: function() {
     var self = this
-    this.$el.html(Mustache.render(this.template, {title: 'Project Filters', toolbar: false}, {
-      title: $('#title-partial').html()
-    }))
+    this.$el.html(this.template({title: 'Project Filters', toolbar: false}))
     this.changeSummary()
     return this
   },

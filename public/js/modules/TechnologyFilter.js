@@ -1,7 +1,8 @@
 var FilterLabelView = require('./FilterLabelView')
+  , templates = require('./templates')(Handlebars)
 
 var TechnologyFilter = FilterLabelView.extend({
-  template: $('#project-type-filter').html()
+  template: templates['project-type']
 })
 
 module.exports = TechnologyFilter

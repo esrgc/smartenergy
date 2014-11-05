@@ -1,17 +1,18 @@
+var templates = require('./templates')(Handlebars)
+
 var FilterLabelView = Backbone.View.extend({
-  template: $('#filter-label-template').html(),
+  template: templates['filter-label'],
   tagName: 'div',
   className: 'filter-label',
   events: {
     'click': 'activate'
   },
   initialize: function() {
-    //this.listenTo(this.model, 'change', this.render)
     this.listenTo(this.model, 'remove', this.remove)
     this.listenTo(this.model, 'change:active', this.changeActive)
   },
   render: function() {
-    this.$el.html(Mustache.render(this.template, this.model.toJSON()))
+    this.$el.html(this.template(this.model.toJSON()))
     this.style()
     return this
   },
@@ -23,7 +24,6 @@ var FilterLabelView = Backbone.View.extend({
   activate: function(filter, e){
     var active = this.model.get('active')
     this.model.set('active', !active)
-    //this.$el.find('button').toggleClass('active')
   },
   changeActive: function() {
     if (this.model.get('active')) {

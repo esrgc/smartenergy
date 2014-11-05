@@ -11,10 +11,11 @@ var MapView = require('./MapView')
   , FilterCollection = require('./FilterCollection')
   , FilterMenuView = require('./FilterMenuView')
   , ChartCollection = require('./ChartCollection')
+  , templates = require('./templates')(Handlebars)
 
 var Dashboard = Backbone.View.extend({
   colors: ['#2790B0', '#2B4E72', '#94BA65'],
-  template: $('#dashboard-template').html(),
+  template: templates.dashboard,
   el: $(".dashboard"),
   activetab: 'home',
   socrata_links: {
@@ -261,7 +262,7 @@ var Dashboard = Backbone.View.extend({
     return view
   },
   render: function() {
-    this.$el.html(Mustache.render(this.template))
+    this.$el.html(this.template())
 
     this.chartCollection.add(this.mapModel)
 

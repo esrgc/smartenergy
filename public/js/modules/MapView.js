@@ -1,19 +1,20 @@
 var ChartModel = require('./ChartModel')
   , FilterModel = require('./FilterModel')
+  , templates = require('./templates')(Handlebars)
 
 var MapView = Backbone.View.extend({
-  template: $('#map-template').html(),
+  template: templates.map,
   templates: {
-    'renewable': $('#renewable-popup').html(),
-    'efficiency': $('#energyeffiency-popup').html(),
-    'transportation': $('#transportation-popup').html()
+    'renewable': templates['renewable-popup'],
+    'efficiency': templates['efficiency-popup'],
+    'transportation': templates['transportation-popup']
   },
   color_fields: {
     'renewable': 'technology',
     'efficiency': 'sector',
     'transportation': 'charging_fueling_station_technology'
   },
-  layers_template: $('#layers-template').html(),
+  layers_template: templates.layers,
   events: {
     'click .layerToggle': 'layerToggle'
   },
@@ -24,7 +25,7 @@ var MapView = Backbone.View.extend({
     this.listenTo(this.model, 'change:loading', this.loading)
   },
   render: function() {
-    this.$el.html(Mustache.render(this.template))
+      this.$el.html(this.template())
     return this
   },
   makeMap: function() {
@@ -152,7 +153,7 @@ var MapView = Backbone.View.extend({
         {name: "Zip Codes", id: "zipcode", layer: self.zips, type: 'base'},
         {name: "Individual Projects", id: "projects", layer: self.projects, type: 'overlay'}
       ]}
-      var layers_html = Mustache.render(self.layers_template, self.layer_switcher)
+      var layers_html = self.layers_template(self.layer_switcher)
       self.$el.find('.map').find('.leaflet-bottom.leaflet-left').html(layers_html)
       self.$el.find('#county').find('p').addClass('active')
       self.$el.find('#projects').find('p').addClass('active')
@@ -184,7 +185,7 @@ var MapView = Backbone.View.extend({
           feature.color = filter[0].get('color')
         }
       }
-      content += Mustache.render(self.templates[Dashboard.activetab], feature)
+      content += self.templates[Dashboard.activetab](feature)
     })
     content += '</div>'
     return content

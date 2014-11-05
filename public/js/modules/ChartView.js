@@ -1,7 +1,8 @@
 var chromath = require('chromath')
+  , templates = require('./templates')(Handlebars)
 
 var ChartView = Backbone.View.extend({
-  template: $('#chart-template').html(),
+  template: templates.chart,
   dataLimit: 30,
   events: {
     "click .download":  "download",
@@ -25,9 +26,7 @@ var ChartView = Backbone.View.extend({
     this.hoverTemplate = '{{label}}: {{value}} ' + this.model.get('units')
   },
   render: function() {
-    this.$el.html(Mustache.render(this.template, this.model.toJSON(), {
-      title: $('#title-partial').html()
-    }))
+    this.$el.html(this.template(this.model.toJSON()))
     return this
   },
   updateChartTools: function() {

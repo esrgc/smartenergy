@@ -12,6 +12,20 @@ module.exports = function(grunt) {
         push: false
       }
     },
+    handlebars: {
+      compile: {
+        options: {
+          commonjs: true,
+          namespace: false,
+          processName: function(filePath) {
+            return filePath.replace(/^public\/js\/templates\//, '').replace(/\.hbs$/, '');
+          }
+        },
+        files: {
+          'public/js/modules/templates.js': 'public/js/templates/*.hbs'
+        }
+      }
+    },
     less: {
       options: {
         compress: true
@@ -20,15 +34,6 @@ module.exports = function(grunt) {
         files: {
           'public/css/<%= pkg.name %>.css': ['public/css/style.less']
         }
-      }
-    },
-    concat: {
-      options: {
-        separator: ';',
-      },
-      js: {
-        src: ['public/js/*.js'],
-        dest: 'public/js/min/<%= pkg.name %>.js'
       }
     },
     browserify: {
@@ -55,7 +60,7 @@ module.exports = function(grunt) {
         spawn: false,
       },
       browserify: {
-        files: ['public/js/*.js'],
+        files: ['public/js/modules/**/*.js'],
         tasks: ['bump', 'browserify', 'uglify'],
       },
       css: {
@@ -68,12 +73,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('assemble');
   grunt.loadNpmTasks('grunt-contrib-less');
-  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-handlebars');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['bump', 'less', 'browserify', 'uglify', 'watch']);
-  grunt.registerTask('prod', ['less', 'browserify', 'uglify']);
+  grunt.registerTask('default', ['bump', 'less', 'handlebars', 'browserify', 'uglify', 'watch']);
+  grunt.registerTask('prod', ['less', 'handlebars', 'browserify', 'uglify']);
 
 };

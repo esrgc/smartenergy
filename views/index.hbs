@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Smart Energy Investment Dashboard</title>
+    <link rel="shortcut ucon" href="/img/favicon.ico?v=12" > 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" type="text/css" href="lib/geodash/geodash.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/{{name}}.css?v={{version}}">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#home">
+          <span>Maryland Energy Administration</span>
+          <h1>Smart Energy Investment Dashboard</h1>
+        </a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          
+          <li><a href="#renewable">Renewable Energy</a></li>
+          <li><a href="#efficiency">Energy Efficiency</a></li>
+          <li><a href="#transportation">Transportation</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+  <div class="container-fluid">  
+    <div class="dashboard"></div>
+  </div>
+  <div class="footer">
+    <div class="linkback"><a href="http://energy.maryland.gov/">Maryland Energy Administration</a></div>
+    <div class="attribution">2014 &#8226; Created by <a href="http://www.esrgc.org/">ESRGC</a></div>
+  </div>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="lib/handlebars.runtime-v2.0.0.js"></script>
+  <script src="lib/lodash.compat.min.js"></script>
+  <script src="lib/backbone-min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+  <script src="lib/leaflet.markercluster.js"></script>
+  <!--[if lt IE 9]>
+  <script src="lib/geodash/geodash.ie8.min.js?v={{version}}" charset="utf-8"></script>
+  <![endif]-->
+  <!--[if (gte IE 9)|!(IE)]><!-->
+  <script src="lib/geodash/geodash.min.js?v={{version}}"></script>
+  <!--<![endif]-->
+  <script src="js/min/{{name}}.min.js?v={{version}}"></script>
+</body>
+</html>
