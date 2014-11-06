@@ -70,7 +70,6 @@ var ChartView = Backbone.View.extend({
       }
       if (tool.yLabel) {
         this.chart.options.yLabel = tool.yLabel
-        console.log(this.chart.options.yLabel)
       }
       if (tool.color) {
         colors = tool.color

@@ -18,27 +18,26 @@ Handlebars.registerPartial("toolbar", Handlebars.template({"compiler":[6,">= 2.0
   return "<div class=\"toolbar\">\n  <i class=\"fa fa-table tool totable\"></i>\n  <i class=\"fa fa-bar-chart-o tool tochart\"></i>\n  <i class=\"fa fa-download tool download\"></i>\n</div>";
   },"useData":true}));
 
-templates["chart"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+templates["chart"] = Handlebars.template({"1":function(depth0,helpers,partials,data,depths) {
+  var helper, lambda=this.lambda, escapeExpression=this.escapeExpression, functionType="function", helperMissing=helpers.helperMissing;
   return "        <label><input type=\"radio\" name=\""
-    + escapeExpression(((helper = (helper = helpers.cid || (depth0 != null ? depth0.cid : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"cid","hash":{},"data":data}) : helper)))
+    + escapeExpression(lambda((depths[1] != null ? depths[1].cid : depths[1]), depth0))
     + "-chart-tools\" value=\""
     + escapeExpression(((helper = (helper = helpers.value || (depth0 != null ? depth0.value : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"value","hash":{},"data":data}) : helper)))
     + "\"> "
     + escapeExpression(((helper = (helper = helpers.text || (depth0 != null ? depth0.text : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"text","hash":{},"data":data}) : helper)))
     + "</label>\n";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing, buffer = "<div class=\""
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data,depths) {
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<div class=\""
     + escapeExpression(((helper = (helper = helpers.width || (depth0 != null ? depth0.width : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"width","hash":{},"data":data}) : helper)))
     + " block\">\n  <div class=\"chart\">\n";
   stack1 = this.invokePartial(partials.title, '    ', 'title', depth0, undefined, helpers, partials, data);
   if (stack1 != null) { buffer += stack1; }
   buffer += "    <div class=\"chart-inner\">\n      <div class=\"chart-tools\">\n";
-  stack1 = ((helper = (helper = helpers.tools || (depth0 != null ? depth0.tools : depth0)) != null ? helper : helperMissing),(options={"name":"tools","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.tools) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+  stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.tools : depth0), {"name":"each","hash":{},"fn":this.program(1, data, depths),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer + "      </div>\n      <div class=\"loader\"><i class=\"fa fa-circle-o-notch fa-spin\"></i></div>\n      <div class=\"the-chart\"></div>\n    </div>\n  </div>\n</div>";
-},"usePartial":true,"useData":true});
+},"usePartial":true,"useData":true,"useDepths":true});
 
 templates["dashboard"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   return "<div class=\"home\">\n  <div class=\"row\">\n    <div class=\"col-md-6 col-md-offset-3\">\n      <p class=\"lead\">Welcome to the Maryland Smart Energy Investment Dashboard</p> \n      <p>This dashboard illustrates where the Maryland Energy Administration has contributed to the growth of clean, renewable energy and energy efficiency industries in our state.</p>\n      <p>In addition, we pinpoint publicly accessible locations of electric vehicle charging stations and ‘E85’ ethanol fueling stations in our state and around the region.</p>\n      <p>Check the map periodically, as we continue the growth of a clean, green Maryland economy.</p>\n      <p>Select a section below to begin.</p>\n      <p class=\"lead\"> \n        <a href=\"#renewable\" role=\"button\" class=\"btn btn-default renewable\">Renewable Energy</a>\n        <a href=\"#efficiency\" role=\"button\" class=\"btn btn-default efficiency\">Energy Efficiency</a>\n        <a href=\"#transportation\" role=\"button\" class=\"btn btn-default transportation\">Transportation</a>\n    </div>\n  </div>\n</div>\n<div class=\"charts\">\n  <div class=\"tab-info\"><a href=\"https://data.maryland.gov/dataset/Renewable-Energy-Geocoded/mqt3-eu4s\">View and Download Raw Data</a></div>\n  <div class=\"row\"></div>\n</div>";

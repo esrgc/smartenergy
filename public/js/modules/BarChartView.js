@@ -3,6 +3,7 @@ var ChartView = require('./ChartView')
 var BarChartView = ChartView.extend({
   render: function() {
     var self = this
+    console.log(this.model.toJSON())
     this.$el.html(this.template(this.model.toJSON()))
     this.updateChartTools()
     this.$el.find('.chart-inner').css('overflow', 'hidden')

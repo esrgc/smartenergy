@@ -59,9 +59,13 @@ module.exports = function(grunt) {
       options: {
         spawn: false,
       },
+      // handlebars: {
+      //   files: ['public/js/templates/*.js'],
+      //   tasks: ['bump', 'handlebars
+      // },
       browserify: {
-        files: ['public/js/modules/**/*.js'],
-        tasks: ['bump', 'browserify', 'uglify'],
+        files: ['public/js/modules/**/*.js', 'public/js/templates/*.hbs'],
+        tasks: ['bump', 'handlebars', 'browserify', 'uglify'],
       },
       css: {
         files: 'public/css/*.less',
