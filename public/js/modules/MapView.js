@@ -4,17 +4,22 @@ var ChartModel = require('./ChartModel')
 
 var MapView = Backbone.View.extend({
   template: templates.map,
+  layers_template: templates.layers,
   templates: {
     'renewable': templates['renewable-popup'],
     'efficiency': templates['efficiency-popup'],
     'transportation': templates['transportation-popup']
   },
+  technology_fields: {
+    'renewable': ['technology'],
+    'efficiency': ['sector'],
+    'transportation': ['charging_fueling_station_technology', 'vehicle_technology']
+  },  
   color_fields: {
     'renewable': 'technology',
     'efficiency': 'sector',
     'transportation': 'charging_fueling_station_technology'
-  },
-  layers_template: templates.layers,
+  },  
   events: {
     'click .layerToggle': 'layerToggle'
   },
@@ -64,6 +69,7 @@ var MapView = Backbone.View.extend({
     var mapbox = L.tileLayer('http://{s}.tiles.mapbox.com/v3/esrgc.map-y9awf40v/{z}/{x}/{y}.png')
     mapbox.addTo(self.map)
 
+    //this.projects = L.featureGroup().addTo(this.map)
     this.projects = L.markerClusterGroup({
       maxClusterRadius: 50,
       showCoverageOnHover: false,
@@ -75,24 +81,39 @@ var MapView = Backbone.View.extend({
         fillColor: '#333',
         fillOpacity: 0.1
       },
+      _iconCreateFunction: function(cluster) {
+        var className = 'multiple'
+        //var tech = _.pluck(cluster.getAllChildMarkers(), '
+        return new L.DivIcon({
+          className: 'projects-icon ' + className,
+          html: cluster.getAllChildMarkers().length,
+          iconSize: L.point(30, 30)
+        })
+      },
       iconCreateFunction: function(cluster) {
         var markers = cluster.getAllChildMarkers()
         var num_projects = 0
         var tech = []
+        var tech_fields = []
         _.each(markers, function(m) {
           if (m.options.projects) {
             num_projects += m.options.projects
           }
           if (m.options.tech) tech.push(m.options.tech)
+          if (m.options.tech_field) tech_fields.push(m.options.tech_field)
         })
         tech = _.uniq(tech)
+        tech_fields = _.uniq(tech_fields)
         if (tech.length === 1) {
           var className = tech[0]
         } else {
           var className = 'multiple'
         }
+        if (tech_fields.length === 1) {
+          className += ' ' + tech_fields[0]
+        }
         return new L.DivIcon({
-          className: 'div-icon ' + className,
+          className: 'projects-icon ' + className + ' ' + Dashboard.activetab,
           html: num_projects,
           iconSize: L.point(30, 30)
         })
@@ -159,7 +180,8 @@ var MapView = Backbone.View.extend({
       self.$el.find('#projects').find('p').addClass('active')
     })
   },
-  makePopup: function(features, latlng) {
+  makePopup: function(features, latlng, tech_field) {
+    console.log(latlng)
     var self = this
     var money = d3.format('$,.2f')
     var content = '<div class="map-projects">'
@@ -178,9 +200,9 @@ var MapView = Backbone.View.extend({
         feature.total_project_cost = money(feature.total_project_cost)
       }
       feature.color = '#bbb'
-      var color_field = self.color_fields[Dashboard.activetab]
-      if (feature[color_field]) {
-        var filter = Dashboard.filterCollection.where({value: feature[color_field]})
+      //var color_field = self.color_fields[Dashboard.activetab]
+      if (feature[tech_field]) {
+        var filter = Dashboard.filterCollection.where({value: feature[tech_field]})
         if (filter.length) {
           feature.color = filter[0].get('color')
         }
@@ -258,63 +280,125 @@ var MapView = Backbone.View.extend({
       })
     }
   },
+  _update: function() {
+    var self = this
+    self.projects.clearLayers()
+    var technology_fields = self.technology_fields[Dashboard.activetab]    
+    for (var i = 0; i < this.model.get('data').length; i++) {
+      var project = this.model.get('data')[i]
+      var latlng = project.point.split(',').map(parseFloat)
+      // var marker = L.marker(latlng)
+      // self.projects.addLayer(marker)
+      technology_fields.forEach(function(tech_field, tech_idx) {
+        if (project[tech_field]) {
+          var technology = project[tech_field]
+          var tech_filter = tech_field + technology.replace(/ /g, '').replace('(', '').replace(')', '')
+          var filter = Dashboard.filterCollection.where({value: technology, type: tech_field})
+          self.circlestyle.tech = tech_filter
+          self.circlestyle.tech_field = tech_field
+          if (filter.length) {
+            self.circlestyle.fillColor = filter[0].get('color')
+            self.circlestyle.radius = 6
+          }
+          if (tech_field === 'charging_fueling_station_technology') {
+            self.circlestyle.radius = 2
+          } else {
+            self.circlestyle.stroke = 6
+          }
+          //var marker = L.circleMarker(latlng, self.circlestyle)
+          var className = 'projects-icon '
+          className += tech_filter
+          className += ' ' + tech_field
+          var marker_props = {}
+          marker_props.tech = tech_filter
+          marker_props.icon = L.divIcon({
+            className: className,
+            iconSize: L.point(10, 10)
+          })
+          var marker = L.marker(latlng, marker_props)
+          marker.on('click', self.markerClick.bind(self, project, tech_field, technology, latlng))
+          self.projects.addLayer(marker)
+        }
+      })
+    }
+  },
   update: function() {
     var self = this
     self.projects.clearLayers()
     _.each(this.model.get('data').points, function(point) {
       if (point.point) {
         var latlng = point.point.split(',').map(parseFloat)
-        if (latlng.length == 2) {
-          for(var i = 0; i < point.techcount.length; i++) {
-            var technology = point.techcount[i].t
-            var projects = point.techcount[i].p
-            var tech_filter = technology.replace(/ /g, '').replace('(', '').replace(')', '')
-            if (projects > 1) {
-              var className = 'div-icon projects-icon '
-              var marker_props = {projects: projects}
-              var filter = Dashboard.filterCollection.where({value: technology})
-              var color = filter[0].get('color')
-              className += tech_filter
-              marker_props.tech = tech_filter
-              marker_props.icon = L.divIcon({
-                className: className,
-                html: projects,
-                iconSize: L.point(30, 30)
-              })
-              var marker = L.marker(latlng, marker_props)
-            } else {
-              if (technology) {
-                self.circlestyle.tech = tech_filter
-                var filter = Dashboard.filterCollection.where({value: technology})
-                if (filter.length) {
-                  self.circlestyle.fillColor = filter[0].get('color')
-                  self.circlestyle.radius = 6
-                }
+        var technology_fields = self.technology_fields[Dashboard.activetab]
+        technology_fields.forEach(function(tech_field, tech_idx) {
+          if (point[tech_field].length) {
+            for(var i = 0; i < point[tech_field].length; i++) {
+              var technology = point[tech_field][i].t
+              var projects = point[tech_field][i].p
+              var tech_filter = tech_field + technology.replace(/ /g, '').replace('(', '').replace(')', '')
+              if (projects > 1) {
+                var className = 'projects-icon '
+                var marker_props = {projects: projects}
+                className += tech_filter
+                className += ' ' + tech_field
+                marker_props.tech = tech_filter
+                marker_props.tech_field = tech_field
+                marker_props.icon = L.divIcon({
+                  className: className,
+                  html: projects,
+                  iconSize: L.point(30, 30)
+                })
+                var marker = L.marker(latlng, marker_props)
               } else {
-                self.circlestyle.tech = 'multiple'
-                self.circlestyle.fillColor = '#000'
+                if (technology) {
+                  self.circlestyle.tech = tech_filter
+                  self.circlestyle.tech_field = tech_field
+                  var filter = Dashboard.filterCollection.where({value: technology, type: tech_field})
+                  if (filter.length) {
+                    self.circlestyle.fillColor = filter[0].get('color')
+                    self.circlestyle.radius = 6
+                  }
+                } else {
+                  self.circlestyle.tech = 'multiple'
+                  self.circlestyle.fillColor = '#000'
+                }
+                if (tech_field === 'charging_fueling_station_technology') {
+                  var marker_props = {projects: 1}
+                  var className = 'projects-icon '
+                  className += tech_filter
+                  className += ' ' + tech_field
+                  marker_props.tech = tech_filter
+                  marker_props.tech_field = tech_field
+                  marker_props.icon = L.divIcon({
+                    className: className,
+                    iconSize: L.point(10, 10)
+                  })
+                  var marker = L.marker(latlng, marker_props)
+                } else {
+                  var marker = L.circleMarker(latlng, self.circlestyle)
+                }
               }
-              var marker = L.circleMarker(latlng, self.circlestyle)
+              marker.on('click', self.markerClick.bind(self, point, tech_field, technology, latlng))
+              self.projects.addLayer(marker)
             }
-            marker.on('click', self.markerClick.bind(self, technology, point, latlng))
-            self.projects.addLayer(marker)
           }
-        }
+        })
       }
     })
   },
-  markerClick: function(technology, point, latlng, e) {
+  markerClick: function(project, tech_field, technology, latlng, e) {
     var self = this
     var url = 'api/getProjectsByPoint'
     url = self.model.makeQuery(url)
-    url += '&point=' + point.point
+    //url += '&_id=' + project._id
+    url += '&point=' + project.point
     url += '&tech=' + technology
+    url += '&tech_field=' + tech_field
     var popup = L.popup()
     .setLatLng(latlng)
     .setContent('Loading')
     .openOn(self.map)
     $.getJSON(url, function(res){
-      popup.setContent(self.makePopup(res, latlng))
+      popup.setContent(self.makePopup(res, latlng, tech_field))
     })
   },
   loading: function() {

@@ -6,6 +6,7 @@ var express = require('express')
   , _ = require('lodash')
   , config = require('../config/config')
   , mongo = require('../lib/mongo')
+  , ObjectID = require('mongodb').ObjectID
 
 var socrataDataset = new Socrata.Dataset()
 socrataDataset.setHost('https://data.maryland.gov')
@@ -285,18 +286,21 @@ api.get('/getPoints', function(req, res){
     , offset = 0
     , qry = ''
   if (CACHE) {
-    var technology_field = 'technology'
+    var technology_fields = []
     if (req.query.tab === 'renewable') {
-      technology_field = 'technology'
+      technology_fields.push('technology')
     } else if (req.query.tab === 'efficiency') {
-      technology_field = 'sector'
+      technology_fields.push('sector')
     } else if (req.query.tab === 'transportation') {
-      technology_field = 'charging_fueling_station_technology'
+      technology_fields.push('charging_fueling_station_technology')
+      technology_fields.push('vehicle_technology')
     }
 
     var conditions = filter.conditions(req.query, 'point')
-    var project = {point: 1, _id: 0}
-    project[technology_field] = 1
+    var project = {point: 1, _id: 1}
+    technology_fields.forEach(function(field) {
+      project[field] = 1
+    })
     var cursor = mongo.db.collection(req.query.tab).find(conditions, project)
     cursor.toArray(function(err, data) {
       var points = _.groupBy(data, 'point')
@@ -306,16 +310,18 @@ api.get('/getPoints', function(req, res){
           point: p,
           projects: points[p].length
         }
-        var techs = _.filter(_.uniq(_.pluck(points[p], technology_field)), null)
-        var techcount = []
-        techs.forEach(function(tech) {
-          var where = {}
-          where[technology_field] = tech
-          var x = {t: tech}
-          x.p = _.where(points[p], where).length
-          techcount.push(x)
+        technology_fields.forEach(function(technology_field) {
+          var techs = _.filter(_.uniq(_.pluck(points[p], technology_field)), null)
+          var techcount = []
+          techs.forEach(function(tech) {
+            var where = {}
+            where[technology_field] = tech
+            var x = {t: tech}
+            x.p = _.where(points[p], where).length
+            techcount.push(x)
+          })
+          obj[technology_field] = techcount
         })
-        obj.techcount = techcount
         response.points.push(obj)
       }
       returnData(req, res, response)
@@ -356,28 +362,41 @@ api.get('/getPoints', function(req, res){
   }
 })
 
+api.get('/getProject', function(req, res){
+  var qry = ''
+  if (CACHE) {
+    var conditions = filter.conditions(req.query)
+    conditions._id = new ObjectID(conditions._id)
+    console.log(conditions)
+    mongo.db.collection(req.query.tab).find(conditions).toArray(function(err, data) {
+      returnData(req, res, data)
+    })
+  } else {
+    if (req.query.tab === 'renewable') {
+      qry = '$select=point,program_name,project_name,other_agency_dollars,total_project_cost,capacity,capacity_units,notes,link,mea_award,technology'
+    } else if (req.query.tab === 'efficiency') {
+      qry = '$select=point,program_name,link,mea_award,notes'
+    } else if (req.query.tab === 'transportation') {
+      qry = '$select=point,program_name,link,mea_award,charging_fueling_station_technology as technology,notes'
+    }
+    qry += '&$order=id&$limit=10000'
+    qry += filter.where(req.query, qry)
+    req.socrata_req = socrataDataset.query(qry, function(err, data) {
+      returnData(req, res, data)
+    })
+  }
+})
+
 api.get('/getProjectsByPoint', function(req, res){
   var qry = ''
 
   if (CACHE) {
-    if (req.query.tab === 'renewable') {
-      technology_field = 'technology'
-    } else if (req.query.tab === 'efficiency') {
-      technology_field = 'sector'
-    } else if (req.query.tab === 'transportation') {
-      technology_field = 'charging_fueling_station_technology'
-    }
+    var tech_field = req.query.tech_field
     var tech = req.query.tech
     delete req.query.tech
+    delete req.query.tech_field
     var conditions = filter.conditions(req.query)
-    conditions[technology_field] = tech
     mongo.db.collection(req.query.tab).find(conditions).toArray(function(err, data) {
-      data = _.map(data, function(r) {
-        if (r.charging_fueling_station_technology) {
-          r.technology = r.charging_fueling_station_technology
-        }
-        return r
-      })
       returnData(req, res, data)
     })
   } else {

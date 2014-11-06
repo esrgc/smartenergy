@@ -185,8 +185,8 @@ templates["transportation-popup"] = Handlebars.template({"1":function(depth0,hel
   var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing, buffer = "<div class=\"map-project\" style=\"background: "
     + escapeExpression(((helper = (helper = helpers.color || (depth0 != null ? depth0.color : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"color","hash":{},"data":data}) : helper)))
     + "\">\n  <ul class=\"list-unstyled\">\n    ";
-  stack1 = ((helper = (helper = helpers.technology || (depth0 != null ? depth0.technology : depth0)) != null ? helper : helperMissing),(options={"name":"technology","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.technology) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+  stack1 = ((helper = (helper = helpers.charging_fueling_station_technology || (depth0 != null ? depth0.charging_fueling_station_technology : depth0)) != null ? helper : helperMissing),(options={"name":"charging_fueling_station_technology","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
+  if (!helpers.charging_fueling_station_technology) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n    ";
   stack1 = ((helper = (helper = helpers.vehicle_technology || (depth0 != null ? depth0.vehicle_technology : depth0)) != null ? helper : helperMissing),(options={"name":"vehicle_technology","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
