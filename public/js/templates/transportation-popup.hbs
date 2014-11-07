@@ -2,7 +2,9 @@
   <ul class="list-unstyled">
     {{#charging_fueling_station_technology}}<li><b>Charging Station Technology:</b> {{.}}</li>{{/charging_fueling_station_technology}}
     {{#vehicle_technology}}<li><b>Vehicle Technology:</b> {{.}}</li>{{/vehicle_technology}}
-    <li><b>Program Name:</b> <a href="{{link}}">{{program_name}}</a></li>
+    <li><b>Program Name:</b> 
+      {{#if link}}<a href="{{link}}" target="_blank">{{program_name}}</a>{{else}}{{program_name}}{{/if}}
+    </li>
     <li><b>Project Name:</b> {{project_name}}</li>
     <li><b>MEA Contribution:</b> {{mea_award}}</li>
     <li><b>Other State Contributions:</b> {{other_agency_dollars}}</li>

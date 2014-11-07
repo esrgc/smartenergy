@@ -44,6 +44,16 @@ templates["dashboard"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"
   },"useData":true});
 
 templates["efficiency-popup"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<a href=\""
+    + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
+    + "\" target=\"_blank\">"
+    + escapeExpression(((helper = (helper = helpers.program_name || (depth0 != null ? depth0.program_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"program_name","hash":{},"data":data}) : helper)))
+    + "</a>";
+},"3":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return escapeExpression(((helper = (helper = helpers.program_name || (depth0 != null ? depth0.program_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"program_name","hash":{},"data":data}) : helper)));
+  },"5":function(depth0,helpers,partials,data) {
   var lambda=this.lambda, escapeExpression=this.escapeExpression;
   return "<li><b>Notes:</b> "
     + escapeExpression(lambda(depth0, depth0))
@@ -51,11 +61,10 @@ templates["efficiency-popup"] = Handlebars.template({"1":function(depth0,helpers
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing, buffer = "<div class=\"map-project\" style=\"background: "
     + escapeExpression(((helper = (helper = helpers.color || (depth0 != null ? depth0.color : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"color","hash":{},"data":data}) : helper)))
-    + "\">\n  <ul class=\"list-unstyled\">\n    <li><b>Program Name:</b> <a href=\""
-    + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
-    + "\">"
-    + escapeExpression(((helper = (helper = helpers.program_name || (depth0 != null ? depth0.program_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"program_name","hash":{},"data":data}) : helper)))
-    + "</a></li>\n    <li><b>Project Name:</b> "
+    + "\">\n  <ul class=\"list-unstyled\">\n    <li><b>Program Name:</b> \n      ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.link : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    </li>\n    <li><b>Project Name:</b> "
     + escapeExpression(((helper = (helper = helpers.project_name || (depth0 != null ? depth0.project_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"project_name","hash":{},"data":data}) : helper)))
     + "</li>\n    <li><b>Sector:</b> "
     + escapeExpression(((helper = (helper = helpers.sector || (depth0 != null ? depth0.sector : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"sector","hash":{},"data":data}) : helper)))
@@ -72,7 +81,7 @@ templates["efficiency-popup"] = Handlebars.template({"1":function(depth0,helpers
     + "</li>\n    <li><b>CO2 Emissions Reductions:</b> "
     + escapeExpression(((helper = (helper = helpers.co2_emissions_reductions_tons || (depth0 != null ? depth0.co2_emissions_reductions_tons : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"co2_emissions_reductions_tons","hash":{},"data":data}) : helper)))
     + " tons</li>\n    ";
-  stack1 = ((helper = (helper = helpers.notes || (depth0 != null ? depth0.notes : depth0)) != null ? helper : helperMissing),(options={"name":"notes","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
+  stack1 = ((helper = (helper = helpers.notes || (depth0 != null ? depth0.notes : depth0)) != null ? helper : helperMissing),(options={"name":"notes","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.notes) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\n  </ul>\n</div>";
@@ -119,6 +128,16 @@ templates["project-type"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"
 },"useData":true});
 
 templates["renewable-popup"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<a href=\""
+    + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
+    + "\" target=\"_blank\">"
+    + escapeExpression(((helper = (helper = helpers.program_name || (depth0 != null ? depth0.program_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"program_name","hash":{},"data":data}) : helper)))
+    + "</a>";
+},"3":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return escapeExpression(((helper = (helper = helpers.program_name || (depth0 != null ? depth0.program_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"program_name","hash":{},"data":data}) : helper)));
+  },"5":function(depth0,helpers,partials,data) {
   var lambda=this.lambda, escapeExpression=this.escapeExpression;
   return "<li><b>Notes:</b> "
     + escapeExpression(lambda(depth0, depth0))
@@ -128,11 +147,10 @@ templates["renewable-popup"] = Handlebars.template({"1":function(depth0,helpers,
     + escapeExpression(((helper = (helper = helpers.color || (depth0 != null ? depth0.color : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"color","hash":{},"data":data}) : helper)))
     + "\">\n  <ul class=\"list-unstyled\">\n    <li><b>Technology:</b> "
     + escapeExpression(((helper = (helper = helpers.technology || (depth0 != null ? depth0.technology : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"technology","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>Program Name:</b> <a href=\""
-    + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
-    + "\">"
-    + escapeExpression(((helper = (helper = helpers.program_name || (depth0 != null ? depth0.program_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"program_name","hash":{},"data":data}) : helper)))
-    + "</a></li>\n    <li><b>Project Name:</b> "
+    + "</li>\n    <li><b>Program Name:</b> \n      ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.link : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    </li>\n    <li><b>Project Name:</b> "
     + escapeExpression(((helper = (helper = helpers.project_name || (depth0 != null ? depth0.project_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"project_name","hash":{},"data":data}) : helper)))
     + "</li>\n    <li><b>MEA Contribution:</b> "
     + escapeExpression(((helper = (helper = helpers.mea_award || (depth0 != null ? depth0.mea_award : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"mea_award","hash":{},"data":data}) : helper)))
@@ -147,7 +165,7 @@ templates["renewable-popup"] = Handlebars.template({"1":function(depth0,helpers,
     + " "
     + escapeExpression(((helper = (helper = helpers.capacity_units || (depth0 != null ? depth0.capacity_units : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"capacity_units","hash":{},"data":data}) : helper)))
     + "</li>\n    ";
-  stack1 = ((helper = (helper = helpers.notes || (depth0 != null ? depth0.notes : depth0)) != null ? helper : helperMissing),(options={"name":"notes","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
+  stack1 = ((helper = (helper = helpers.notes || (depth0 != null ? depth0.notes : depth0)) != null ? helper : helperMissing),(options={"name":"notes","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.notes) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\n  </ul>\n</div>";
@@ -181,7 +199,17 @@ templates["transportation-popup"] = Handlebars.template({"1":function(depth0,hel
   return "<li><b>Vehicle Technology:</b> "
     + escapeExpression(lambda(depth0, depth0))
     + "</li>";
-},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+},"5":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<a href=\""
+    + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
+    + "\" target=\"_blank\">"
+    + escapeExpression(((helper = (helper = helpers.program_name || (depth0 != null ? depth0.program_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"program_name","hash":{},"data":data}) : helper)))
+    + "</a>";
+},"7":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return escapeExpression(((helper = (helper = helpers.program_name || (depth0 != null ? depth0.program_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"program_name","hash":{},"data":data}) : helper)));
+  },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
   var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing, buffer = "<div class=\"map-project\" style=\"background: "
     + escapeExpression(((helper = (helper = helpers.color || (depth0 != null ? depth0.color : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"color","hash":{},"data":data}) : helper)))
     + "\">\n  <ul class=\"list-unstyled\">\n    ";
@@ -192,11 +220,10 @@ templates["transportation-popup"] = Handlebars.template({"1":function(depth0,hel
   stack1 = ((helper = (helper = helpers.vehicle_technology || (depth0 != null ? depth0.vehicle_technology : depth0)) != null ? helper : helperMissing),(options={"name":"vehicle_technology","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
   if (!helpers.vehicle_technology) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n    <li><b>Program Name:</b> <a href=\""
-    + escapeExpression(((helper = (helper = helpers.link || (depth0 != null ? depth0.link : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"link","hash":{},"data":data}) : helper)))
-    + "\">"
-    + escapeExpression(((helper = (helper = helpers.program_name || (depth0 != null ? depth0.program_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"program_name","hash":{},"data":data}) : helper)))
-    + "</a></li>\n    <li><b>Project Name:</b> "
+  buffer += "\n    <li><b>Program Name:</b> \n      ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.link : depth0), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.program(7, data),"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "\n    </li>\n    <li><b>Project Name:</b> "
     + escapeExpression(((helper = (helper = helpers.project_name || (depth0 != null ? depth0.project_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"project_name","hash":{},"data":data}) : helper)))
     + "</li>\n    <li><b>MEA Contribution:</b> "
     + escapeExpression(((helper = (helper = helpers.mea_award || (depth0 != null ? depth0.mea_award : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"mea_award","hash":{},"data":data}) : helper)))
