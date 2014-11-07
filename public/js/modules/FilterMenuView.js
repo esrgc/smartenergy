@@ -25,7 +25,7 @@ var FilterMenuView = ChartView.extend({
     var self = this
     this.resize()
     self.$el.find('.technology').hide()
-    self.$el.find('.vehicle-technology').hide()
+    self.$el.find('.vehicle_technology').hide()
     self.$el.find('.sector').hide()
     self.$el.find('.program').hide()
     self.$el.find('.charging_fueling_station_technology').hide()

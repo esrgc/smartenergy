@@ -280,48 +280,6 @@ var MapView = Backbone.View.extend({
       })
     }
   },
-  _update: function() {
-    var self = this
-    self.projects.clearLayers()
-    var technology_fields = self.technology_fields[Dashboard.activetab]    
-    for (var i = 0; i < this.model.get('data').length; i++) {
-      var project = this.model.get('data')[i]
-      var latlng = project.point.split(',').map(parseFloat)
-      // var marker = L.marker(latlng)
-      // self.projects.addLayer(marker)
-      technology_fields.forEach(function(tech_field, tech_idx) {
-        if (project[tech_field]) {
-          var technology = project[tech_field]
-          var tech_filter = tech_field + technology.replace(/ /g, '').replace('(', '').replace(')', '')
-          var filter = Dashboard.filterCollection.where({value: technology, type: tech_field})
-          self.circlestyle.tech = tech_filter
-          self.circlestyle.tech_field = tech_field
-          if (filter.length) {
-            self.circlestyle.fillColor = filter[0].get('color')
-            self.circlestyle.radius = 6
-          }
-          if (tech_field === 'charging_fueling_station_technology') {
-            self.circlestyle.radius = 2
-          } else {
-            self.circlestyle.stroke = 6
-          }
-          //var marker = L.circleMarker(latlng, self.circlestyle)
-          var className = 'projects-icon '
-          className += tech_filter
-          className += ' ' + tech_field
-          var marker_props = {}
-          marker_props.tech = tech_filter
-          marker_props.icon = L.divIcon({
-            className: className,
-            iconSize: L.point(10, 10)
-          })
-          var marker = L.marker(latlng, marker_props)
-          marker.on('click', self.markerClick.bind(self, project, tech_field, technology, latlng))
-          self.projects.addLayer(marker)
-        }
-      })
-    }
-  },
   update: function() {
     var self = this
     self.projects.clearLayers()
