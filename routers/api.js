@@ -396,6 +396,7 @@ api.get('/getProjectsByPoint', function(req, res){
     delete req.query.tech
     delete req.query.tech_field
     var conditions = filter.conditions(req.query)
+    conditions[tech_field] = tech
     mongo.db.collection(req.query.tab).find(conditions).toArray(function(err, data) {
       returnData(req, res, data)
     })
