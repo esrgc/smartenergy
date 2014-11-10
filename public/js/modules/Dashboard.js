@@ -197,10 +197,12 @@ var Dashboard = Backbone.View.extend({
       {value: 'Local Government', color: '#ced25d', type: 'sector'},
       {value: 'State Government', color: '#d46e12', type: 'sector'}
     ]
+    this.sectors2 = _.clone(this.sectors)
+    this.sectors2.splice(2,1)
     this.filter_hash = {
       'efficiency': this.sectors.concat(this.program_names),
       'renewable': this.sectors.concat(this.renewables),
-      'transportation': this.sectors.concat(this.stations).concat(this.vehicle_technology)
+      'transportation': this.sectors2.concat(this.stations).concat(this.vehicle_technology)
     }
     this.filterCollection.add(this.filter_hash[this.activetab])
   },
