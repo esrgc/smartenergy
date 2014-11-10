@@ -2,6 +2,7 @@
 @import 'overrides.less';
 @import 'tableview.less';
 @import 'header.less';
+@import 'mediaqueries.less';
 
 html, body {
   height: 100%;
@@ -26,8 +27,10 @@ body {
     h1 {
       line-height: 20px;
       font-size: 26px;
-      display: block;
       margin: 0;
+      &.small {
+        line-height: 50px;
+      }
     }
     &:hover {
       color: #eee;

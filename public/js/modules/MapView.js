@@ -69,26 +69,15 @@ var MapView = Backbone.View.extend({
     var mapbox = L.tileLayer('http://{s}.tiles.mapbox.com/v3/esrgc.map-y9awf40v/{z}/{x}/{y}.png')
     mapbox.addTo(self.map)
 
-    //this.projects = L.featureGroup().addTo(this.map)
     this.projects = L.markerClusterGroup({
       maxClusterRadius: 50,
       showCoverageOnHover: false,
       spiderfyOnMaxZoom: true,
-      //disableClusteringAtZoom: 10,
       polygonOptions: {
         color: '#2B4E72',
         weight: 2,
         fillColor: '#333',
         fillOpacity: 0.1
-      },
-      _iconCreateFunction: function(cluster) {
-        var className = 'multiple'
-        //var tech = _.pluck(cluster.getAllChildMarkers(), '
-        return new L.DivIcon({
-          className: 'projects-icon ' + className,
-          html: cluster.getAllChildMarkers().length,
-          iconSize: L.point(30, 30)
-        })
       },
       iconCreateFunction: function(cluster) {
         var markers = cluster.getAllChildMarkers()

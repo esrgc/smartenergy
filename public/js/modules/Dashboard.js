@@ -50,6 +50,7 @@ var Dashboard = Backbone.View.extend({
         key: 'contribution',
         chart_type: 'stat',
         format: d3.format('$,'),
+        width: 'col-md-6 col-lg-3',
         toolbar: false,
         sort: false
       },
@@ -62,6 +63,7 @@ var Dashboard = Backbone.View.extend({
         filter_color: true,
         units: '',
         valueFormat: d3.format('$,.0f'),
+        width: 'col-lg-3 col-md-3 col-sm-12',
         tools: [{value: 'Contribution', text: 'Contribution', type: 'money'}, {value: 'Projects', text: 'Projects'}]
       },
       mea_contribution: {
@@ -73,7 +75,7 @@ var Dashboard = Backbone.View.extend({
         group: 'geo',
         units: '',
         valueFormat: d3.format('$,.0f'),
-        width: 'col-md-6 col-sm-12',
+        width: 'col-lg-6 col-md-9',
         colors: [self.colors[0]],
         yLabel: 'Dollars',
         legend: true,
@@ -110,16 +112,18 @@ var Dashboard = Backbone.View.extend({
         {value: 'Projects', text: 'Projects', yLabel: 'Projects'}],
         barLabelFormat: d3.format('$.2s')
       },
-      electricity: {title: "Electricity Savings By Region", api: 'api/getSavings', key: 'County', y: ['Savings'], chart_type: 'bar', units: 'kWh', geo: true, width: 'col-md-6 col-sm-12', colors: [self.colors[0]], yLabel: 'kWh'},
-      reduction: {title: "CO2 Emissions Reductions By Region", api: 'api/getReductions', key: 'County', y: ['Reduction'], chart_type: 'bar', units: 'tons', geo: true, width: 'col-md-6 col-sm-12', colors: [self.colors[0]], yLabel: 'Tons'},
+      electricity: {title: "Electricity Savings By Region", api: 'api/getSavings', key: 'County', y: ['Savings'], chart_type: 'bar', units: 'kWh', geo: true, width: 'col-md-6 col-sm-12', colors: [self.colors[0]], yLabel: 'kWh', width: 'col-lg-6 col-md-12'},
+      reduction: {title: "CO2 Emissions Reductions By Region", api: 'api/getReductions', key: 'County', y: ['Reduction'], chart_type: 'bar', units: 'tons', geo: true, width: 'col-md-6 col-sm-12', colors: [self.colors[0]], yLabel: 'Tons', width: 'col-lg-6 col-md-12'},
       reductionTime: {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'Year', y: 'Reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%Y"), showUnitsInTable: true, yLabel: 'Tons'},
-      station_technology: {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie', units: 'stations', valueFormat: d3.format(',.0f'), filter_color: true},
+      station_technology: {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie', units: 'stations', valueFormat: d3.format(',.0f'), filter_color: true, width: 'col-lg-3 col-md-3 col-sm-12'},
     }
+    this.charts.sector2 = _.clone(this.charts.sector)
+    this.charts.sector2.width = 'col-lg-3 col-md-3 col-sm-12'
     this.charts.program2 = _.clone(this.charts.program)
-    this.charts.program2.width = 'col-md-6 col-sm-12'
+    this.charts.program2.width = 'col-lg-6 col-md-12'
     this.chart_hash = {
       efficiency: [this.charts.stats, 
-      this.charts.sector, 
+      this.charts.sector2, 
       this.charts.mea_contribution, 
       this.charts.program2, this.charts.electricity, 
       this.charts.reduction],
