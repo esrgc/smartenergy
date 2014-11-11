@@ -56,7 +56,7 @@ api.get('/getTechnology', function(req, res){
     returnData(req, res, data)
   }
   if (CACHE) {
-    var conditions = filter.conditions(req.query)
+    var conditions = filter.conditions(req.query, 'technology')
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
       {$project: {technology: 1, mea_award: 1}},
@@ -260,6 +260,7 @@ api.get('/getContribution', function(req, res){
       id[req.query.geotype] =  '$' + req.query.geotype
       project_in[req.query.geotype] = 1
       project_out[req.query.geotype] = '$_id.' + req.query.geotype
+      conditions[req.query.geotype] = {$exists: true}
     }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
