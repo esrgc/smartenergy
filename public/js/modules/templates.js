@@ -36,7 +36,7 @@ templates["chart"] = Handlebars.template({"1":function(depth0,helpers,partials,d
   buffer += "    <div class=\"chart-inner\">\n      <div class=\"chart-tools\">\n";
   stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.tools : depth0), {"name":"each","hash":{},"fn":this.program(1, data, depths),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "      </div>\n      <div class=\"loader\"><i class=\"fa fa-circle-o-notch fa-spin\"></i></div>\n      <div class=\"the-chart\"></div>\n    </div>\n  </div>\n</div>";
+  return buffer + "      </div>\n      <div class=\"loader\"><i class=\"fa fa-circle-o-notch fa-spin\"></i></div>\n      <div class=\"the-chart\"></div>\n      <div class=\"nodata\">No Data</div>\n    </div>\n  </div>\n</div>";
 },"usePartial":true,"useData":true,"useDepths":true});
 
 templates["dashboard"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {

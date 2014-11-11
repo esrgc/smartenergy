@@ -108,7 +108,12 @@ var ChartView = Backbone.View.extend({
       this.drawChart()
     }
     var d = this.prepData(this.model.get('data'))
-    this.chart.update(d)
+    if (d.length) {
+      this.empty(false)
+      this.chart.update(d)
+    } else {
+      this.empty(true)
+    }
   },
   resize: function() {
     var height = this.$el.find('.chart').innerHeight()
@@ -162,7 +167,7 @@ var ChartView = Backbone.View.extend({
     var url = this.model.makeQuery()
     window.open(url)
   },
-  toTable: function(){
+  toTable: function() {
     var TableView = require('./TableView')
     var view = new TableView({
       model: this.model,
@@ -170,6 +175,17 @@ var ChartView = Backbone.View.extend({
     })
     this.$el.parent().html(view.render().el)
     view.resize()
+  },
+  empty: function(empty) {
+    if (empty) {
+      this.$el.find('.the-chart').hide()
+      this.$el.find('.chart-tools').hide()
+      this.$el.find('.nodata').show()
+    } else {
+      this.$el.find('.the-chart').show()
+      this.$el.find('.chart-tools').show()
+      this.$el.find('.nodata').hide()
+    }
   }
 })
 
