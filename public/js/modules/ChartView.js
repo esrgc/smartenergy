@@ -183,7 +183,7 @@ var ChartView = Backbone.View.extend({
       this.$el.find('.nodata').show()
     } else {
       this.$el.find('.the-chart').show()
-      this.$el.find('.chart-tools').show()
+      if (this.model.get('tools')) this.$el.find('.chart-tools').show()
       this.$el.find('.nodata').hide()
     }
   }

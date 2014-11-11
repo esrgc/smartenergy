@@ -7,7 +7,6 @@ var StackedBarChartView = BarChartView.extend({
     if (row) {
       var totals = []
       data.forEach(function(row, i) {
-        console.log(row)
         if (!row[self.model.get('key')]) {
           row[self.model.get('key')] = 'Other'
         }
