@@ -203,7 +203,7 @@ api.get('/getStats', function(req, res){
       {$project: {mea_award: 1, other_agency_dollars: 1,
         total_project_cost: {
           $cond: [
-            {$gt: ['$total_project_cost', 0]},
+            {$ne: ['$total_project_cost', '']},
             '$total_project_cost',
             {$add: ['$mea_award', '$other_agency_dollars']}
           ]
@@ -248,9 +248,9 @@ api.get('/getContribution', function(req, res){
     var project_in = {mea_award: 1, other_agency_dollars: 1,
       total_project_cost: {
         $cond: [
-          {$gt: ['$total_project_cost', 0]}, //conf
-          '$total_project_cost', //if
-          {$add: ['$mea_award', '$other_agency_dollars']} //else
+          {$ne: ['$total_project_cost', '']},
+          '$total_project_cost',
+          {$add: ['$mea_award', '$other_agency_dollars']}
         ]
       }
     }
@@ -260,7 +260,7 @@ api.get('/getContribution', function(req, res){
       id[req.query.geotype] =  '$' + req.query.geotype
       project_in[req.query.geotype] = 1
       project_out[req.query.geotype] = '$_id.' + req.query.geotype
-      conditions[req.query.geotype] = {$exists: true}
+      conditions[req.query.geotype] = {$exists: true, $ne: ''}
     }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},

@@ -20,17 +20,19 @@
     "chromath": "0.0.6",
     "cors": "^2.2.0",
     "createcss": "0.0.2",
-    "csv": "0.3.7",
+    "csv": "^0.4.1",
     "ejs": "~0.8.5",
     "errorhandler": "1.0.0",
     "express": "4.0.x",
     "hbs": "^2.7.0",
     "lodash": "^2.4.1",
+    "mdimapgeocoder": "^0.1.6",
     "mongodb": "^1.4.12",
     "morgan": "1.0.0",
     "mustache": "0.8.1",
     "request": "^2.47.0",
-    "tedious": "~0.1.5"
+    "tedious": "~0.1.5",
+    "turf": "^1.2.0"
   },
   "devDependencies": {
     "assemble": "~0.4.35",

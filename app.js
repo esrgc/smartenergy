@@ -1,8 +1,7 @@
 
 /**
- *   Boardpress
+ *   Smart Energy Investment Dashboard
  *   Author: Frank Rowe, ESRGC
- *   Date: April, 2014
  */
 
 var express = require('express')
@@ -15,6 +14,7 @@ var express = require('express')
   , config = require('./config/config')
   , mongo = require('./lib/mongo')
   , admin = require('./routers/admin')
+
 var app = express()
 
 app.set('port', process.env.PORT || 3000)
@@ -34,7 +34,7 @@ app.use('/api', require('./routers/api'))
 app.use('/update', function(req, res) { 
   admin.update(req.query.p, req.query.tab, function(err) {
     if (err) res.send('error updating')
-    else res.send('update successfull')
+    else res.send('update successful')
   })
 })
 
