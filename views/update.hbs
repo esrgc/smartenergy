@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Smart Energy Investment Dashboard</title>
+    <link rel="shortcut icon" href="/img/favicon.ico?v=2"> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href='http://fonts.googleapis.com/css?family=Roboto'>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+  <div class="container-fluid">  
+    <div class="col-md-offset-4 col-md-4">
+    <h1>Update</h1>
+      <form role="form" method="POST" enctype="multipart/form-data" action="/update">
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Password" name="password">
+      </div>
+        <div class="form-group">
+          <label for="filefield">File input</label>
+          <input type="file" id="filefield" name="filefield">
+          <p class="help-block">Must be csv file.</p>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="tab" id="renewable" value="renewable" checked>
+            Renewable Energy
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="tab" id="efficiency" value="efficiency">
+            Energy Efficiency
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="tab" id="transportation" value="transportation">
+            Transportation
+          </label>
+        </div>
+        <input type="submit" class="btn btn-default">
+      </form>
+      </div>
+  </div>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="lib/handlebars.runtime-v2.0.0.js"></script>
+  <script src="lib/lodash.compat.min.js"></script>
+  <script src="lib/backbone-min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+</body>
+</html>

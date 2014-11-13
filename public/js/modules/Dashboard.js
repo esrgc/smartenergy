@@ -182,13 +182,11 @@ var Dashboard = Backbone.View.extend({
       {value: 'Home Performance Rebate Program', type: 'program_name'},
       {value: 'EmPOWER Clean Energy Communities Low-to-Moderate Income Grant Program', type: 'program_name'},
       {value: 'Kathleen A.P. Mathias Agriculture Energy Efficiency Grant Program', type: 'program_name'},
-      {value: 'MEEHA - Multifamily', type: 'program_name'},
       {value: 'Maryland Home Energy Loan Program', type: 'program_name'},
       {value: 'Maryland Smart Energy Communities', type: 'program_name'},
       {value: 'Energy and Water Conservation in Maryland State Parks', type: 'program_name'},
       {value: 'Energy Performance Contracting', type: 'program_name'},
-      {value: 'State Agency Loan Program', type: 'program_name'},
-      {value: 'Maryland Save Energy Now', type: 'program_name'}
+      {value: 'State Agency Loan Program', type: 'program_name'}
     ]
     this.sectors = [
       {value: 'Residential', color: '#cc6060', type: 'sector'},
