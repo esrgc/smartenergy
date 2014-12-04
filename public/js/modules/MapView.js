@@ -38,7 +38,8 @@ var MapView = Backbone.View.extend({
     var el = this.$el.find('.map').get(0)
     this.map = L.map(el, {
       attributionControl: false,
-      minZoom: 7
+      minZoom: 7,
+      defaultExtentControl: true
     }).setView([39, -77], 7)
     self.$el.find('.map').find('.leaflet-top.leaflet-right').html('<div class="loader"><i class="fa fa-circle-o-notch fa-spin"></i></div>')
     self.$el.find('.map').find('.leaflet-bottom.leaflet-right').html('<div id="mouseover" class="layerToggle"></div>')
