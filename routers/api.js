@@ -123,6 +123,7 @@ api.get('/getCapacityByArea', function(req, res){
       var id = {}
       id[req.query.geotype] =  '$' + req.query.geotype
       project[req.query.geotype] = '$_id.' + req.query.geotype
+      conditions[req.query.geotype] = {$exists: true, $ne: ''}
     }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
@@ -178,7 +179,7 @@ api.get('/getSector', function(req, res){
     returnData(req, res, data)
   }
   if (CACHE) {
-    var conditions = filter.conditions(req.query)
+    var conditions = filter.conditions(req.query, 'sector')
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
       {$project: {sector: 1, mea_award: 1}},
@@ -469,6 +470,7 @@ api.get('/getReductions', function(req, res){
       var id = {}
       id[req.query.geotype] =  '$' + req.query.geotype
       project[req.query.geotype] = '$_id.' + req.query.geotype
+      conditions[req.query.geotype] = {$exists: true, $ne: ''}
     }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
@@ -501,6 +503,7 @@ api.get('/getSavings', function(req, res){
       var id = {}
       id[req.query.geotype] =  '$' + req.query.geotype
       project[req.query.geotype] = '$_id.' + req.query.geotype
+      conditions[req.query.geotype] = {$exists: true, $ne: ''}
     }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
