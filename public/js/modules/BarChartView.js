@@ -21,6 +21,8 @@ var BarChartView = ChartView.extend({
       , opacity: 0.9
       , barLabels: this.model.get('barLabels')
       , barLabelFormat: this.model.get('barLabelFormat')
+      , xLabelAngle: this.model.get('xLabelAngle')
+      , xAxisLabelPadding: this.model.get('xAxisLabelPadding')
       , legend: this.model.get('legend')
       , legendWidth: 'auto'
       , legendPosition: 'inside'

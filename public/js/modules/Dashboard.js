@@ -78,6 +78,8 @@ var Dashboard = Backbone.View.extend({
         width: 'col-lg-6 col-md-9',
         colors: [self.colors[0]],
         yLabel: 'Dollars',
+        xLabelAngle: -60,
+        xAxisLabelPadding: 50,
         legend: true,
         dontFormat: ['Investment Leverage'],
         geo: true,

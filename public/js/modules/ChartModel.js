@@ -17,6 +17,8 @@ var ChartModel = Backbone.Model.extend({
       sort: true,
       width: 'col-lg-3 col-md-6 col-sm-12',
       barLabels: false,
+      xLabelAngle: false,
+      xAxisLabelPadding: 20,
       legend: false,
       valueFormat: d3.format(',.2f'),
       labelFormat: function(d) { return d },
