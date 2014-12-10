@@ -1,6 +1,6 @@
 {
   "name": "smartenergy",
-  "version": "0.2.1871",
+  "version": "0.2.1872",
   "description": "",
   "main": "server.js",
   "scripts": {
@@ -25,6 +25,7 @@
     "ejs": "~0.8.5",
     "errorhandler": "1.0.0",
     "express": "4.0.x",
+    "geojson-area": "^0.1.0",
     "hbs": "^2.7.0",
     "lodash": "^2.4.1",
     "mdimapgeocoder": "^0.1.6",
