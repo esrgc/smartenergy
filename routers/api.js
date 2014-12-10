@@ -16,6 +16,10 @@ socrataDataset.setCredentials(config.socrata.user, config.socrata.password)
 
 var CACHE = true
 
+var projcount = {
+  $cond: [{$ne: ['$regional', false]}, 0, 1]
+}
+
 function addGeoType(obj, geotype, row) {
   if (geotype === 'state' || !geotype || typeof geotype === 'undefined') {
     obj['state'] = 'Maryland'
@@ -57,10 +61,18 @@ api.get('/getTechnology', function(req, res){
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query, 'technology')
+    if (req.query.geotype && req.query[req.query.geotype]) {
+      conditions['$or'] = [
+        {recipient_region_if_applicable: ''},
+        {regional: req.query.geotype}
+      ]
+    } else {
+      conditions.regional = {$eq: false}
+    }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
-      {$project: {technology: 1, mea_award: 1}},
-      {$group: {_id: {technology: '$technology'}, projects:{$sum: 1}, contribution: {$sum: '$mea_award'}}},
+      {$project: {technology: 1, mea_award: 1, projcount: projcount}},
+      {$group: {_id: {technology: '$technology'}, projects:{$sum: '$projcount'}, contribution: {$sum: '$mea_award'}}},
       {$project: {_id: 0,technology: "$_id.technology", projects: 1, contribution: 1}},
       {$sort: {projects: -1}}, handleData)
   } else {
@@ -91,10 +103,18 @@ api.get('/getProgramName', function(req, res){
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query)
+    if (req.query.geotype && req.query[req.query.geotype]) {
+      conditions['$or'] = [
+        {recipient_region_if_applicable: ''},
+        {regional: req.query.geotype}
+      ]
+    } else {
+      conditions.regional = {$eq: false}
+    }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
-      {$project: {program_name: 1, mea_award: 1}},
-      {$group: {_id: {program_name: '$program_name'}, projects:{$sum: 1}, contribution: {$sum: '$mea_award'}}},
+      {$project: {program_name: 1, mea_award: 1, projcount: projcount}},
+      {$group: {_id: {program_name: '$program_name'}, projects:{$sum: '$projcount'}, contribution: {$sum: '$mea_award'}}},
       {$project: {_id: 0,program_name: "$_id.program_name", projects: 1, contribution: 1}},
       {$sort: {projects: -1}}, handleData)
   } else {
@@ -123,7 +143,15 @@ api.get('/getCapacityByArea', function(req, res){
       var id = {}
       id[req.query.geotype] =  '$' + req.query.geotype
       project[req.query.geotype] = '$_id.' + req.query.geotype
-      conditions[req.query.geotype] = {$exists: true, $ne: ''}
+      if (req.query.geotype && req.query[req.query.geotype]) {
+        conditions['$or'] = [
+          {recipient_region_if_applicable: ''},
+          {regional: req.query.geotype}
+        ]
+      } else {
+        conditions.regional = {$eq: false}
+        conditions[req.query.geotype] = {$exists: true, $ne: ''}
+      }
     }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
@@ -169,6 +197,7 @@ api.get('/getCapacityBySector', function(req, res){
 
 api.get('/getSector', function(req, res){
   function handleData(err, data) {
+    console.log(err)
     data = _.map(data, function(r) {
       return {
         'Sector': r.sector,
@@ -180,10 +209,18 @@ api.get('/getSector', function(req, res){
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query, 'sector')
+    if (req.query.geotype && req.query[req.query.geotype]) {
+      conditions['$or'] = [
+        {recipient_region_if_applicable: ''},
+        {regional: req.query.geotype}
+      ]
+    } else {
+      conditions.regional = {$eq: false}
+    }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
-      {$project: {sector: 1, mea_award: 1}},
-      {$group: {_id: {sector: '$sector'}, projects:{$sum: 1}, contribution: {$sum: '$mea_award'}}},
+      {$project: {sector: 1, mea_award: 1, projcount: projcount}},
+      {$group: {_id: {sector: '$sector'}, projects:{$sum: '$projcount'}, contribution: {$sum: '$mea_award'}}},
       {$project: {_id: 0,sector: "$_id.sector", projects: 1, contribution: 1}},
       {$sort: {projects: -1}}, handleData)
   } else {
@@ -199,6 +236,14 @@ api.get('/getStats', function(req, res){
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query)
+    if (req.query.geotype && req.query[req.query.geotype]) {
+      conditions['$or'] = [
+        {recipient_region_if_applicable: ''},
+        {regional: req.query.geotype}
+      ]
+    } else {
+      conditions.regional = {$eq: false}
+    }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
       {$project: {mea_award: 1, other_agency_dollars: 1,
@@ -228,7 +273,7 @@ api.get('/getStats', function(req, res){
 })
 
 api.get('/getContribution', function(req, res){
-  function handleData(err, data) {
+  function handleData(err, data) {    
     data = _.map(data, function(r) {
       var obj = {
         'MEA Contribution': r.mea_contribution,
@@ -261,8 +306,17 @@ api.get('/getContribution', function(req, res){
       id[req.query.geotype] =  '$' + req.query.geotype
       project_in[req.query.geotype] = 1
       project_out[req.query.geotype] = '$_id.' + req.query.geotype
-      conditions[req.query.geotype] = {$exists: true, $ne: ''}
+      if (req.query.geotype && req.query[req.query.geotype]) {
+        conditions['$or'] = [
+          {recipient_region_if_applicable: ''},
+          {regional: req.query.geotype}
+        ]
+      } else {
+        conditions.regional = {$eq: false}
+        conditions[req.query.geotype] = {$exists: true, $ne: ''}
+      }
     }
+    console.log(conditions)
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
       {$project: project_in},
@@ -299,6 +353,7 @@ api.get('/getPoints', function(req, res){
     }
 
     var conditions = filter.conditions(req.query, 'point')
+    conditions.regional = {$eq: false}
     var project = {point: 1, _id: 1}
     technology_fields.forEach(function(field) {
       project[field] = 1
@@ -369,7 +424,6 @@ api.get('/getProject', function(req, res){
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     conditions._id = new ObjectID(conditions._id)
-    console.log(conditions)
     mongo.db.collection(req.query.tab).find(conditions).toArray(function(err, data) {
       returnData(req, res, data)
     })
@@ -430,10 +484,18 @@ api.get('/getStationTechnology', function(req, res){
   }
   if (CACHE) {
     var conditions = filter.conditions(req.query, 'charging_fueling_station_technology')
+    if (req.query.geotype && req.query[req.query.geotype]) {
+      conditions['$or'] = [
+        {recipient_region_if_applicable: ''},
+        {regional: req.query.geotype}
+      ]
+    } else {
+      conditions.regional = {$eq: false}
+    }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
-      {$project: {charging_fueling_station_technology: 1}},
-      {$group: {_id: {charging_fueling_station_technology: '$charging_fueling_station_technology'}, projects: {$sum: 1}}},
+      {$project: {charging_fueling_station_technology: 1, projcount: projcount}},
+      {$group: {_id: {charging_fueling_station_technology: '$charging_fueling_station_technology'}, projects: {$sum: '$projcount'}}},
       {$project: {_id: 0,charging_fueling_station_technology: "$_id.charging_fueling_station_technology", projects: 1}},
       handleData)
   } else {
@@ -464,13 +526,23 @@ api.get('/getReductions', function(req, res){
 
   if (CACHE) {
     var conditions = filter.conditions(req.query)
+    if (req.query.geotype && req.query[req.query.geotype]) {
+      conditions['$or'] = [
+        {recipient_region_if_applicable: ''},
+        {regional: req.query.geotype}
+      ]
+    } else {
+      conditions.regional = {$eq: false}
+    }
     var id = null
     var project = {_id: 0, reduction: 1}
     if (req.query.geotype) {
       var id = {}
       id[req.query.geotype] =  '$' + req.query.geotype
       project[req.query.geotype] = '$_id.' + req.query.geotype
-      conditions[req.query.geotype] = {$exists: true, $ne: ''}
+      if (!req.query[req.query.geotype]) {
+        conditions[req.query.geotype] = {$exists: true, $ne: ''}
+      }
     }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
@@ -497,13 +569,23 @@ api.get('/getSavings', function(req, res){
 
   if (CACHE) {
     var conditions = filter.conditions(req.query)
+    if (req.query.geotype && req.query[req.query.geotype]) {
+      conditions['$or'] = [
+        {recipient_region_if_applicable: ''},
+        {regional: req.query.geotype}
+      ]
+    } else {
+      conditions.regional = {$eq: false}
+    }
     var id = null
     var project = {_id: 0, savings: 1}
     if (req.query.geotype) {
       var id = {}
       id[req.query.geotype] =  '$' + req.query.geotype
-      project[req.query.geotype] = '$_id.' + req.query.geotype
-      conditions[req.query.geotype] = {$exists: true, $ne: ''}
+      project[req.query.geotype] = '$_id.' + req.query.geotype      
+      if (!req.query[req.query.geotype]) {
+        conditions[req.query.geotype] = {$exists: true, $ne: ''}
+      }
     }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},

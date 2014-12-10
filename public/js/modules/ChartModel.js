@@ -69,13 +69,13 @@ var ChartModel = Backbone.Model.extend({
       }
     })
     url += 'tab=' + Dashboard.activetab
+    var geotype = ''
+    var geofilters = Dashboard.filterCollection.where({type: 'geotype'})
+    if (geofilters.length > 0) {
+      geotype = geofilters[0].get('value')
+    }
+    url += '&geotype=' + geotype
     if (this.get('geo')) {
-      var geotype = ''
-      var geofilters = Dashboard.filterCollection.where({type: 'geotype'})
-      if (geofilters.length > 0) {
-        geotype = geofilters[0].get('value')
-      }
-      url += '&geotype=' + geotype
       self.set('key', geotype)
     }
     return url

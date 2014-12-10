@@ -1334,7 +1334,7 @@ GeoDash.Chart = GeoDash.Class.extend({
       if (self.options.xLabelAngle) {
         label.style("transform", 'rotate(' + self.options.xLabelAngle+ 'deg)')
           .style("transform-origin", 'right top')
-          .style("line-height", 'normal')
+          .style("line-height", '8px')
           .style('overflow', 'visible')
           .style('text-align', 'right')
           .style('position', 'absolute')
@@ -2973,16 +2973,6 @@ GeoDash.LineChart = GeoDash.Chart.extend({
           var m = (w / 2) * -1
           return '0 0 0 ' + m + 'px'
         })
-        // .on('mouseover', function (d, i) {
-        //   if(!GeoDash.Browser.touch) {
-        //     self.mouseOver(d, i, this)
-        //   }
-        // })
-        // .on('mouseout', function (d, i) {
-        //   if(!GeoDash.Browser.touch) {
-        //     self.mouseOut(d, i, this)
-        //   }
-        // })
     }
   }
   , mouseOver: function(d, i, el){
