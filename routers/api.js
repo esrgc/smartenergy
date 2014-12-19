@@ -197,7 +197,6 @@ api.get('/getCapacityBySector', function(req, res){
 
 api.get('/getSector', function(req, res){
   function handleData(err, data) {
-    console.log(err)
     data = _.map(data, function(r) {
       return {
         'Sector': r.sector,
@@ -316,7 +315,6 @@ api.get('/getContribution', function(req, res){
         conditions[req.query.geotype] = {$exists: true, $ne: ''}
       }
     }
-    console.log(conditions)
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
       {$project: project_in},
