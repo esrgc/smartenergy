@@ -16,6 +16,7 @@ var LineChartView = BarChartView.extend({
       , interpolate: 'monotone'
       , xTickFormat: d3.time.format('%Y')
       , yTicksCount: 5
+      , dotRadius: 2
       , legend: false
       , showArea: true
       , accumulate: true
