@@ -47,11 +47,10 @@ var LineChartView = BarChartView.extend({
         obj[key] = Math.round(x*100) / 100
       })
     })
-    console.log(res)
     res = _.sortBy(res, function(row, i) {
       return row[self.model.get('key')]
     })
-    console.log(res)
+    this.model.set('data', res, {silent: true})
     //this.setColors(data)
     return res
   }
