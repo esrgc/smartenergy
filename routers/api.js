@@ -505,11 +505,38 @@ api.get('/getStationTechnology', function(req, res){
 })
 
 api.get('/getVehicleTechnology', function(req, res){
-  var qry = '$select=vehicle_technology,count(id) as value&$group=vehicle_technology'
-  qry += filter.where(req.query, qry, 'vehicle_technology')
-  req.socrata_req = socrataDataset.query(qry, function(err, data) {
+  function handleData(err, data) {
+    data = _.map(data, function(r) {
+      return {
+        'Technology': r.vehicle_technology,
+        'Projects': r.projects
+      }
+    })
     returnData(req, res, data)
-  })
+  }
+  if (CACHE) {
+    var conditions = filter.conditions(req.query, 'vehicle_technology')
+    if (req.query.geotype && req.query[req.query.geotype]) {
+      conditions['$or'] = [
+        {recipient_region_if_applicable: ''},
+        {regional: req.query.geotype}
+      ]
+    } else {
+      conditions.regional = {$eq: false}
+    }
+    mongo.db.collection(req.query.tab).aggregate(
+      {$match: conditions},
+      {$project: {vehicle_technology: 1, projcount: projcount}},
+      {$group: {_id: {vehicle_technology: '$vehicle_technology'}, projects: {$sum: '$projcount'}}},
+      {$project: {_id: 0,vehicle_technology: "$_id.vehicle_technology", projects: 1}},
+      handleData)
+  } else {
+    var qry = '$select=vehicle_technology,count(id) as value&$group=vehicle_technology'
+    qry += filter.where(req.query, qry, 'vehicle_technology')
+    req.socrata_req = socrataDataset.query(qry, function(err, data) {
+      returnData(req, res, data)
+    })
+  }
 })
 
 api.get('/getReductions', function(req, res){

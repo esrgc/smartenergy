@@ -118,6 +118,7 @@ var Dashboard = Backbone.View.extend({
       reduction: {title: "CO2 Emissions Reductions By Region", api: 'api/getReductions', key: 'County', y: ['Reduction'], chart_type: 'bar', units: 'tons', geo: true, width: 'col-md-6 col-sm-12', colors: [self.colors[0]], yLabel: 'Tons', width: 'col-lg-6 col-md-12', xLabelAngle: -60, xAxisLabelPadding: 50},
       reductionTime: {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'Year', y: 'Reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%Y"), showUnitsInTable: true, yLabel: 'Tons'},
       station_technology: {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie', units: 'stations', valueFormat: d3.format(',.0f'), filter_color: true, width: 'col-lg-3 col-md-3 col-sm-12'},
+      vehicle_technology: {title: "Vehicle Technology", api: 'api/getVehicleTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie', units: 'projects', valueFormat: d3.format(',.0f'), filter_color: true, width: 'col-lg-3 col-md-3 col-sm-12'}
     }
     this.charts.sector2 = _.clone(this.charts.sector)
     this.charts.sector2.width = 'col-lg-3 col-md-3 col-sm-12'
@@ -131,7 +132,7 @@ var Dashboard = Backbone.View.extend({
       this.charts.reduction],
       renewable: [this.charts.stats, this.charts.technology, this.charts.mea_contribution, this.charts.program, this.charts.sector, this.charts.reductionTime
       ],
-      transportation: [this.charts.stats, this.charts.station_technology, this.charts.mea_contribution, this.charts.program, this.charts.sector],
+      transportation: [this.charts.stats, this.charts.station_technology, this.charts.mea_contribution, this.charts.sector, this.charts.vehicle_technology],
       capacity_charts: [
         {title: "Capacity By Area", api: 'api/getCapacityByArea', key: 'County', y: ['Capacity'], chart_type: 'bar', showUnitsInTable: true, geo: true, valueFormat: d3.format(',.2f'), width: 'col-md-6 col-sm-12'},
         {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'Sector', y: ['Capacity'], chart_type: 'bar', showUnitsInTable: true},
