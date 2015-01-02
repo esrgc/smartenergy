@@ -136,7 +136,7 @@ var Dashboard = Backbone.View.extend({
       capacity_charts: [
         {title: "Capacity By Area", api: 'api/getCapacityByArea', key: 'County', y: ['Capacity'], chart_type: 'bar', showUnitsInTable: true, geo: true, valueFormat: d3.format(',.2f'), width: 'col-md-6 col-sm-12'},
         {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'Sector', y: ['Capacity'], chart_type: 'bar', showUnitsInTable: true},
-        {title: "Capacity Growth", api: 'api/getCapacityOverTime', key: 'Year', y: ['Capacity'], chart_type: 'line', labelFormat: d3.time.format("%Y"), showUnitsInTable: true, filter_color: true},
+        {title: "Capacity Growth", api: 'api/getCapacityOverTime', key: 'Date', y: ['Capacity'], chart_type: 'line', labelFormat: d3.time.format("%Y"), showUnitsInTable: true, filter_color: true},
       ]
     }
   },

@@ -29,7 +29,6 @@ var FilterMenuView = ChartView.extend({
   update: function() {
     var self = this
     this.resize()
-    console.log('update')
     self.$el.find('.technology').hide()
     self.$el.find('.vehicle_technology').hide()
     self.$el.find('.sector').hide()

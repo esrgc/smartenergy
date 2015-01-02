@@ -635,7 +635,7 @@ api.get('/getCapacityOverTime', function(req, res){
     var data = _.flatten(results)
     data = _.map(data, function(r) {
       return {
-        'Year': r.year,
+        'Date': r.date,
         'Capacity': r.sum_capacity
       }
     })
@@ -643,42 +643,68 @@ api.get('/getCapacityOverTime', function(req, res){
   }
 
   if (CACHE) {
+    var conditions = filter.conditions(req.query)
+    if (req.query.geotype && req.query[req.query.geotype]) {
+      conditions['$or'] = [
+        {recipient_region_if_applicable: ''},
+        {regional: req.query.geotype}
+      ]
+    } else {
+      conditions.regional = {$eq: false}
+    }
+    conditions.date = {$gt: new Date('2008-01-01T12:00:00'), $lt: new Date('2015-01-01T12:00:00')}
+    mongo.db.collection(req.query.tab).aggregate(
+      {$match: conditions},
+      {$project: {
+        yrmonth: {
+          $concat: [
+            { '$substr': [ { '$month': '$date' }, 0, 2 ] },
+            '-',
+            { '$substr': [ { '$year': '$date' }, 0, 4 ] }
+          ]
+        },
+        month: { $month: '$date' },
+        year: {$year: '$date'},
+        capacity: 1
+      }},
+      {$group: {_id: {yrmonth: '$yrmonth'}, sum_capacity:{$sum: '$capacity'}}},
+      {$project: {date: '$_id.yrmonth', sum_capacity: 1}},
+      handleData)
+    // var getPerYear = function(year, callback) {
+    //   var conditions = filter.conditions(req.query)
+    //   conditions.date = {$gt: new Date(year + '-01-01T12:00:00'), $lt: new Date(year+1 + '-01-01T12:00:00')}
+    //   mongo.db.collection(req.query.tab).aggregate(
+    //     {$match: conditions},
+    //     {$project: {capacity: 1}},
+    //     {$group: {_id: null, sum_capacity:{$sum: '$capacity'}}},
+    //     function(err, data) {
+    //       if (data.length) data[0].year = year.toString()
+    //       callback(err, data)
+    //   })
+    // }
+  } else {
     var getPerYear = function(year, callback) {
-      var conditions = filter.conditions(req.query)
-      conditions.date = {$gt: new Date(year + '-01-01T12:00:00'), $lt: new Date(year+1 + '-01-01T12:00:00')}
-      mongo.db.collection(req.query.tab).aggregate(
-        {$match: conditions},
-        {$project: {capacity: 1}},
-        {$group: {_id: null, sum_capacity:{$sum: '$capacity'}}},
-        function(err, data) {
-          if (data.length) data[0].year = year.toString()
-          callback(err, data)
+      var nextyear = year+1
+      var qry = '$select=sum(capacity), \'' + year + '\' as year&$where=date>%27' + year + '-01-01T12:00:00%27  and date<%27' + nextyear + '-01-01T12:00:00%27 '
+      qry += filter.where(req.query, qry)
+      socrataDataset.query(qry, function(err, data) {
+        callback(null, data)
       })
     }
-  } else {
-  var getPerYear = function(year, callback) {
-    var nextyear = year+1
-    var qry = '$select=sum(capacity), \'' + year + '\' as year&$where=date>%27' + year + '-01-01T12:00:00%27  and date<%27' + nextyear + '-01-01T12:00:00%27 '
-    qry += filter.where(req.query, qry)
-    socrataDataset.query(qry, function(err, data) {
-      callback(null, data)
-    })
-  }
   }
 
-  async.parallel([
-    function(callback) { getPerYear(2008, callback) },
-    function(callback) { getPerYear(2009, callback) },
-    function(callback) { getPerYear(2010, callback) },
-    function(callback) { getPerYear(2011, callback) },
-    function(callback) { getPerYear(2012, callback) },
-    function(callback) { getPerYear(2013, callback) },
-    function(callback) { getPerYear(2014, callback) }
-  ], handleData)
+  // async.parallel([
+  //   function(callback) { getPerYear(2008, callback) },
+  //   function(callback) { getPerYear(2009, callback) },
+  //   function(callback) { getPerYear(2010, callback) },
+  //   function(callback) { getPerYear(2011, callback) },
+  //   function(callback) { getPerYear(2012, callback) },
+  //   function(callback) { getPerYear(2013, callback) },
+  //   function(callback) { getPerYear(2014, callback) }
+  // ], handleData)
 })
 
 api.get('/getReductionOverTime', function(req, res){
-
   function handleData(err, results) {
     var data = _.flatten(results)
     data = _.map(data, function(r) {
@@ -689,7 +715,6 @@ api.get('/getReductionOverTime', function(req, res){
     })
     returnData(req, res, data)
   }
-
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     if (req.query.geotype && req.query[req.query.geotype]) {
