@@ -5,6 +5,11 @@ var ChartView = require('./ChartView')
 
 var FilterMenuView = ChartView.extend({
   template: templates['filter-menu'],
+  description: {
+    renewable: 'Select filters to view Maryland Energy Administration contributions to the growth of affordable and reliable renewable energy in our state.',
+    efficiency: 'Select filters to view Maryland Energy Administration contributions to the growth of affordable and reliable energy efficiency in our state.',
+    transportation: 'Select filters to view Maryland Energy Administration contributions to the growth of affordable and reliable clean transportation in our state.'
+  },
   events: {
     'click .reset': 'resetFilters',
     'change select': 'changeDropdown'
@@ -24,11 +29,13 @@ var FilterMenuView = ChartView.extend({
   update: function() {
     var self = this
     this.resize()
+    console.log('update')
     self.$el.find('.technology').hide()
     self.$el.find('.vehicle_technology').hide()
     self.$el.find('.sector').hide()
     self.$el.find('.program').hide()
     self.$el.find('.charging_fueling_station_technology').hide()
+    self.$el.find('.description > p').html(this.description[Dashboard.activetab])
     $('.the-filters').empty()
     Dashboard.filterCollection.each(function(filter) {
       if (filter.get('type') === 'technology') {

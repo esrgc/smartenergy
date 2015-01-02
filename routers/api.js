@@ -245,12 +245,12 @@ api.get('/getStats', function(req, res){
     }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
-      {$project: {mea_award: 1, other_agency_dollars: 1,
+      {$project: {mea_award: 1,
         total_project_cost: {
           $cond: [
             {$ne: ['$total_project_cost', '']},
             '$total_project_cost',
-            {$add: ['$mea_award', '$other_agency_dollars']}
+            {$add: ['$mea_award']}
           ]
         }
       }},
@@ -258,7 +258,7 @@ api.get('/getStats', function(req, res){
         _id: null,
         total_projects:{$sum: 1},
         project_cost: {$sum: '$total_project_cost'},
-        contribution: {$sum: {$add: ['$mea_award', '$other_agency_dollars']}}
+        contribution: {$sum: {$add: ['$mea_award']}}
       }},
       {$project: {_id: 0, total_projects: 1, project_cost: 1, contribution: 1}},
       handleData)
@@ -273,6 +273,7 @@ api.get('/getStats', function(req, res){
 
 api.get('/getContribution', function(req, res){
   function handleData(err, data) {    
+    console.log(data[0])
     data = _.map(data, function(r) {
       var obj = {
         'MEA Contribution': r.mea_contribution,
@@ -290,12 +291,12 @@ api.get('/getContribution', function(req, res){
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     var id = null
-    var project_in = {mea_award: 1, other_agency_dollars: 1,
+    var project_in = {mea_award: 1,
       total_project_cost: {
         $cond: [
           {$ne: ['$total_project_cost', '']},
           '$total_project_cost',
-          {$add: ['$mea_award', '$other_agency_dollars']}
+          {$add: ['$mea_award']}
         ]
       }
     }
@@ -321,7 +322,7 @@ api.get('/getContribution', function(req, res){
       {$group: {
         _id: id,
         projects:{$sum: 1},
-        mea_contribution: {$sum: {$add: ['$mea_award', '$other_agency_dollars']}},
+        mea_contribution: {$sum: {$add: ['$mea_award']}},
         project_cost: {$sum: '$total_project_cost'}
       }},
       {$project: project_out},
