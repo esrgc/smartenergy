@@ -116,7 +116,7 @@ var Dashboard = Backbone.View.extend({
       },
       electricity: {title: "Electricity Savings By Region", api: 'api/getSavings', key: 'County', y: ['Savings'], chart_type: 'bar', units: 'kWh', geo: true, width: 'col-md-6 col-sm-12', colors: [self.colors[0]], yLabel: 'kWh', width: 'col-lg-6 col-md-12', xLabelAngle: -60, xAxisLabelPadding: 50},
       reduction: {title: "CO2 Emissions Reductions By Region", api: 'api/getReductions', key: 'County', y: ['Reduction'], chart_type: 'bar', units: 'tons', geo: true, width: 'col-md-6 col-sm-12', colors: [self.colors[0]], yLabel: 'Tons', width: 'col-lg-6 col-md-12', xLabelAngle: -60, xAxisLabelPadding: 50},
-      reductionTime: {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'Year', y: 'Reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%Y"), showUnitsInTable: true, yLabel: 'Tons'},
+      reductionTime: {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'Date', y: 'Reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%m/%y"), showUnitsInTable: true, yLabel: 'Tons'},
       station_technology: {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie', units: 'stations', valueFormat: d3.format(',.0f'), filter_color: true, width: 'col-lg-3 col-md-3 col-sm-12'},
       vehicle_technology: {title: "Vehicle Technology", api: 'api/getVehicleTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie', units: 'projects', valueFormat: d3.format(',.0f'), filter_color: true, width: 'col-lg-3 col-md-3 col-sm-12'}
     }

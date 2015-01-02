@@ -683,7 +683,7 @@ api.get('/getReductionOverTime', function(req, res){
     var data = _.flatten(results)
     data = _.map(data, function(r) {
       return {
-        'Year': r.year,
+        'Date': r.date,
         'Reduction': r.reduction,
       }
     })
@@ -691,18 +691,45 @@ api.get('/getReductionOverTime', function(req, res){
   }
 
   if (CACHE) {
-    var getPerYear = function(year, callback) {
-      var conditions = filter.conditions(req.query)
-      conditions.date = {$gt: new Date(year + '-01-01T12:00:00'), $lt: new Date(year+1 + '-01-01T12:00:00')}
-      mongo.db.collection(req.query.tab).aggregate(
-        {$match: conditions},
-        {$project: {co2_emissions_reductions_tons: 1}},
-        {$group: {_id: null, reduction:{$sum: '$co2_emissions_reductions_tons'}}},
-        function(err, data) {
-          if (data.length) data[0].year = year.toString()
-          callback(err, data)
-      })
+    var conditions = filter.conditions(req.query)
+    if (req.query.geotype && req.query[req.query.geotype]) {
+      conditions['$or'] = [
+        {recipient_region_if_applicable: ''},
+        {regional: req.query.geotype}
+      ]
+    } else {
+      conditions.regional = {$eq: false}
     }
+    conditions.date = {$gt: new Date('2008-01-01T12:00:00'), $lt: new Date('2015-01-01T12:00:00')}
+    mongo.db.collection(req.query.tab).aggregate(
+      {$match: conditions},
+      {$project: {
+        yrmonth: {
+          $concat: [
+            { '$substr': [ { '$month': '$date' }, 0, 2 ] },
+            '-',
+            { '$substr': [ { '$year': '$date' }, 0, 4 ] }
+          ]
+        },
+        month: { $month: '$date' },
+        year: {$year: '$date'},
+        co2_emissions_reductions_tons: 1
+      }},
+      {$group: {_id: {yrmonth: '$yrmonth'}, reduction:{$sum: '$co2_emissions_reductions_tons'}}},
+      {$project: {date: '$_id.yrmonth', reduction: 1}},
+      handleData)
+    // var getPerYear = function(year, callback) {
+    //   var conditions = filter.conditions(req.query)
+    //   conditions.date = {$gt: new Date(year + '-01-01T12:00:00'), $lt: new Date(year+1 + '-01-01T12:00:00')}
+    //   mongo.db.collection(req.query.tab).aggregate(
+    //     {$match: conditions},
+    //     {$project: {co2_emissions_reductions_tons: 1}},
+    //     {$group: {_id: null, reduction:{$sum: '$co2_emissions_reductions_tons'}}},
+    //     function(err, data) {
+    //       if (data.length) data[0].year = year.toString()
+    //       callback(err, data)
+    //   })
+    // }
   } else {
     var _getPerYear = function(year, callback) {
       var nextyear = year+1
@@ -715,15 +742,15 @@ api.get('/getReductionOverTime', function(req, res){
 
     var getPerYear = async.memoize(_getPerYear)
   }
-  async.parallel([
-    function(callback) { getPerYear(2008, callback) },
-    function(callback) { getPerYear(2009, callback) },
-    function(callback) { getPerYear(2010, callback) },
-    function(callback) { getPerYear(2011, callback) },
-    function(callback) { getPerYear(2012, callback) },
-    function(callback) { getPerYear(2013, callback) },
-    function(callback) { getPerYear(2014, callback) }
-  ], handleData)
+  // async.parallel([
+  //   function(callback) { getPerYear(2008, callback) },
+  //   function(callback) { getPerYear(2009, callback) },
+  //   function(callback) { getPerYear(2010, callback) },
+  //   function(callback) { getPerYear(2011, callback) },
+  //   function(callback) { getPerYear(2012, callback) },
+  //   function(callback) { getPerYear(2013, callback) },
+  //   function(callback) { getPerYear(2014, callback) }
+  // ], handleData)
 })
 
 module.exports = api

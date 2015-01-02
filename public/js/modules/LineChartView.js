@@ -21,6 +21,10 @@ var LineChartView = BarChartView.extend({
       , accumulate: true
       , valueFormat: this.model.get('valueFormat')
       , yLabel: this.model.get('yLabel')
+      , xTimeInterval: {
+          timePeriod: d3.time.year,
+          interval: 1
+        }
     })
   },
   prepData: function(res) {
@@ -31,17 +35,22 @@ var LineChartView = BarChartView.extend({
     } else {
       this.chart.options.y = keys
     }
-    var parseDate = d3.time.format('%Y').parse
+    var parseDate = d3.time.format('%-m-%Y').parse
     _.each(res, function(obj, idx){
-      var isDate = _.isDate(obj[self.model.get('key')])
-      if(!isDate) {
+      //var isDate = _.isDate(obj[self.model.get('key')])
+      //if(!isDate) {
         obj[self.model.get('key')] = parseDate(obj[self.model.get('key')])
-      }
+      //}
       _.each(keys, function(key) {
         var x = obj[key]
         obj[key] = Math.round(x*100) / 100
+        obj[key] = 1000
       })
     })
+    res = _.sortBy(res, function(row, i) {
+      return row[self.model.get('key')]
+    })
+    console.log(res)
     //this.setColors(data)
     return res
   }
