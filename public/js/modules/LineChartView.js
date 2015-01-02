@@ -38,13 +38,10 @@ var LineChartView = BarChartView.extend({
     var parseDate = d3.time.format('%-m-%Y').parse
     _.each(res, function(obj, idx){
       //var isDate = _.isDate(obj[self.model.get('key')])
-      //if(!isDate) {
-        obj[self.model.get('key')] = parseDate(obj[self.model.get('key')])
-      //}
+      obj[self.model.get('key')] = parseDate(obj[self.model.get('key')])
       _.each(keys, function(key) {
         var x = obj[key]
         obj[key] = Math.round(x*100) / 100
-        obj[key] = 1000
       })
     })
     res = _.sortBy(res, function(row, i) {
