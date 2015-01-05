@@ -3,14 +3,14 @@
     <li><b>Program Name:</b> 
       {{#if link}}<a href="{{link}}" target="_blank">{{program_name}}</a>{{else}}{{program_name}}{{/if}}
     </li>
-    <li><b>Project Name:</b> {{project_name}}</li>
+    {{#if project_name}}<li><b>Project Name:</b> {{project_name}}</li>{{/if}}
     <li><b>Sector:</b> {{sector}}</li>
     <li><b>MEA Contribution:</b> {{mea_award}}</li>
-    <li><b>Other State Contributions:</b> {{other_agency_dollars}}</li>
-    <li><b>Total Project Cost:</b> {{total_project_cost}}</li>
-    <li><b>Investment Leverage:</b> {{investment_leverage}}</li>
-    <li><b>Electricity Savings (kWh):</b> {{electricity_savings_kwh}}</li>
+    {{#if other_agency_dollars}}<li><b>Other State Contributions:</b> {{other_agency_dollars}}</li>{{/if}}
+    {{#if total_project_cost}}<li><b>Total Project Cost:</b> {{total_project_cost}}</li>{{/if}}
+    {{#if investment_leverage}}<li><b>Investment Leverage:</b> {{investment_leverage}}</li>{{/if}}
+    <li><b>Electricity Savings:</b> {{electricity_savings_kwh}} kWh</li>
     <li><b>CO2 Emissions Reductions:</b> {{co2_emissions_reductions_tons}} tons</li>
-    {{#notes}}<li><b>Notes:</b> {{.}}</li>{{/notes}}
+    {{#if notes}}<li><b>Notes:</b> {{notes}}</li>{{/if}}
   </ul>
 </div>

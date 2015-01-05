@@ -24,9 +24,9 @@ var Dashboard = Backbone.View.extend({
     'transportation': 'https://data.maryland.gov/dataset/Transportation-Geocoded/4dvs-jtxq'
   },
   tab_colors: {
-    'renewable': '#2790B0',
+    'renewable': '#12A6B8',
     'efficiency': '#2B4E72',
-    'transportation': '#94BA65'
+    'transportation': '#E5972F'
   },
   initialize: function() {
 

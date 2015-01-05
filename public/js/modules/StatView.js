@@ -31,10 +31,10 @@ var StatView = ChartView.extend({
     stat.project_cost = this.format(data.project_cost)
     stat.sum_other_agency_dollars = this.format(data.sum_other_agency_dollars)
     var html = '<table class="table table-condensed statview">'
-    html += '<tr><td>Total Projects</td><td><strong>' + d3.format(',')(data.total_projects) + '</strong></td></tr>'
-    html += '<tr><td>Total Project Cost</td><td><strong>' + stat.project_cost + '</strong></td></tr>'
-    html += '<tr><td>MEA Contribution</td><td><strong>' + stat.contribution + '</strong></td></tr>'
-    html += '<tr><td>Investment Leverage</td><td><strong>' + stat.investment_leverage + '</strong></td></tr>'
+    html += '<tr><td>Total Projects</td><td>' + d3.format(',')(data.total_projects) + '</td></tr>'
+    html += '<tr><td>Total Project Cost</td><td>' + stat.project_cost + '</td></tr>'
+    html += '<tr><td>MEA Contribution</td><td>' + stat.contribution + '</td></tr>'
+    html += '<tr><td>Investment Leverage</td><td>' + stat.investment_leverage + '</td></tr>'
     html += '</table>'
     this.$el.find('.stat').html(html)
   },

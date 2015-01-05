@@ -50,35 +50,58 @@ templates["efficiency-popup"] = Handlebars.template({"1":function(depth0,helpers
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return escapeExpression(((helper = (helper = helpers.program_name || (depth0 != null ? depth0.program_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"program_name","hash":{},"data":data}) : helper)));
   },"5":function(depth0,helpers,partials,data) {
-  var lambda=this.lambda, escapeExpression=this.escapeExpression;
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<li><b>Project Name:</b> "
+    + escapeExpression(((helper = (helper = helpers.project_name || (depth0 != null ? depth0.project_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"project_name","hash":{},"data":data}) : helper)))
+    + "</li>";
+},"7":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<li><b>Other State Contributions:</b> "
+    + escapeExpression(((helper = (helper = helpers.other_agency_dollars || (depth0 != null ? depth0.other_agency_dollars : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"other_agency_dollars","hash":{},"data":data}) : helper)))
+    + "</li>";
+},"9":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<li><b>Total Project Cost:</b> "
+    + escapeExpression(((helper = (helper = helpers.total_project_cost || (depth0 != null ? depth0.total_project_cost : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"total_project_cost","hash":{},"data":data}) : helper)))
+    + "</li>";
+},"11":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<li><b>Investment Leverage:</b> "
+    + escapeExpression(((helper = (helper = helpers.investment_leverage || (depth0 != null ? depth0.investment_leverage : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"investment_leverage","hash":{},"data":data}) : helper)))
+    + "</li>";
+},"13":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<li><b>Notes:</b> "
-    + escapeExpression(lambda(depth0, depth0))
+    + escapeExpression(((helper = (helper = helpers.notes || (depth0 != null ? depth0.notes : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"notes","hash":{},"data":data}) : helper)))
     + "</li>";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing, buffer = "<div class=\"map-project\" style=\"background: "
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<div class=\"map-project\" style=\"background: "
     + escapeExpression(((helper = (helper = helpers.color || (depth0 != null ? depth0.color : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"color","hash":{},"data":data}) : helper)))
     + "\">\n  <ul class=\"list-unstyled\">\n    <li><b>Program Name:</b> \n      ";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.link : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "\n    </li>\n    <li><b>Project Name:</b> "
-    + escapeExpression(((helper = (helper = helpers.project_name || (depth0 != null ? depth0.project_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"project_name","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>Sector:</b> "
+  buffer += "\n    </li>\n    ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.project_name : depth0), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    <li><b>Sector:</b> "
     + escapeExpression(((helper = (helper = helpers.sector || (depth0 != null ? depth0.sector : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"sector","hash":{},"data":data}) : helper)))
     + "</li>\n    <li><b>MEA Contribution:</b> "
     + escapeExpression(((helper = (helper = helpers.mea_award || (depth0 != null ? depth0.mea_award : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"mea_award","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>Other State Contributions:</b> "
-    + escapeExpression(((helper = (helper = helpers.other_agency_dollars || (depth0 != null ? depth0.other_agency_dollars : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"other_agency_dollars","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>Total Project Cost:</b> "
-    + escapeExpression(((helper = (helper = helpers.total_project_cost || (depth0 != null ? depth0.total_project_cost : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"total_project_cost","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>Investment Leverage:</b> "
-    + escapeExpression(((helper = (helper = helpers.investment_leverage || (depth0 != null ? depth0.investment_leverage : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"investment_leverage","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>Electricity Savings (kWh):</b> "
+    + "</li>\n    ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.other_agency_dollars : depth0), {"name":"if","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.total_project_cost : depth0), {"name":"if","hash":{},"fn":this.program(9, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.investment_leverage : depth0), {"name":"if","hash":{},"fn":this.program(11, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    <li><b>Electricity Savings:</b> "
     + escapeExpression(((helper = (helper = helpers.electricity_savings_kwh || (depth0 != null ? depth0.electricity_savings_kwh : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"electricity_savings_kwh","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>CO2 Emissions Reductions:</b> "
+    + " kWh</li>\n    <li><b>CO2 Emissions Reductions:</b> "
     + escapeExpression(((helper = (helper = helpers.co2_emissions_reductions_tons || (depth0 != null ? depth0.co2_emissions_reductions_tons : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"co2_emissions_reductions_tons","hash":{},"data":data}) : helper)))
     + " tons</li>\n    ";
-  stack1 = ((helper = (helper = helpers.notes || (depth0 != null ? depth0.notes : depth0)) != null ? helper : helperMissing),(options={"name":"notes","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.notes) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.notes : depth0), {"name":"if","hash":{},"fn":this.program(13, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\n  </ul>\n</div>";
 },"useData":true});
@@ -134,35 +157,58 @@ templates["renewable-popup"] = Handlebars.template({"1":function(depth0,helpers,
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return escapeExpression(((helper = (helper = helpers.program_name || (depth0 != null ? depth0.program_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"program_name","hash":{},"data":data}) : helper)));
   },"5":function(depth0,helpers,partials,data) {
-  var lambda=this.lambda, escapeExpression=this.escapeExpression;
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<li><b>Project Name:</b> "
+    + escapeExpression(((helper = (helper = helpers.project_name || (depth0 != null ? depth0.project_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"project_name","hash":{},"data":data}) : helper)))
+    + "</li>";
+},"7":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<li><b>Other State Contributions:</b> "
+    + escapeExpression(((helper = (helper = helpers.other_agency_dollars || (depth0 != null ? depth0.other_agency_dollars : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"other_agency_dollars","hash":{},"data":data}) : helper)))
+    + "</li>";
+},"9":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<li><b>Total Project Cost:</b> "
+    + escapeExpression(((helper = (helper = helpers.total_project_cost || (depth0 != null ? depth0.total_project_cost : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"total_project_cost","hash":{},"data":data}) : helper)))
+    + "</li>";
+},"11":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<li><b>Investment Leverage:</b> "
+    + escapeExpression(((helper = (helper = helpers.investment_leverage || (depth0 != null ? depth0.investment_leverage : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"investment_leverage","hash":{},"data":data}) : helper)))
+    + "</li>";
+},"13":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<li><b>Notes:</b> "
-    + escapeExpression(lambda(depth0, depth0))
+    + escapeExpression(((helper = (helper = helpers.notes || (depth0 != null ? depth0.notes : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"notes","hash":{},"data":data}) : helper)))
     + "</li>";
 },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing, buffer = "<div class=\"map-project\" style=\"background: "
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<div class=\"map-project\" style=\"background: "
     + escapeExpression(((helper = (helper = helpers.color || (depth0 != null ? depth0.color : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"color","hash":{},"data":data}) : helper)))
     + "\">\n  <ul class=\"list-unstyled\">\n    <li><b>Technology:</b> "
     + escapeExpression(((helper = (helper = helpers.technology || (depth0 != null ? depth0.technology : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"technology","hash":{},"data":data}) : helper)))
     + "</li>\n    <li><b>Program Name:</b> \n      ";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.link : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.program(3, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
-  buffer += "\n    </li>\n    <li><b>Project Name:</b> "
-    + escapeExpression(((helper = (helper = helpers.project_name || (depth0 != null ? depth0.project_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"project_name","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>MEA Contribution:</b> "
+  buffer += "\n    </li>\n    ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.project_name : depth0), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    <li><b>MEA Contribution:</b> "
     + escapeExpression(((helper = (helper = helpers.mea_award || (depth0 != null ? depth0.mea_award : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"mea_award","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>Other State Contributions:</b> "
-    + escapeExpression(((helper = (helper = helpers.other_agency_dollars || (depth0 != null ? depth0.other_agency_dollars : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"other_agency_dollars","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>Total Project Cost:</b> "
-    + escapeExpression(((helper = (helper = helpers.total_project_cost || (depth0 != null ? depth0.total_project_cost : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"total_project_cost","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>Investment Leverage:</b> "
-    + escapeExpression(((helper = (helper = helpers.investment_leverage || (depth0 != null ? depth0.investment_leverage : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"investment_leverage","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>Capacity:</b> "
+    + "</li>\n    ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.other_agency_dollars : depth0), {"name":"if","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.total_project_cost : depth0), {"name":"if","hash":{},"fn":this.program(9, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.investment_leverage : depth0), {"name":"if","hash":{},"fn":this.program(11, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    <li><b>Capacity:</b> "
     + escapeExpression(((helper = (helper = helpers.capacity || (depth0 != null ? depth0.capacity : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"capacity","hash":{},"data":data}) : helper)))
     + " "
     + escapeExpression(((helper = (helper = helpers.capacity_units || (depth0 != null ? depth0.capacity_units : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"capacity_units","hash":{},"data":data}) : helper)))
     + "</li>\n    ";
-  stack1 = ((helper = (helper = helpers.notes || (depth0 != null ? depth0.notes : depth0)) != null ? helper : helperMissing),(options={"name":"notes","hash":{},"fn":this.program(5, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.notes) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.notes : depth0), {"name":"if","hash":{},"fn":this.program(13, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\n  </ul>\n</div>";
 },"useData":true});
@@ -186,14 +232,14 @@ templates["table-empty"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"]
 },"usePartial":true,"useData":true});
 
 templates["transportation-popup"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
-  var lambda=this.lambda, escapeExpression=this.escapeExpression;
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<li><b>Charging Station Technology:</b> "
-    + escapeExpression(lambda(depth0, depth0))
+    + escapeExpression(((helper = (helper = helpers.charging_fueling_station_technology || (depth0 != null ? depth0.charging_fueling_station_technology : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"charging_fueling_station_technology","hash":{},"data":data}) : helper)))
     + "</li>";
 },"3":function(depth0,helpers,partials,data) {
-  var lambda=this.lambda, escapeExpression=this.escapeExpression;
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<li><b>Vehicle Technology:</b> "
-    + escapeExpression(lambda(depth0, depth0))
+    + escapeExpression(((helper = (helper = helpers.vehicle_technology || (depth0 != null ? depth0.vehicle_technology : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"vehicle_technology","hash":{},"data":data}) : helper)))
     + "</li>";
 },"5":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
@@ -205,37 +251,69 @@ templates["transportation-popup"] = Handlebars.template({"1":function(depth0,hel
 },"7":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return escapeExpression(((helper = (helper = helpers.program_name || (depth0 != null ? depth0.program_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"program_name","hash":{},"data":data}) : helper)));
-  },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  var stack1, helper, options, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing, buffer = "<div class=\"map-project\" style=\"background: "
+  },"9":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<li><b>Project Name:</b> "
+    + escapeExpression(((helper = (helper = helpers.project_name || (depth0 != null ? depth0.project_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"project_name","hash":{},"data":data}) : helper)))
+    + "</li>";
+},"11":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<li><b>Other State Contributions:</b> "
+    + escapeExpression(((helper = (helper = helpers.other_agency_dollars || (depth0 != null ? depth0.other_agency_dollars : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"other_agency_dollars","hash":{},"data":data}) : helper)))
+    + "</li>";
+},"13":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<li><b>Total Project Cost:</b> "
+    + escapeExpression(((helper = (helper = helpers.total_project_cost || (depth0 != null ? depth0.total_project_cost : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"total_project_cost","hash":{},"data":data}) : helper)))
+    + "</li>";
+},"15":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<li><b>Investment Leverage:</b> "
+    + escapeExpression(((helper = (helper = helpers.investment_leverage || (depth0 != null ? depth0.investment_leverage : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"investment_leverage","hash":{},"data":data}) : helper)))
+    + "</li>";
+},"17":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<li><b>Gallons of Gasoline Equivalent Avoided:</b> "
+    + escapeExpression(((helper = (helper = helpers.gallons_of_gasoline_equivalent_avoided || (depth0 != null ? depth0.gallons_of_gasoline_equivalent_avoided : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"gallons_of_gasoline_equivalent_avoided","hash":{},"data":data}) : helper)))
+    + "</li>";
+},"19":function(depth0,helpers,partials,data) {
+  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+  return "<li><b>Notes:</b> "
+    + escapeExpression(((helper = (helper = helpers.notes || (depth0 != null ? depth0.notes : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"notes","hash":{},"data":data}) : helper)))
+    + "</li>";
+},"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+  var stack1, helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, buffer = "<div class=\"map-project\" style=\"background: "
     + escapeExpression(((helper = (helper = helpers.color || (depth0 != null ? depth0.color : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"color","hash":{},"data":data}) : helper)))
     + "\">\n  <ul class=\"list-unstyled\">\n    ";
-  stack1 = ((helper = (helper = helpers.charging_fueling_station_technology || (depth0 != null ? depth0.charging_fueling_station_technology : depth0)) != null ? helper : helperMissing),(options={"name":"charging_fueling_station_technology","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.charging_fueling_station_technology) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.charging_fueling_station_technology : depth0), {"name":"if","hash":{},"fn":this.program(1, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n    ";
-  stack1 = ((helper = (helper = helpers.vehicle_technology || (depth0 != null ? depth0.vehicle_technology : depth0)) != null ? helper : helperMissing),(options={"name":"vehicle_technology","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data}),(typeof helper === functionType ? helper.call(depth0, options) : helper));
-  if (!helpers.vehicle_technology) { stack1 = blockHelperMissing.call(depth0, stack1, options); }
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.vehicle_technology : depth0), {"name":"if","hash":{},"fn":this.program(3, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n    <li><b>Program Name:</b> \n      ";
   stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.link : depth0), {"name":"if","hash":{},"fn":this.program(5, data),"inverse":this.program(7, data),"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "\n    </li>\n    <li><b>Project Name:</b> "
-    + escapeExpression(((helper = (helper = helpers.project_name || (depth0 != null ? depth0.project_name : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"project_name","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>MEA Contribution:</b> "
+  buffer += "\n    </li>\n    ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.project_name : depth0), {"name":"if","hash":{},"fn":this.program(9, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    <li><b>MEA Contribution:</b> "
     + escapeExpression(((helper = (helper = helpers.mea_award || (depth0 != null ? depth0.mea_award : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"mea_award","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>Other State Contributions:</b> "
-    + escapeExpression(((helper = (helper = helpers.other_agency_dollars || (depth0 != null ? depth0.other_agency_dollars : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"other_agency_dollars","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>Total Project Cost:</b> "
-    + escapeExpression(((helper = (helper = helpers.total_project_cost || (depth0 != null ? depth0.total_project_cost : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"total_project_cost","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>Investment Leverage:</b> "
-    + escapeExpression(((helper = (helper = helpers.investment_leverage || (depth0 != null ? depth0.investment_leverage : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"investment_leverage","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>Gallons of Gasoline Equivalent Avoided:</b> "
-    + escapeExpression(((helper = (helper = helpers.gallons_of_gasoline_equivalent_avoided || (depth0 != null ? depth0.gallons_of_gasoline_equivalent_avoided : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"gallons_of_gasoline_equivalent_avoided","hash":{},"data":data}) : helper)))
-    + " "
-    + escapeExpression(((helper = (helper = helpers.capacity_units || (depth0 != null ? depth0.capacity_units : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"capacity_units","hash":{},"data":data}) : helper)))
-    + "</li>\n    <li><b>Notes:</b> "
-    + escapeExpression(((helper = (helper = helpers.notes || (depth0 != null ? depth0.notes : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"notes","hash":{},"data":data}) : helper)))
-    + "</li>\n  </ul>\n</div>";
+    + "</li>\n    ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.other_agency_dollars : depth0), {"name":"if","hash":{},"fn":this.program(11, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.total_project_cost : depth0), {"name":"if","hash":{},"fn":this.program(13, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.investment_leverage : depth0), {"name":"if","hash":{},"fn":this.program(15, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.gallons_of_gasoline_equivalent_avoided : depth0), {"name":"if","hash":{},"fn":this.program(17, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  buffer += "\n    ";
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.notes : depth0), {"name":"if","hash":{},"fn":this.program(19, data),"inverse":this.noop,"data":data});
+  if (stack1 != null) { buffer += stack1; }
+  return buffer + "\n  </ul>\n</div>";
 },"useData":true});
 
 return templates;

@@ -1,16 +1,16 @@
 <div class="map-project" style="background: {{color}}">
   <ul class="list-unstyled">
-    {{#charging_fueling_station_technology}}<li><b>Charging Station Technology:</b> {{.}}</li>{{/charging_fueling_station_technology}}
-    {{#vehicle_technology}}<li><b>Vehicle Technology:</b> {{.}}</li>{{/vehicle_technology}}
+    {{#if charging_fueling_station_technology}}<li><b>Charging Station Technology:</b> {{charging_fueling_station_technology}}</li>{{/if}}
+    {{#if vehicle_technology}}<li><b>Vehicle Technology:</b> {{vehicle_technology}}</li>{{/if}}
     <li><b>Program Name:</b> 
       {{#if link}}<a href="{{link}}" target="_blank">{{program_name}}</a>{{else}}{{program_name}}{{/if}}
     </li>
-    <li><b>Project Name:</b> {{project_name}}</li>
+    {{#if project_name}}<li><b>Project Name:</b> {{project_name}}</li>{{/if}}
     <li><b>MEA Contribution:</b> {{mea_award}}</li>
-    <li><b>Other State Contributions:</b> {{other_agency_dollars}}</li>
-    <li><b>Total Project Cost:</b> {{total_project_cost}}</li>
-    <li><b>Investment Leverage:</b> {{investment_leverage}}</li>
-    <li><b>Gallons of Gasoline Equivalent Avoided:</b> {{gallons_of_gasoline_equivalent_avoided}} {{capacity_units}}</li>
-    <li><b>Notes:</b> {{notes}}</li>
+    {{#if other_agency_dollars}}<li><b>Other State Contributions:</b> {{other_agency_dollars}}</li>{{/if}}
+    {{#if total_project_cost}}<li><b>Total Project Cost:</b> {{total_project_cost}}</li>{{/if}}
+    {{#if investment_leverage}}<li><b>Investment Leverage:</b> {{investment_leverage}}</li>{{/if}}
+    {{#if gallons_of_gasoline_equivalent_avoided}}<li><b>Gallons of Gasoline Equivalent Avoided:</b> {{gallons_of_gasoline_equivalent_avoided}}</li>{{/if}}
+    {{#if notes}}<li><b>Notes:</b> {{notes}}</li>{{/if}}
   </ul>
 </div>

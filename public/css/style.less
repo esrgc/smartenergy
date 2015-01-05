@@ -11,13 +11,14 @@ html, body {
 
 body {
   background: #fff;
-  font-family: 'Roboto', sans-serif;
+  /*font-family: 'Roboto', sans-serif;*/
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .navbar {
-  background: @alternate3;
+  background: @meagreen;
   color: #fff;
-  border-color: darken(@alternate3, 10%);
+  border-color: darken(@meagreen, 10%);
   a.navbar-brand {
     color: #fff;
     padding: 0 10px 0 10px;
@@ -109,21 +110,21 @@ body {
 
 .home {
   padding: 10px;
-  border: 1px solid @tableBorder;
+  border: 0px solid @tableBorder;
   margin: 0 auto;
   text-align: left;
   .welcome {
-    font-size: 16px;
-    text-decoration: underline;
+    font-size: 21px;
+    font-weight: bold;
   }
   h4 {
     margin-top: 0px;
   }
   .intro {
-    font-size: 14px;
+    font-size: 18px;
   }
   .help {
-    font-size: 12px;
+    font-size: 14px;
     h4 {
       margin-top: 0px;
     }
@@ -138,13 +139,13 @@ body {
     color: white;
   }
   .btn.renewable {
-    background: @lightblue;
+    background: @renewable;
   }
   .btn.efficiency {
-    background: @blue;
+    background: @efficiency;
   }
   .btn.transportation {
-    background: @green;
+    background: @transportation;
   }
 }
 
