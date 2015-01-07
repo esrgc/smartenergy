@@ -117,8 +117,30 @@ var Dashboard = Backbone.View.extend({
       electricity: {title: "Electricity Savings By Region", api: 'api/getSavings', key: 'County', y: ['Savings'], chart_type: 'bar', units: 'kWh', geo: true, width: 'col-md-6 col-sm-12', colors: [self.colors[0]], yLabel: 'kWh', width: 'col-lg-6 col-md-12', xLabelAngle: -60, xAxisLabelPadding: 50},
       reduction: {title: "CO2 Emissions Reductions By Region", api: 'api/getReductions', key: 'County', y: ['Reduction'], chart_type: 'bar', units: 'tons', geo: true, width: 'col-md-6 col-sm-12', colors: [self.colors[0]], yLabel: 'Tons', width: 'col-lg-6 col-md-12', xLabelAngle: -60, xAxisLabelPadding: 50},
       reductionTime: {title: "CO2 Reduction", api: 'api/getReductionOverTime', key: 'Date', y: 'Reduction', chart_type: 'line', units: 'tons', labelFormat: d3.time.format("%m/%y"), showUnitsInTable: true, yLabel: 'Tons'},
-      station_technology: {title: "Charging/Fueling Station Technology", api: 'api/getStationTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie', units: 'stations', valueFormat: d3.format(',.0f'), filter_color: true, width: 'col-lg-3 col-md-3 col-sm-12'},
-      vehicle_technology: {title: "Vehicle Technology", api: 'api/getVehicleTechnology', key: 'Technology', y: 'Projects', chart_type: 'pie', units: 'projects', valueFormat: d3.format(',.0f'), filter_color: true, width: 'col-lg-3 col-md-3 col-sm-12'}
+      station_technology: {
+        title: "Charging/Fueling Station Technology",
+        api: 'api/getStationTechnology',
+        key: 'Technology',
+        y: 'Contribution',
+        chart_type: 'pie',
+        units: '',
+        valueFormat: d3.format(',.0f'),
+        filter_color: true,
+        width: 'col-lg-3 col-md-3 col-sm-12',
+        tools: [{value: 'Contribution', text: 'Contribution', type: 'money'}, {value: 'Stations', text: 'Stations'}]
+      },
+      vehicle_technology: {
+        title: "Vehicle Technology",
+        api: 'api/getVehicleTechnology',
+        key: 'Technology',
+        y: 'Contribution',
+        chart_type: 'pie',
+        units: '',
+        valueFormat: d3.format('$,.0f'),
+        filter_color: true,
+        width: 'col-lg-3 col-md-3 col-sm-12',
+        tools: [{value: 'Contribution', text: 'Contribution', type: 'money'}, {value: 'Projects', text: 'Projects'}]
+      }
     }
     this.charts.sector2 = _.clone(this.charts.sector)
     this.charts.sector2.width = 'col-lg-3 col-md-3 col-sm-12'
@@ -168,7 +190,8 @@ var Dashboard = Backbone.View.extend({
       {value: 'Biodiesel', color: '#f39c12', type: 'charging_fueling_station_technology'},
       {value: 'E85', color: '#2ECC40', type: 'charging_fueling_station_technology'},
       {value: 'Natural Gas (CNG)', color: '#FFDC00', type: 'charging_fueling_station_technology'},
-      {value: 'Propane', color: '#FF4136', type: 'charging_fueling_station_technology'}
+      {value: 'LPG', color: '#FF4136', type: 'charging_fueling_station_technology'},
+      {value: 'Back-up Generator', color: '#7D7F81', type: 'charging_fueling_station_technology'}
     ]
     this.programtypes = [
       {value: 'Grant', type: 'program_type'},

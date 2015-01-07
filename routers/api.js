@@ -498,7 +498,8 @@ api.get('/getStationTechnology', function(req, res){
     data = _.map(data, function(r) {
       return {
         'Technology': r.charging_fueling_station_technology,
-        'Projects': r.projects
+        'Stations': r.projects,
+        'Contribution': r.contribution
       }
     })
     returnData(req, res, data)
@@ -515,9 +516,9 @@ api.get('/getStationTechnology', function(req, res){
     }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
-      {$project: {charging_fueling_station_technology: 1, projcount: projcount}},
-      {$group: {_id: {charging_fueling_station_technology: '$charging_fueling_station_technology'}, projects: {$sum: '$projcount'}}},
-      {$project: {_id: 0,charging_fueling_station_technology: "$_id.charging_fueling_station_technology", projects: 1}},
+      {$project: {charging_fueling_station_technology: 1, projcount: projcount, mea_award: 1}},
+      {$group: {_id: {charging_fueling_station_technology: '$charging_fueling_station_technology'}, projects: {$sum: '$projcount'}, contribution: {$sum: '$mea_award'}}},
+      {$project: {_id: 0,charging_fueling_station_technology: "$_id.charging_fueling_station_technology", projects: 1, contribution: 1}},
       handleData)
   } else {
     var qry = '$select=charging_fueling_station_technology,count(id) as projects&$group=charging_fueling_station_technology'
@@ -531,7 +532,8 @@ api.get('/getVehicleTechnology', function(req, res){
     data = _.map(data, function(r) {
       return {
         'Technology': r.vehicle_technology,
-        'Projects': r.projects
+        'Projects': r.projects,
+        'Contribution': r.contribution
       }
     })
     returnData(req, res, data)
@@ -548,9 +550,9 @@ api.get('/getVehicleTechnology', function(req, res){
     }
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
-      {$project: {vehicle_technology: 1, projcount: projcount}},
-      {$group: {_id: {vehicle_technology: '$vehicle_technology'}, projects: {$sum: '$projcount'}}},
-      {$project: {_id: 0,vehicle_technology: "$_id.vehicle_technology", projects: 1}},
+      {$project: {vehicle_technology: 1, projcount: projcount, mea_award: 1}},
+      {$group: {_id: {vehicle_technology: '$vehicle_technology'}, projects: {$sum: '$projcount'}, contribution: {$sum: '$mea_award'}}},
+      {$project: {_id: 0,vehicle_technology: "$_id.vehicle_technology", projects: 1, contribution: 1}},
       handleData)
   } else {
     var qry = '$select=vehicle_technology,count(id) as value&$group=vehicle_technology'

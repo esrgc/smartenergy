@@ -46,8 +46,8 @@ var PieChartView = BarChartView.extend({
     var row = data[0]
     if (row) {
       data = _.sortBy(data, function(row, i) {
-        return row[self.chart.options.y[0]]
-      })
+        return row[self.chart.options.y]
+      }).reverse()
       this.setColors(data)
       this.model.set('data', data, {silent: true})
       if (data.length > self.dataLimit) {
