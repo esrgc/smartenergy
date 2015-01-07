@@ -21,7 +21,6 @@ var StatView = ChartView.extend({
     var round = d3.format('.2')
     var data = this.model.get('data')[0]
     var stat = {}
-    //console.log(data)
     if (data.il_contribution === 0) {
       var i = 0
     } else {
