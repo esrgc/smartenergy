@@ -229,6 +229,48 @@ api.get('/getSector', function(req, res){
   }
 })
 
+// api.get('/getStats', function(req, res){
+//   function handleData(err, data) {
+//     returnData(req, res, data)
+//   }
+//   if (CACHE) {
+//     var conditions = filter.conditions(req.query)
+//     if (req.query.geotype && req.query[req.query.geotype]) {
+//       conditions['$or'] = [
+//         {recipient_region_if_applicable: ''},
+//         {regional: req.query.geotype}
+//       ]
+//     } else {
+//       conditions.regional = {$eq: false}
+//     }
+//     mongo.db.collection(req.query.tab).aggregate(
+//       {$match: conditions},
+//       {$project: {mea_award: 1,
+//         total_project_cost: {
+//           $cond: [
+//             {$ne: ['$total_project_cost', '']},
+//             '$total_project_cost',
+//             {$add: ['$mea_award']}
+//           ]
+//         }
+//       }},
+//       {$group: {
+//         _id: null,
+//         total_projects:{$sum: 1},
+//         project_cost: {$sum: '$total_project_cost'},
+//         contribution: {$sum: {$add: ['$mea_award']}}
+//       }},
+//       {$project: {_id: 0, total_projects: 1, project_cost: 1, contribution: 1}},
+//       handleData)
+//   } else {
+//     var qry = '$select=sum(mea_award)%20as%20contribution,sum(total_project_cost)%20as%20project_cost,sum(other_agency_dollars),count(id)%20as%20total_projects'
+//     qry += filter.where(req.query, qry)
+//     req.socrata_req = socrataDataset.query(qry, function(err, data) {
+//       returnData(req, res, data)
+//     })
+//   }
+// })
+
 api.get('/getStats', function(req, res){
   function handleData(err, data) {
     returnData(req, res, data)
@@ -243,14 +285,35 @@ api.get('/getStats', function(req, res){
     } else {
       conditions.regional = {$eq: false}
     }
+
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
       {$project: {mea_award: 1,
-        total_project_cost: {
+        total_project_cost: 1,
+        //only count rows with total cost and mea award towards
+        //Investment Levarage calculation
+        il_total_project_cost: {
           $cond: [
-            {$ne: ['$total_project_cost', '']},
-            '$total_project_cost',
-            {$add: ['$mea_award']}
+            { 
+              $and:
+                [
+                  {$ne: ['$total_project_cost', '']}, {$ne: ['$mea_award', '']}
+                ]
+            },
+            '$total_project_cost', //true
+            0 //false
+          ]
+        },
+        il_contribution: {
+          $cond: [
+            { 
+              $and:
+                [
+                  {$ne: ['$total_project_cost', '']}, {$ne: ['$mea_award', '']}
+                ]
+            },
+            '$mea_award', //true
+            0 //false
           ]
         }
       }},
@@ -258,9 +321,11 @@ api.get('/getStats', function(req, res){
         _id: null,
         total_projects:{$sum: 1},
         project_cost: {$sum: '$total_project_cost'},
-        contribution: {$sum: {$add: ['$mea_award']}}
+        il_project_cost: {$sum: '$il_total_project_cost'},
+        contribution: {$sum: '$mea_award'},
+        il_contribution: {$sum: '$il_contribution'}
       }},
-      {$project: {_id: 0, total_projects: 1, project_cost: 1, contribution: 1}},
+      {$project: {_id: 0, total_projects: 1, project_cost: 1, contribution: 1, il_project_cost: 1, il_contribution: 1}},
       handleData)
   } else {
     var qry = '$select=sum(mea_award)%20as%20contribution,sum(total_project_cost)%20as%20project_cost,sum(other_agency_dollars),count(id)%20as%20total_projects'
@@ -272,8 +337,7 @@ api.get('/getStats', function(req, res){
 })
 
 api.get('/getContribution', function(req, res){
-  function handleData(err, data) {    
-    console.log(data[0])
+  function handleData(err, data) {
     data = _.map(data, function(r) {
       var obj = {
         'MEA Contribution': r.mea_contribution,

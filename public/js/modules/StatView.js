@@ -21,10 +21,11 @@ var StatView = ChartView.extend({
     var round = d3.format('.2')
     var data = this.model.get('data')[0]
     var stat = {}
-    if (data.contribution === 0) {
+    //console.log(data)
+    if (data.il_contribution === 0) {
       var i = 0
     } else {
-      var i = (parseFloat(data.project_cost) - parseFloat(data.contribution))/parseFloat(data.contribution) || 0
+      var i = (parseFloat(data.il_project_cost) - parseFloat(data.il_contribution))/parseFloat(data.il_contribution) || 0
     }
     stat.investment_leverage = d3.round(i, 2)
     stat.contribution = this.format(data.contribution)
