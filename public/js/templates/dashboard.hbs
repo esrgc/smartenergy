@@ -9,17 +9,50 @@
       <p>Select a section below to begin.</p>
       </div>
       <p class="lead home-nav"> 
-        <a href="#renewable" role="button" class="btn btn-default renewable">Renewable Energy</a>
+<!--         <a href="#renewable" role="button" class="btn btn-default renewable">Renewable Energy</a>
         <a href="#efficiency" role="button" class="btn btn-default efficiency">Energy Efficiency</a>
-        <a href="#transportation" role="button" class="btn btn-default transportation">Transportation</a>
+        <a href="#transportation" role="button" class="btn btn-default transportation">Transportation</a> -->
       </p>
-      <div class="help well">
-        <h4>Dashboard Help</h5>
-        <p>Data on this dashboard can be viewed and downloaded from <a href="http://data.maryland.gov">StateStat</a>, Maryland’s Open Data Portal.</p>
-        <p>Use the map filter list in the lower left-hand corner of the map to specify the type of geography to compare and to specify whether individual projects should be displayed on the map. Similar geographies can be compared by selecting one or more from the map. Deselect a region by single clicking it on the map or clear all selections using the Reset Map button.</p>
-        <p>Individual projects are displayed by default as numbered points on the map. These points are clustered at different zoom levels so as you zoom in on the map, the points disaggregate until a single point is visible or the points break out into their respective technologies. Click an individual project point to view a popup list of statistics relevant to that specific project.</p>
-        <p>Use the "Project Filters" buttons to further refine the charts.</p>
-        <p>The data display can be manipulated by selecting the chart or table icon in the upper right-hand side of each graph.</p>
+      <div id="chartLinkButtons">
+        <a href="#renewable">
+          <div class="linkButton">
+            <h3>Renewable Energy</h3>
+            <div class="linkButtonImg"><img src="img/renewable.png"></div>
+            <div class="description">Show MEA contributions to the growth of affordable and reliable renewable energy.</div>
+          </div>
+        </a>
+        <a href="#efficiency">
+          <div class="linkButton">
+            <h3>Energy Efficiency</h3>
+            <div class="linkButtonImg"><img src="img/efficiency.png"></div>
+            <div class="description">Show MEA contributions to the growth of affordable and reliable energy efficiency.</div>
+          </div>
+        </a>
+        <a href="#transportation">
+          <div class="linkButton">
+            <h3>Transportation</h3>
+            <div class="linkButtonImg"><img src="img/transportation.png"></div>
+            <div class="description">Show MEA contributions to the growth of affordable and reliable clean transportation.</div>
+          </div>
+        </a>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="headingTwo">
+          <h4 class="panel-title">
+            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              View Dashboard Help
+            </a>
+          </h4>
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+          <div class="panel-body">
+            <p>Data on this dashboard can be viewed and downloaded from <a href="http://data.maryland.gov">StateStat</a>, Maryland’s Open Data Portal.</p>
+            <p>Use the map filter list in the lower left-hand corner of the map to specify the type of geography to compare and to specify whether individual projects should be displayed on the map. Similar geographies can be compared by selecting one or more from the map. Deselect a region by single clicking it on the map or clear all selections using the Reset Map button.</p>
+            <p>Individual projects are displayed by default as numbered points on the map. These points are clustered at different zoom levels so as you zoom in on the map, the points disaggregate until a single point is visible or the points break out into their respective technologies. Click an individual project point to view a popup list of statistics relevant to that specific project.</p>
+            <p>Use the "Project Filters" buttons to further refine the charts.</p>
+            <p>The data display can be manipulated by selecting the chart or table icon in the upper right-hand side of each graph.</p>
+          </div>
+        </div>
       </div>
       <div class="logos">
         <a href="http://energy.maryland.gov"><img src="img/mea_small.png" alt=""></a>

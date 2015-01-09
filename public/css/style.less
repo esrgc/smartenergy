@@ -121,7 +121,7 @@ body {
     margin-top: 0px;
   }
   .intro {
-    font-size: 18px;
+    font-size: 16px;
   }
   .help {
     font-size: 14px;
@@ -486,3 +486,61 @@ body {
   background: fadeout(@green, 20%);
 }
 */
+
+#chartLinkButtons {
+  margin: 20px 0 20px 0;
+  overflow: hidden;
+  text-align: center;
+  a {
+    display: inline-block;
+    margin: 2px;
+    width: 220px;
+    &:hover {
+      text-decoration: none;
+      h3 {
+        border-color: #506b78;
+      }
+      .linkButtonImg {
+        border-color: #506b78;
+      }
+      .description {
+        border-color: #506b78;
+      }
+    }
+    h3 {
+      line-height: 36px;
+      font-size: 18px;
+      margin: 0;
+      float: none;
+      color: #333;
+      border: 1px solid #a3b8c2;
+      padding-left: 10px;
+      -webkit-border-top-left-radius: 5px;
+      -webkit-border-top-right-radius: 5px;
+      -moz-border-radius-topleft: 5px;
+      -moz-border-radius-topright: 5px;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+    .linkButtonImg {
+      border-bottom: 1px solid #a3b8c2;
+      border-left: 1px solid #a3b8c2;
+      border-right: 1px solid #a3b8c2;
+      padding: 10px;
+    }
+     .description {
+      border-bottom: 1px solid #a3b8c2;
+      border-left: 1px solid #a3b8c2;
+      border-right: 1px solid #a3b8c2;
+      padding: 5px;
+      font-size: 10px;
+      color: #333;
+      -webkit-border-bottom-right-radius: 5px;
+      -webkit-border-bottom-left-radius: 5px;
+      -moz-border-radius-bottomright: 5px;
+      -moz-border-radius-bottomleft: 5px;
+      border-bottom-right-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+  }
+}
