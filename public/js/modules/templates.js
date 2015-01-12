@@ -219,7 +219,7 @@ templates["stat"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main"
     + " block\">\n  <div class=\"chart\">\n";
   stack1 = this.invokePartial(partials.title, '    ', 'title', depth0, undefined, helpers, partials, data);
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "    <div class=\"chart-inner\">\n      <div class=\"loader\"><i class=\"fa fa-circle-o-notch fa-spin\"></i></div>\n      <div class=\"the-chart\"><div class=\"stat\"></div></div>\n    </div>\n  </div>\n</div>";
+  return buffer + "    <div class=\"chart-inner\">\n      <div class=\"loader\"><i class=\"fa fa-circle-o-notch fa-spin\"></i></div>\n      <div class=\"the-chart\">\n        <div class=\"stat\"></div>\n        <div class=\"note\">* Residential projects are displayed at their zip code locations to ensure recipient privacy.</div>\n      </div>\n    </div>\n  </div>\n</div>";
 },"usePartial":true,"useData":true});
 
 templates["table-empty"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
