@@ -39,6 +39,7 @@ var MapView = Backbone.View.extend({
     this.map = L.map(el, {
       attributionControl: false,
       minZoom: 7,
+      maxZoom: 16,
       defaultExtentControl: true
     }).setView([39, -77], 7)
     self.$el.find('.map').find('.leaflet-top.leaflet-right').html('<div class="loader"><i class="fa fa-circle-o-notch fa-spin"></i></div>')
