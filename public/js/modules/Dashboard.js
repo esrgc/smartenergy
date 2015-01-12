@@ -201,18 +201,19 @@ var Dashboard = Backbone.View.extend({
       {value: 'Other', type: 'program_type'}
     ]
     this.program_names = [
-      {value: 'Energy Efficient Appliance Rebate Program', type: 'program_name'},
-      {value: 'EmPOWER Maryland Challenge - C&I Grant Program', type: 'program_name'},
-      {value: 'EECBG Building Retrofit', type: 'program_name'},
-      {value: 'Maryland Statewide Farm Energy Audit Program', type: 'program_name'},
-      {value: 'Home Performance Rebate Program', type: 'program_name'},
-      {value: 'EmPOWER Clean Energy Communities Low-to-Moderate Income Grant Program', type: 'program_name'},
-      {value: 'Kathleen A.P. Mathias Agriculture Energy Efficiency Grant Program', type: 'program_name'},
-      {value: 'Maryland Home Energy Loan Program', type: 'program_name'},
-      {value: 'Maryland Smart Energy Communities', type: 'program_name'},
-      {value: 'Energy and Water Conservation in Maryland State Parks', type: 'program_name'},
-      {value: 'Energy Performance Contracting', type: 'program_name'},
-      {value: 'State Agency Loan Program', type: 'program_name'}
+      {value: "EmPOWER Clean Energy Communities Low-to-Moderate Income Grant Program", type: 'program_name'},
+      {value: "Maryland Smart Energy Communities", type: 'program_name'},
+      {value: "EECBG Building Retrofit", type: 'program_name'},
+      {value: "Maryland Home Energy Loan Program", type: 'program_name'},
+      {value: "State Energy Loan Program", type: 'program_name'},
+      {value: "Energy and Water Conservation in Maryland State Parks", type: 'program_name'},
+      {value: "Energy Efficient Appliance Rebate Program", type: 'program_name'},
+      {value: "EmPOWER Maryland Challenege: Commercial-Industrial Grant Program", type: 'program_name'},
+      {value: "State Building Energy Performance Contracting (run by DGS)", type: 'program_name'},
+      {value: "Maryland Statewide Farm Energy Audit Program", type: 'program_name'},
+      {value: "Home Performance Rebate Program", type: 'program_name'},
+      {value: "Jane E. Lawton Conservation Loan Program ", type: 'program_name'},
+      {value: "Kathleen A.P. Mathias Agriculture Energy Efficiency Grant Program", type: 'program_name'}
     ]
     this.sectors = [
       {value: 'Residential', color: '#cc6060', type: 'sector'},
