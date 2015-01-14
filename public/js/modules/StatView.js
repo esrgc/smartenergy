@@ -19,24 +19,30 @@ var StatView = ChartView.extend({
   update: function() {
     this.resize()
     var round = d3.format('.2')
-    var data = this.model.get('data')[0]
-    var stat = {}
-    if (data.il_contribution === 0) {
-      var i = 0
+    console.log(this.model.get('data'))
+    if (this.model.get('data').length) {
+      this.empty(false)
+      var data = this.model.get('data')[0]
+      var stat = {}
+      if (data.il_contribution === 0) {
+        var i = 0
+      } else {
+        var i = (parseFloat(data.il_project_cost) - parseFloat(data.il_contribution))/parseFloat(data.il_contribution) || 0
+      }
+      stat.investment_leverage = d3.round(i, 2)
+      stat.contribution = this.format(data.contribution)
+      stat.project_cost = this.format(data.project_cost)
+      stat.sum_other_agency_dollars = this.format(data.sum_other_agency_dollars)
+      var html = '<table class="table table-condensed statview">'
+      html += '<tr><td>Total Projects</td><td>' + d3.format(',')(data.total_projects) + '</td></tr>'
+      html += '<tr><td>Total Project Cost</td><td>' + stat.project_cost + '</td></tr>'
+      html += '<tr><td>MEA Contribution</td><td>' + stat.contribution + '</td></tr>'
+      html += '<tr><td>Investment Leverage</td><td>' + stat.investment_leverage + '</td></tr>'
+      html += '</table>'
+      this.$el.find('.stat').html(html)
     } else {
-      var i = (parseFloat(data.il_project_cost) - parseFloat(data.il_contribution))/parseFloat(data.il_contribution) || 0
+      this.empty(true)
     }
-    stat.investment_leverage = d3.round(i, 2)
-    stat.contribution = this.format(data.contribution)
-    stat.project_cost = this.format(data.project_cost)
-    stat.sum_other_agency_dollars = this.format(data.sum_other_agency_dollars)
-    var html = '<table class="table table-condensed statview">'
-    html += '<tr><td>Total Projects</td><td>' + d3.format(',')(data.total_projects) + '</td></tr>'
-    html += '<tr><td>Total Project Cost</td><td>' + stat.project_cost + '</td></tr>'
-    html += '<tr><td>MEA Contribution</td><td>' + stat.contribution + '</td></tr>'
-    html += '<tr><td>Investment Leverage</td><td>' + stat.investment_leverage + '</td></tr>'
-    html += '</table>'
-    this.$el.find('.stat').html(html)
   },
   prepData: function(data){
     return data

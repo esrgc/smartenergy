@@ -32,7 +32,7 @@ templates["chart"] = Handlebars.template({"1":function(depth0,helpers,partials,d
   buffer += "    <div class=\"chart-inner\">\n      <div class=\"chart-tools\">\n";
   stack1 = helpers.each.call(depth0, (depth0 != null ? depth0.tools : depth0), {"name":"each","hash":{},"fn":this.program(1, data, depths),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "      </div>\n      <div class=\"loader\"><i class=\"fa fa-circle-o-notch fa-spin\"></i></div>\n      <div class=\"the-chart\"></div>\n      <div class=\"nodata\">No Data</div>\n    </div>\n  </div>\n</div>";
+  return buffer + "      </div>\n      <div class=\"loader\"><i class=\"fa fa-circle-o-notch fa-spin\"></i></div>\n      <div class=\"the-chart\"></div>\n      <div class=\"nodata\">N/A</div>\n    </div>\n  </div>\n</div>";
 },"usePartial":true,"useData":true,"useDepths":true});
 
 templates["dashboard"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -219,7 +219,7 @@ templates["stat"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main"
     + " block\">\n  <div class=\"chart\">\n";
   stack1 = this.invokePartial(partials.title, '    ', 'title', depth0, undefined, helpers, partials, data);
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "    <div class=\"chart-inner\">\n      <div class=\"loader\"><i class=\"fa fa-circle-o-notch fa-spin\"></i></div>\n      <div class=\"the-chart\">\n        <div class=\"stat\"></div>\n        <div class=\"note\">* Residential and Agricultural projects are displayed at their zip code locations to ensure recipient privacy.</div>\n      </div>\n    </div>\n  </div>\n</div>";
+  return buffer + "    <div class=\"chart-inner\">\n      <div class=\"loader\"><i class=\"fa fa-circle-o-notch fa-spin\"></i></div>\n      <div class=\"the-chart\">\n        <div class=\"stat\"></div>\n        <div class=\"note\">* Residential and Agricultural projects are displayed at their zip code locations to ensure recipient privacy.</div>\n      </div>\n      <div class=\"nodata\">This combination of filters has no applicable projects.</div>\n    </div>\n  </div>\n</div>";
 },"usePartial":true,"useData":true});
 
 templates["table-empty"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
