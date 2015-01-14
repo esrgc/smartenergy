@@ -20,6 +20,7 @@ var FilterLabelView = Backbone.View.extend({
     if (this.model.get('color')) {
       if ((this.model.get('type') === 'sector' && Dashboard.activetab === 'efficiency')
          || (Dashboard.activetab !== 'efficiency' && this.model.get('type') !== 'sector')) {
+        this.$el.find('button').addClass('colored')
         this.$el.find('button').css('background-color', this.model.get('color'))
       }
     }

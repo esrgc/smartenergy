@@ -310,12 +310,12 @@ body {
         }
         &.program {
           .the-filters {
-            border-left: 0px solid #333;
+            border-left: 0px solid #444;
           }
         }
         .the-filters {
           padding-top: 1px;
-          border-left: 1px solid #333;
+          border-left: 1px solid #444;
           overflow: hidden;
         }
         .filter-label {
@@ -325,10 +325,15 @@ body {
           margin-bottom: 0px;
           text-align: left;
           font-size: 12px;
-           button {
+          button {
+            background: #EBEBEB;
+            color: #000;
             font-size: 13px;
             border-radius: 0px;
             border-left: 0px;
+            &.colored {
+              color: #000;
+            }
             &.active:before {
               font-family: FontAwesome;
               font-size: 10px;
