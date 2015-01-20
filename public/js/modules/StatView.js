@@ -26,7 +26,7 @@ var StatView = ChartView.extend({
       var stat = {}
       stat.contribution = this.format(data.contribution)
       stat.sum_other_agency_dollars = this.format(data.sum_other_agency_dollars)
-      if (data.il_contribution === 0) {
+      if (data.il_contribution === 0 || data.il_project_cost) {
         stat.investment_leverage = 'Not Available'
       } else {
         var i = (parseFloat(data.il_project_cost) - parseFloat(data.il_contribution))/parseFloat(data.il_contribution) || 0
