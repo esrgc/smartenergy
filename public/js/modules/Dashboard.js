@@ -205,7 +205,7 @@ var Dashboard = Backbone.View.extend({
       {value: "Maryland Smart Energy Communities", type: 'program_name'},
       {value: "EECBG Building Retrofit", type: 'program_name'},
       {value: "Maryland Home Energy Loan Program", type: 'program_name'},
-      {value: "State Energy Loan Program", type: 'program_name'},
+      {value: "State Agency Loan Program", type: 'program_name'},
       {value: "Energy and Water Conservation in Maryland State Parks", type: 'program_name'},
       {value: "Energy Efficient Appliance Rebate Program", type: 'program_name'},
       {value: "EmPOWER Maryland Challenege: Commercial-Industrial Grant Program", type: 'program_name'},
