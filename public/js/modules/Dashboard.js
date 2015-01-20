@@ -154,7 +154,7 @@ var Dashboard = Backbone.View.extend({
       this.charts.reduction],
       renewable: [this.charts.stats, this.charts.technology, this.charts.mea_contribution, this.charts.program, this.charts.sector, this.charts.reductionTime
       ],
-      transportation: [this.charts.stats, this.charts.station_technology, this.charts.mea_contribution, this.charts.sector, this.charts.vehicle_technology],
+      transportation: [this.charts.stats, this.charts.vehicle_technology, this.charts.mea_contribution, this.charts.sector, this.charts.station_technology],
       capacity_charts: [
         {title: "Capacity By Area", api: 'api/getCapacityByArea', key: 'County', y: ['Capacity'], chart_type: 'bar', showUnitsInTable: true, geo: true, valueFormat: d3.format(',.2f'), width: 'col-md-6 col-sm-12'},
         {title: "Capacity By Sector", api: 'api/getCapacityBySector', key: 'Sector', y: ['Capacity'], chart_type: 'bar', showUnitsInTable: true},
@@ -187,10 +187,10 @@ var Dashboard = Backbone.View.extend({
     ]
     this.stations = [
       {value: 'Electric', color: '#0074D9', type: 'charging_fueling_station_technology'},
-      {value: 'Biodiesel', color: '#f39c12', type: 'charging_fueling_station_technology'},
+      {value: 'Biodiesel', color: '#f39c12', type: 'charging_fueling_station_technology', visible: false},
       {value: 'E85', color: '#2ECC40', type: 'charging_fueling_station_technology'},
       {value: 'Natural Gas (CNG)', color: '#FFDC00', type: 'charging_fueling_station_technology'},
-      {value: 'LPG', color: '#FF4136', type: 'charging_fueling_station_technology'},
+      {value: 'LPG', color: '#FF4136', type: 'charging_fueling_station_technology', visible: false},
       {value: 'Back-up Generator', color: '#7D7F81', type: 'charging_fueling_station_technology'}
     ]
     this.programtypes = [

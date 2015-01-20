@@ -3,7 +3,8 @@ var createcss = require('createcss')
 var FilterModel = Backbone.Model.extend({
   defaults: function() {
     return {
-      active: false
+      active: false,
+      visible: true
     }
   },
   initialize: function(){
