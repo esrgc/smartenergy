@@ -175,14 +175,14 @@ var Dashboard = Backbone.View.extend({
     ]
     this.vehicle_technology = [
       {value: 'Electric', color: '#0074D9', type: 'vehicle_technology'},
-      {value: 'Biodiesel', color: '#f39c12', type: 'vehicle_technology'},
-      {value: 'E85', color: '#2ECC40', type: 'vehicle_technology'},
+      //{value: 'Biodiesel', color: '#f39c12', type: 'vehicle_technology'},
+      //{value: 'E85', color: '#2ECC40', type: 'vehicle_technology'},
       {value: 'Natural Gas (CNG)', color: '#FFDC00', type: 'vehicle_technology'},
-      {value: 'Natural Gas (LNG)', color: '#39CCCC', type: 'vehicle_technology'},
+      //{value: 'Natural Gas (LNG)', color: '#39CCCC', type: 'vehicle_technology'},
       {value: 'Propane', color: '#FF4136', type: 'vehicle_technology'},
-      {value: 'Hydrogen', color: '#F012BE', type: 'vehicle_technology'},
+      //{value: 'Hydrogen', color: '#F012BE', type: 'vehicle_technology'},
       {value: 'Hybrid', color: '#B10DC9', type: 'vehicle_technology'},
-      {value: 'Electric Hybrid', color: '#626f9a', type: 'vehicle_technology'},
+      {value: 'Hybrid Electric', color: '#626f9a', type: 'vehicle_technology'},
       {value: 'Idle Reduction', color: '#01FF70', type: 'vehicle_technology'},
     ]
     this.stations = [
