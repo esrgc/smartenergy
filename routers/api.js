@@ -216,6 +216,7 @@ api.get('/getSector', function(req, res){
     } else {
       conditions.regional = {$eq: false}
     }
+    console.log(conditions)
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
       {$project: {sector: 1, mea_award: 1, projcount: projcount}},
@@ -255,7 +256,9 @@ api.get('/getStats', function(req, res){
             { 
               $and:
                 [
-                  {$ne: ['$total_project_cost', '']}, {$ne: ['$mea_award', '']}
+                  {$ne: ['$total_project_cost', '']},
+                  {$ne: ['$total_project_cost', 0]},
+                  {$ne: ['$mea_award', '']}
                 ]
             },
             '$total_project_cost', //true
@@ -267,7 +270,9 @@ api.get('/getStats', function(req, res){
             { 
               $and:
                 [
-                  {$ne: ['$total_project_cost', '']}, {$ne: ['$mea_award', '']}
+                  {$ne: ['$total_project_cost', '']},
+                  {$ne: ['$total_project_cost', 0]},
+                  {$ne: ['$mea_award', '']}
                 ]
             },
             '$mea_award', //true

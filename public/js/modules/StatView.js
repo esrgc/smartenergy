@@ -24,15 +24,19 @@ var StatView = ChartView.extend({
       this.empty(false)
       var data = this.model.get('data')[0]
       var stat = {}
+      stat.contribution = this.format(data.contribution)
+      stat.sum_other_agency_dollars = this.format(data.sum_other_agency_dollars)
       if (data.il_contribution === 0) {
-        var i = 0
+        stat.investment_leverage = 'Not Available'
       } else {
         var i = (parseFloat(data.il_project_cost) - parseFloat(data.il_contribution))/parseFloat(data.il_contribution) || 0
+        stat.investment_leverage = d3.round(i, 2)
       }
-      stat.investment_leverage = d3.round(i, 2)
-      stat.contribution = this.format(data.contribution)
-      stat.project_cost = this.format(data.project_cost)
-      stat.sum_other_agency_dollars = this.format(data.sum_other_agency_dollars)
+      if (data.project_cost === 0) {
+        stat.project_cost = 'Not Available'
+      } else {
+        stat.project_cost = this.format(data.project_cost)
+      }
       var html = '<table class="table table-condensed statview">'
       html += '<tr><td>Total Projects</td><td>' + d3.format(',')(data.total_projects) + '</td></tr>'
       html += '<tr><td>Total Project Cost</td><td>' + stat.project_cost + '</td></tr>'
