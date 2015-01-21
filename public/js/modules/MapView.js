@@ -279,7 +279,7 @@ var MapView = Backbone.View.extend({
         var latlng = point.point.split(',').map(parseFloat)
         var technology_fields = self.technology_fields[Dashboard.activetab]
         technology_fields.forEach(function(tech_field, tech_idx) {
-          if (point[tech_field].length) {
+          if (point[tech_field] && point[tech_field].length) {
             for(var i = 0; i < point[tech_field].length; i++) {
               var technology = point[tech_field][i].t
               var projects = point[tech_field][i].p

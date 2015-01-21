@@ -216,7 +216,7 @@ api.get('/getSector', function(req, res){
     } else {
       conditions.regional = {$eq: false}
     }
-    console.log(conditions)
+
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
       {$project: {sector: 1, mea_award: 1, projcount: projcount}},
@@ -374,10 +374,16 @@ api.get('/getPoints', function(req, res){
     } else if (req.query.tab === 'efficiency') {
       technology_fields.push('sector')
     } else if (req.query.tab === 'transportation') {
-      technology_fields.push('charging_fueling_station_technology')
-      technology_fields.push('vehicle_technology')
+      var techs = ['charging_fueling_station_technology', 'vehicle_technology']
+      techs.forEach(function(tech) {
+        if (req.query[tech]) {
+          technology_fields.push(tech)
+        }
+      })
+      if (technology_fields.length === 0) {
+        technology_fields = techs
+      }
     }
-
     var conditions = filter.conditions(req.query, 'point')
     conditions.regional = {$eq: false}
     var project = {point: 1, _id: 1}
