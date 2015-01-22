@@ -522,7 +522,7 @@ body {
   margin: 20px 0 20px 0;
   overflow: hidden;
   text-align: center;
-  a {
+  .linkButton {
     display: inline-block;
     margin: 2px;
     width: 220px;
@@ -544,8 +544,7 @@ body {
       margin: 0;
       float: none;
       color: #333;
-      border: 1px solid #a3b8c2;
-      padding-left: 10px;
+      /*border: 1px solid #a3b8c2;*/
       -webkit-border-top-left-radius: 5px;
       -webkit-border-top-right-radius: 5px;
       -moz-border-radius-topleft: 5px;
@@ -554,15 +553,29 @@ body {
       border-top-right-radius: 5px;
     }
     .linkButtonImg {
-      border-bottom: 1px solid #a3b8c2;
+/*      border-bottom: 1px solid #a3b8c2;
       border-left: 1px solid #a3b8c2;
-      border-right: 1px solid #a3b8c2;
-      padding: 10px;
+      border-right: 1px solid #a3b8c2;*/
+      padding: 0px;
+      .darken img {
+        -webkit-filter: brightness(100%);
+        filter: brightness(100%);
+        -webkit-transition: all .1s ease;
+           -moz-transition: all .1s ease;
+             -o-transition: all .1s ease;
+            -ms-transition: all .1s ease;
+                transition: all .1s ease;
+      }
+       
+      .darken img:hover {
+        -webkit-filter: brightness(90%);
+        filter: brightness(90%);
+      }
     }
      .description {
-      border-bottom: 1px solid #a3b8c2;
+/*      border-bottom: 1px solid #a3b8c2;
       border-left: 1px solid #a3b8c2;
-      border-right: 1px solid #a3b8c2;
+      border-right: 1px solid #a3b8c2;*/
       padding: 5px;
       font-size: 10px;
       color: #333;
