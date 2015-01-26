@@ -1,4 +1,15 @@
-@media (min-width: 965px) {
+@media (max-width: 629px) {
+  .navbar-brand {
+    h1.small {
+      display: block;
+    }
+    h1.full {
+      display: none;
+    }
+  }
+}
+
+@media (min-width: 630px) and (max-width: 954px) {
   .navbar-brand {
     h1.small {
       display: none;
@@ -9,17 +20,28 @@
   }
 }
 
-@media (max-width: 965px) {
+@media screen and (min-width: 955px) and (max-width: 966px) {
+  .navbar-brand {
+    h1.small {
+      display: block;
+    }
+    h1.full {
+      display: none;
+    }
+  }
+}
+
+@media (min-width: 967px) {
   .navbar-brand {
     margin-left: 0px;
     span {
       display: none;
     }
     h1.small{
-      display: block;
+      display: none;
     }
     h1.full {
-      display: none;
+      display: block;
     }
   }
 }

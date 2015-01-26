@@ -60,7 +60,7 @@ var MapView = Backbone.View.extend({
 
     this.circlestyle = {
       radius: 4,
-      fillColor: "#f00",
+      fillColor: "#bbb",
       color: "#333",
       weight: 1,
       opacity: 1,
@@ -95,16 +95,18 @@ var MapView = Backbone.View.extend({
         })
         tech = _.uniq(tech)
         tech_fields = _.uniq(tech_fields)
-        if (tech.length === 1) {
-          var className = tech[0]
+        var className = 'projects-icon '
+        if (tech.length === 1 && Dashboard.activetab !== 'efficiency') {
+          className += tech[0]
         } else {
-          var className = 'multiple'
+          className += 'multiple'
         }
         if (tech_fields.length === 1) {
           className += ' ' + tech_fields[0]
         }
+        className = className + ' ' + Dashboard.activetab
         return new L.DivIcon({
-          className: 'projects-icon ' + className + ' ' + Dashboard.activetab,
+          className: className,
           html: num_projects,
           iconSize: L.point(30, 30)
         })
