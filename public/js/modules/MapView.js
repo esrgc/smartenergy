@@ -173,7 +173,7 @@ var MapView = Backbone.View.extend({
   },
   makePopup: function(features, latlng, tech_field) {
     var self = this
-    var money = d3.format('$,.2f')
+    var money = d3.format('$,f')
     var content = '<div class="map-projects">'
     _.each(features, function(feature) {
       var i = (parseFloat(feature.total_project_cost) - parseFloat(feature.mea_award))/parseFloat(feature.mea_award) || 0
