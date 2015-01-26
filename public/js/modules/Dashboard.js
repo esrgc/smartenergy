@@ -83,7 +83,7 @@ var Dashboard = Backbone.View.extend({
         legend: true,
         dontFormat: ['Investment Leverage'],
         geo: true,
-        tools: [{value: 'MEA Contribution,Leveraged Investment', text: 'All Contributions', type: 'money', yLabel: 'Dollars'}, {value: 'MEA Contribution', text: 'MEA Contribution', type: 'money', yLabel: 'Dollars'}]
+        tools: [{value: 'MEA Contribution', text: 'MEA Contribution', type: 'money', yLabel: 'Dollars'}, {value: 'MEA Contribution,Leveraged Investment', text: 'All Contributions', type: 'money', yLabel: 'Dollars'}]
       },
       program: {
         title: "Activity By Program",
@@ -121,7 +121,7 @@ var Dashboard = Backbone.View.extend({
         title: "Charging/Fueling Station Technology",
         api: 'api/getStationTechnology',
         key: 'Technology',
-        y: 'Contribution',
+        y: 'Stations',
         chart_type: 'pie',
         units: '',
         valueFormat: d3.format(',.0f'),
