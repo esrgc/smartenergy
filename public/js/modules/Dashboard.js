@@ -215,11 +215,11 @@ var Dashboard = Backbone.View.extend({
       {value: "Kathleen A.P. Mathias Agriculture Energy Efficiency Grant Program", type: 'program_name'}
     ]
     this.sectors = [
-      {value: 'Residential', color: '#cc6060', type: 'sector'},
-      {value: 'Commercial', color: '#62a8c4', type: 'sector'},
-      {value: 'Agriculture', color: '#91d667', type: 'sector'},
-      {value: 'Local Government', color: '#ced25d', type: 'sector'},
-      {value: 'State Government', color: '#d46e12', type: 'sector'}
+      {value: 'Residential', type: 'sector'},
+      {value: 'Commercial', type: 'sector'},
+      {value: 'Agriculture', type: 'sector'},
+      {value: 'Local Government', type: 'sector'},
+      {value: 'State Government', type: 'sector'}
     ]
     this.sectors2 = _.clone(this.sectors)
     this.sectors2.splice(2,1)

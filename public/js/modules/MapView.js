@@ -60,8 +60,8 @@ var MapView = Backbone.View.extend({
 
     this.circlestyle = {
       radius: 4,
-      fillColor: "#999999",
-      color: "#000000",
+      fillColor: "#f00",
+      color: "#333",
       weight: 1,
       opacity: 1,
       fillOpacity: 0.8,
@@ -292,10 +292,12 @@ var MapView = Backbone.View.extend({
               if (projects > 1) {
                 var className = 'projects-icon '
                 var marker_props = {projects: projects}
-                className += tech_filter
-                className += ' ' + tech_field
-                marker_props.tech = tech_filter
-                marker_props.tech_field = tech_field
+                if (tech_field !== 'sector') {
+                  className += tech_filter
+                  className += ' ' + tech_field
+                  marker_props.tech = tech_filter
+                  marker_props.tech_field = tech_field
+                }
                 marker_props.icon = L.divIcon({
                   className: className,
                   html: projects,
@@ -304,11 +306,17 @@ var MapView = Backbone.View.extend({
                 var marker = L.marker(latlng, marker_props)
               } else {
                 if (technology) {
-                  self.circlestyle.tech = tech_filter
-                  self.circlestyle.tech_field = tech_field
+                  if (tech_field !== 'sector') {
+                    self.circlestyle.tech = tech_filter
+                    self.circlestyle.tech_field = tech_field
+                  }
                   var filter = Dashboard.filterCollection.where({value: technology, type: tech_field})
                   if (filter.length) {
-                    self.circlestyle.fillColor = filter[0].get('color')
+                    if (tech_field === 'sector') {
+                      self.circlestyle.fillColor = '#bbb'
+                    } else {
+                      self.circlestyle.fillColor = filter[0].get('color')
+                    }
                     self.circlestyle.radius = 6
                   }
                 } else {
