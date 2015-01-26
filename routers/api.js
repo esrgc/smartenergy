@@ -307,9 +307,9 @@ api.get('/getContribution', function(req, res){
         'Total Project Cost': r.project_cost
       }
       if (r.project_cost > 0) {
-        obj['Other Contributions'] = r.project_cost - r.mea_contribution
+        obj['Leveraged Investment'] = r.project_cost - r.mea_contribution
       } else {
-        obj['Other Contributions'] = 0
+        obj['Leverage Investment'] = 0
       }
       return addGeoType(obj, req.query.geotype, r)
     })

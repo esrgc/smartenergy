@@ -1,5 +1,5 @@
-@media (min-width: 545px) {
-  a.navbar-brand {
+@media (min-width: 965px) {
+  .navbar-brand {
     h1.small {
       display: none;
     }
@@ -9,9 +9,9 @@
   }
 }
 
-@media (max-width: 545px) {
-  a.navbar-brand {
-    height: auto;
+@media (max-width: 965px) {
+  .navbar-brand {
+    margin-left: 0px;
     span {
       display: none;
     }
@@ -21,5 +21,11 @@
     h1.full {
       display: none;
     }
+  }
+}
+
+@media (min-width: 955px) {
+  .navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+    margin-left: 0px;
   }
 }

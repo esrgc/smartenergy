@@ -75,19 +75,14 @@ var ChartView = Backbone.View.extend({
         colors = tool.color
       } else {
         var new_colors = _.without(Dashboard.colors, Dashboard.tab_colors[Dashboard.activetab])
-        if (keys.length === 2 ) {
-          colors.push(Dashboard.tab_colors[Dashboard.activetab])
-          colors.push(chromath.complement(Dashboard.tab_colors[Dashboard.activetab]).toString())
-        } else {
-          keys.forEach(function(key, i) {
-            colors.push(
-              chromath.lighten(
-                Dashboard.tab_colors[Dashboard.activetab],
-                (i * 30)/100
-              ).toString()
-            )
-          })
-        }
+        keys.forEach(function(key, i) {
+          colors.push(
+            chromath.lighten(
+              Dashboard.tab_colors[Dashboard.activetab],
+              (i * 40)/100
+            ).toString()
+          )
+        })
       }
     }
     console.log(colors)

@@ -172,7 +172,6 @@ var MapView = Backbone.View.extend({
     })
   },
   makePopup: function(features, latlng, tech_field) {
-    console.log(latlng)
     var self = this
     var money = d3.format('$,.2f')
     var content = '<div class="map-projects">'
@@ -252,10 +251,15 @@ var MapView = Backbone.View.extend({
         Dashboard.filterCollection.add(f)
       }
     }.bind(this, feature, layer))
-    layer.on('mouseover', function(e) {
-      self.$el.find('.map').find('#mouseover').html(e.target.feature.properties.name)
+    layer.on('mouseover', function(layer, e) {
+      var options = layer.options || layer._options
+      var name = e.target.feature.properties.name
+      if (options.name === 'congressional') {
+        name = name.replace('24', '')
+      }
+      self.$el.find('.map').find('#mouseover').html(name)
       self.$el.find('.map').find('#mouseover').show()
-    })
+    }.bind(this, layer))
     layer.on('mouseout', function(e) {
       self.$el.find('.map').find('#mouseover').hide()
     })
@@ -274,6 +278,7 @@ var MapView = Backbone.View.extend({
   update: function() {
     var self = this
     self.projects.clearLayers()
+    self.map.closePopup()
     _.each(this.model.get('data').points, function(point) {
       if (point.point) {
         var latlng = point.point.split(',').map(parseFloat)

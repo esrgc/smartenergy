@@ -7,7 +7,7 @@ var FilterMenuView = ChartView.extend({
   template: templates['filter-menu'],
   description: {
     renewable: 'Select filters to view Maryland Energy Administration contributions to the growth of affordable and reliable renewable energy in our state.',
-    efficiency: 'Select filters to view Maryland Energy Administration contributions to the growth of affordable and reliable energy efficiency in our state.',
+    efficiency: 'Select filters to view Maryland Energy Administration contributions to the growth of affordable energy efficiency in our state.',
     transportation: 'Select filters to view Maryland Energy Administration contributions to the growth of affordable and reliable clean transportation in our state.'
   },
   events: {
@@ -64,6 +64,11 @@ var FilterMenuView = ChartView.extend({
     }
   },
   makeDropDown: function(type, filters) {
+    filters.sort(function(a, b){
+      if (a.get('value') < b.get('value')) return -1
+      if (a.get('value') > b.get('value')) return 1
+      return 0
+    })
     var html = '<select class="form-control" id="' + type + '">'
     html += '<option value="">All</option>'
     _.each(filters, function(filter) {

@@ -36,7 +36,7 @@ templates["chart"] = Handlebars.template({"1":function(depth0,helpers,partials,d
 },"usePartial":true,"useData":true,"useDepths":true});
 
 templates["dashboard"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
-  return "<div class=\"home\">\n  <div class=\"row\">\n    <div class=\"col-md-8 col-md-offset-2\">\n      <p class=\"welcome\">Welcome to the Maryland Smart Energy Investment Dashboard!</p>\n      <div class=\"intro\">\n      <p>This dashboard illustrates <a href=\"http://energy.maryland.gov\">Maryland Energy Administration’s</a> contributions to the growth of affordable, reliable, renewable energy and energy efficiency industries in our state.</p>\n      <p>Additionally, this tool pinpoints publicly accessible locations of electric vehicle charging stations and other alternative refueling stations in our State.</p>\n      <p>The Maryland Smart Energy Investment Dashboard largely tracks MEA’s investments and is not intended to give a comprehensive summary of all projects and installations across the state. Please check the map periodically, as we continue the growth of Maryland’s energy economy.</p>\n      <p>Select a section below to begin.</p>\n      </div>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-md-12\">\n      <div id=\"chartLinkButtons\">\n        <div class=\"linkButton\">\n          <h3>Renewable Energy</h3>\n          <div class=\"linkButtonImg\"><a href=\"#renewable\" class=\"darken\"><img src=\"img/renewable-icon.png\"></a></div>\n          <div class=\"description\">Show MEA contributions to the growth of affordable and reliable renewable energy.</div>\n        </div>\n        <div class=\"linkButton\">\n          <h3>Energy Efficiency</h3>\n          <div class=\"linkButtonImg\"><a href=\"#efficiency\" class=\"darken\"><img src=\"img/efficiency-icon.png\"></a></div>\n          <div class=\"description\">Show MEA contributions to the growth of affordable and reliable energy efficiency.</div>\n        </div>\n        <div class=\"linkButton\">\n          <h3>Transportation</h3>\n          <div class=\"linkButtonImg\"><a href=\"#transportation\" class=\"darken\"><img src=\"img/transportation-icon.png\"></a></div>\n          <div class=\"description\">Show MEA contributions to the growth of affordable and reliable clean transportation.</div>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-md-8 col-md-offset-2\">\n      <div class=\"panel panel-default\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"headingTwo\">\n          <h4 class=\"panel-title\">\n            <a class=\"collapsed\" data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseTwo\" aria-expanded=\"false\" aria-controls=\"collapseTwo\">\n              View Dashboard Help\n            </a>\n          </h4>\n        </div>\n        <div id=\"collapseTwo\" class=\"panel-collapse collapse\" role=\"tabpanel\" aria-labelledby=\"headingTwo\">\n          <div class=\"panel-body\">\n            <p>Data on this dashboard can be viewed and downloaded from <a href=\"http://data.maryland.gov\">StateStat</a>, Maryland’s Open Data Portal.</p>\n            <p>Use the map filter list in the lower left-hand corner of the map to specify the type of geography to compare and to specify whether individual projects should be displayed on the map. Similar geographies can be compared by selecting one or more from the map. Deselect a region by single clicking it on the map or clear all selections using the Reset Map button.</p>\n            <p>Individual projects are displayed by default as numbered points on the map. These points are clustered at different zoom levels so as you zoom in on the map, the points disaggregate until a single point is visible or the points break out into their respective technologies. Click an individual project point to view a popup list of statistics relevant to that specific project.</p>\n            <p>Use the \"Project Filters\" buttons to further refine the charts.</p>\n            <p>The data display can be manipulated by selecting the chart or table icon in the upper right-hand side of each graph.</p>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-md-12\">\n      <div class=\"logos\">\n        <a href=\"http://energy.maryland.gov\"><img src=\"img/mea_small.png\" alt=\"\"></a>\n        <a href=\"http://doit.maryland.gov/Pages/default.aspx\"><img src=\"img/doit_small.png\" alt=\"\"></a>\n        <a href=\"http://www.esrgc.org\"><img src=\"img/esrgc_logo.png\" alt=\"\"></a>\n        <a href=\"http://www.salisbury.edu\"><img src=\"img/SU logo.png\" alt=\"\"></a>\n      </div>\n    </div>\n  </div>\n</div>\n<div class=\"charts\">\n  <div class=\"tab-info\"><a href=\"https://data.maryland.gov/dataset/Renewable-Energy-Geocoded/mqt3-eu4s\">View and Download Raw Data</a></div>\n  <div class=\"row\"></div>\n</div>";
+  return "<div class=\"home\">\n  <div class=\"row\">\n    <div class=\"col-lg-8 col-md-12 col-lg-offset-2 intro\">\n      <div class=\"panel panel-default\">\n        <div class=\"panel-heading\">\n          <h3 class=\"panel-title\">Welcome to the Maryland Smart Energy Investment Dashboard!</h3>\n        </div>\n        <div class=\"panel-body\">\n      <p>This dashboard illustrates <a href=\"http://energy.maryland.gov\">Maryland Energy Administration’s</a> contributions to the growth of affordable, reliable, renewable energy and energy efficiency industries in our state.</p>\n      <p>Additionally, this tool pinpoints publicly accessible locations of electric vehicle charging stations and other alternative refueling stations in our State.</p>\n      <p>The Maryland Smart Energy Investment Dashboard largely tracks MEA’s investments and is not intended to give a comprehensive summary of all projects and installations across the state. MEA occasionally makes changes in the types of projects eligible for awards; MEA's website has information on currently open programs and the types of projects eligible for awards. Please check the map periodically, as we continue the growth of Maryland’s energy economy.</p>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-lg-8 col-md-12 col-lg-offset-2\">\n      <div id=\"chartLinkButtons\">\n        <div class=\"panel panel-default\">\n          <div class=\"panel-heading\">\n            <h3 class=\"panel-title\">Select a Section Below to Begin</h3>\n          </div>\n          <div class=\"panel-body\">\n                <div class=\"linkButton\">\n                  <h3>Renewable Energy</h3>\n                  <div class=\"linkButtonImg\"><a href=\"#renewable\" class=\"darken\"><img src=\"img/renewable-icon.png\"></a></div>\n                  <div class=\"description\">Show MEA contributions to the growth of affordable and reliable renewable energy.</div>\n                </div>\n                <div class=\"linkButton\">\n                  <h3>Energy Efficiency</h3>\n                  <div class=\"linkButtonImg\"><a href=\"#efficiency\" class=\"darken\"><img src=\"img/efficiency-icon.png\"></a></div>\n                  <div class=\"description\">Show MEA contributions to the growth of affordable energy efficiency.</div>\n                </div>\n                <div class=\"linkButton\">\n                  <h3>Transportation</h3>\n                  <div class=\"linkButtonImg\"><a href=\"#transportation\" class=\"darken\"><img src=\"img/transportation-icon.png\"></a></div>\n                  <div class=\"description\">Show MEA contributions to the growth of affordable and reliable clean transportation.</div>\n                </div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-lg-8 col-md-12 col-lg-offset-2\">\n      <div class=\"panel panel-default\">\n        <div class=\"panel-heading\" role=\"tab\" id=\"headingTwo\">\n          <h4 class=\"panel-title\">\n            <a data-toggle=\"collapse\" data-parent=\"#accordion\" href=\"#collapseTwo\" aria-expanded=\"false\" aria-controls=\"collapseTwo\">\n              Dashboard Help\n            </a>\n          </h4>\n        </div>\n        <div id=\"collapseTwo\" class=\"panel-collapse collapse in\" role=\"tabpanel\" aria-labelledby=\"headingTwo\">\n          <div class=\"panel-body\">\n            <p>Data on this dashboard can be viewed and downloaded from Maryland’s <a href=\"http://data.maryland.gov\">Open Data Portal</a>.</p>\n            <p>Use the map filter list in the lower left-hand corner of the map to specify the type of geography to compare and to specify whether individual projects should be displayed on the map. Similar geographies can be compared by selecting one or more from the map. Deselect a region by single clicking it on the map or clear all selections using the Reset Map button.</p>\n            <p>Individual projects are displayed by default as numbered points on the map. These points are clustered at different zoom levels so as you zoom in on the map, the points disaggregate until a single point is visible or the points break out into their respective technologies. Click an individual project point to view a popup list of statistics relevant to that specific project.</p>\n            <p>Use the \"Project Filters\" buttons to further refine the charts.</p>\n            <p>The data display can be manipulated by selecting the chart or table icon in the upper right-hand side of each graph.</p>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n  <div class=\"row\">\n    <div class=\"col-md-12\">\n      <div class=\"logos\">\n        <a href=\"http://energy.maryland.gov\"><img src=\"img/mea_small.png\" alt=\"\"></a>\n        <a href=\"http://doit.maryland.gov/Pages/default.aspx\"><img src=\"img/doit_small.png\" alt=\"\"></a>\n        <a href=\"http://www.esrgc.org\"><img src=\"img/esrgc_logo.png\" alt=\"\"></a>\n        <a href=\"http://www.salisbury.edu\"><img src=\"img/SU logo.png\" alt=\"\"></a>\n      </div>\n    </div>\n  </div>\n</div>\n<div class=\"charts\">\n  <div class=\"tab-info\"><a href=\"https://data.maryland.gov/dataset/Renewable-Energy-Geocoded/mqt3-eu4s\">View and Download Raw Data</a></div>\n  <div class=\"row\"></div>\n</div>";
   },"useData":true});
 
 templates["efficiency-popup"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
@@ -56,20 +56,15 @@ templates["efficiency-popup"] = Handlebars.template({"1":function(depth0,helpers
     + "</li>";
 },"7":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "<li><b>Other State Contributions:</b> "
-    + escapeExpression(((helper = (helper = helpers.other_agency_dollars || (depth0 != null ? depth0.other_agency_dollars : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"other_agency_dollars","hash":{},"data":data}) : helper)))
-    + "</li>";
-},"9":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<li><b>Total Project Cost:</b> "
     + escapeExpression(((helper = (helper = helpers.total_project_cost || (depth0 != null ? depth0.total_project_cost : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"total_project_cost","hash":{},"data":data}) : helper)))
     + "</li>";
-},"11":function(depth0,helpers,partials,data) {
+},"9":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<li><b>Investment Leverage:</b> "
     + escapeExpression(((helper = (helper = helpers.investment_leverage || (depth0 != null ? depth0.investment_leverage : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"investment_leverage","hash":{},"data":data}) : helper)))
     + "</li>";
-},"13":function(depth0,helpers,partials,data) {
+},"11":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<li><b>Notes:</b> "
     + escapeExpression(((helper = (helper = helpers.notes || (depth0 != null ? depth0.notes : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"notes","hash":{},"data":data}) : helper)))
@@ -88,20 +83,17 @@ templates["efficiency-popup"] = Handlebars.template({"1":function(depth0,helpers
     + "</li>\n    <li><b>MEA Contribution:</b> "
     + escapeExpression(((helper = (helper = helpers.mea_award || (depth0 != null ? depth0.mea_award : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"mea_award","hash":{},"data":data}) : helper)))
     + "</li>\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.other_agency_dollars : depth0), {"name":"if","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.total_project_cost : depth0), {"name":"if","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.total_project_cost : depth0), {"name":"if","hash":{},"fn":this.program(9, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.investment_leverage : depth0), {"name":"if","hash":{},"fn":this.program(11, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.investment_leverage : depth0), {"name":"if","hash":{},"fn":this.program(9, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n    <li><b>Electricity Savings:</b> "
     + escapeExpression(((helper = (helper = helpers.electricity_savings_kwh || (depth0 != null ? depth0.electricity_savings_kwh : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"electricity_savings_kwh","hash":{},"data":data}) : helper)))
     + " kWh</li>\n    <li><b>CO2 Emissions Reductions:</b> "
     + escapeExpression(((helper = (helper = helpers.co2_emissions_reductions_tons || (depth0 != null ? depth0.co2_emissions_reductions_tons : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"co2_emissions_reductions_tons","hash":{},"data":data}) : helper)))
     + " tons</li>\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.notes : depth0), {"name":"if","hash":{},"fn":this.program(13, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.notes : depth0), {"name":"if","hash":{},"fn":this.program(11, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\n  </ul>\n</div>";
 },"useData":true});
@@ -117,7 +109,7 @@ templates["filter-menu"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"]
   var stack1, buffer = "<div class=\"col-sm-6 block\">\n  <div class=\"chart\">\n";
   stack1 = this.invokePartial(partials.title, '    ', 'title', depth0, undefined, helpers, partials, data);
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "    <div class=\"chart-inner\">\n    <div class=\"row\">\n\n    </div>\n      <div class=\"filters container-fluid\">\n        <div class=\"row\">\n          <div class=\"col-md-12\">\n            <div class=\"description\">\n              <p></p>\n              <button type=\"button\" class=\"btn btn-default btn-xs reset\">Reset Map</button>\n            </div>\n          </div>\n          <div class=\"filter-box technology col-md-6\">\n            <div class=\"filter-title\">Technology</div>\n            <div class=\"the-filters\"></div>\n          </div>\n          <div class=\"filter-box vehicle_technology col-md-6\">\n            <div class=\"filter-title\"><div class=\"projects-icon vehicle_technology\"></div> Vehicle Technology</div>\n            <div class=\"the-filters\"></div>\n          </div>\n          <div class=\"filter-box charging_fueling_station_technology col-md-6\">\n            <div class=\"filter-title\"><div class=\"projects-icon charging_fueling_station_technology\"></div> Charging Station Technology</div>\n            <div class=\"the-filters\"></div>\n          </div>\n          <div class=\"filter-box sector col-md-6\">\n            <div class=\"filter-title\">Sector</div>\n            <div class=\"the-filters\"></div>\n          </div>\n          <div class=\"filter-box program col-md-6\">\n            <div class=\"filter-title\">Program</div>\n            <div class=\"the-filters\"></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>";
+  return buffer + "    <div class=\"chart-inner\">\n    <div class=\"row\">\n\n    </div>\n      <div class=\"filters container-fluid\">\n        <div class=\"row\">\n          <div class=\"col-md-12\">\n            <div class=\"description\">\n              <p></p>\n              <button type=\"button\" class=\"btn btn-default btn-xs reset\">Reset Map</button>\n            </div>\n          </div>\n          <div class=\"filter-box technology col-md-6\">\n            <div class=\"filter-title\">Technology</div>\n            <div class=\"the-filters\"></div>\n          </div>\n          <div class=\"filter-box vehicle_technology col-md-6\">\n            <div class=\"filter-title\"><div class=\"projects-icon vehicle_technology\"></div> Vehicle Technology</div>\n            <div class=\"the-filters\"></div>\n          </div>\n          <div class=\"filter-box charging_fueling_station_technology col-md-6\">\n            <div class=\"filter-title\"><div class=\"projects-icon charging_fueling_station_technology\"></div> Charging/Fueling Station Technology</div>\n            <div class=\"the-filters\"></div>\n          </div>\n          <div class=\"filter-box sector col-md-6\">\n            <div class=\"filter-title\">Sector</div>\n            <div class=\"the-filters\"></div>\n          </div>\n          <div class=\"filter-box program col-md-6\">\n            <div class=\"filter-title\">Program</div>\n            <div class=\"the-filters\"></div>\n          </div>\n        </div>\n      </div>\n    </div>\n  </div>\n</div>";
 },"usePartial":true,"useData":true});
 
 templates["layers"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
@@ -163,20 +155,15 @@ templates["renewable-popup"] = Handlebars.template({"1":function(depth0,helpers,
     + "</li>";
 },"7":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "<li><b>Other State Contributions:</b> "
-    + escapeExpression(((helper = (helper = helpers.other_agency_dollars || (depth0 != null ? depth0.other_agency_dollars : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"other_agency_dollars","hash":{},"data":data}) : helper)))
-    + "</li>";
-},"9":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<li><b>Total Project Cost:</b> "
     + escapeExpression(((helper = (helper = helpers.total_project_cost || (depth0 != null ? depth0.total_project_cost : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"total_project_cost","hash":{},"data":data}) : helper)))
     + "</li>";
-},"11":function(depth0,helpers,partials,data) {
+},"9":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<li><b>Investment Leverage:</b> "
     + escapeExpression(((helper = (helper = helpers.investment_leverage || (depth0 != null ? depth0.investment_leverage : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"investment_leverage","hash":{},"data":data}) : helper)))
     + "</li>";
-},"13":function(depth0,helpers,partials,data) {
+},"11":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<li><b>Notes:</b> "
     + escapeExpression(((helper = (helper = helpers.notes || (depth0 != null ? depth0.notes : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"notes","hash":{},"data":data}) : helper)))
@@ -195,20 +182,17 @@ templates["renewable-popup"] = Handlebars.template({"1":function(depth0,helpers,
   buffer += "\n    <li><b>MEA Contribution:</b> "
     + escapeExpression(((helper = (helper = helpers.mea_award || (depth0 != null ? depth0.mea_award : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"mea_award","hash":{},"data":data}) : helper)))
     + "</li>\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.other_agency_dollars : depth0), {"name":"if","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.total_project_cost : depth0), {"name":"if","hash":{},"fn":this.program(7, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.total_project_cost : depth0), {"name":"if","hash":{},"fn":this.program(9, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.investment_leverage : depth0), {"name":"if","hash":{},"fn":this.program(11, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.investment_leverage : depth0), {"name":"if","hash":{},"fn":this.program(9, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n    <li><b>Capacity:</b> "
     + escapeExpression(((helper = (helper = helpers.capacity || (depth0 != null ? depth0.capacity : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"capacity","hash":{},"data":data}) : helper)))
     + " "
     + escapeExpression(((helper = (helper = helpers.capacity_units || (depth0 != null ? depth0.capacity_units : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"capacity_units","hash":{},"data":data}) : helper)))
     + "</li>\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.notes : depth0), {"name":"if","hash":{},"fn":this.program(13, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.notes : depth0), {"name":"if","hash":{},"fn":this.program(11, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\n  </ul>\n</div>";
 },"useData":true});
@@ -219,7 +203,7 @@ templates["stat"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main"
     + " block\">\n  <div class=\"chart\">\n";
   stack1 = this.invokePartial(partials.title, '    ', 'title', depth0, undefined, helpers, partials, data);
   if (stack1 != null) { buffer += stack1; }
-  return buffer + "    <div class=\"chart-inner\">\n      <div class=\"loader\"><i class=\"fa fa-circle-o-notch fa-spin\"></i></div>\n      <div class=\"the-chart\">\n        <div class=\"stat\"></div>\n        <div class=\"note\">* Residential and Agricultural projects are displayed at their zip code locations to ensure recipient privacy.</div>\n      </div>\n      <div class=\"nodata\">This combination of filters has no applicable projects.</div>\n    </div>\n  </div>\n</div>";
+  return buffer + "    <div class=\"chart-inner\">\n      <div class=\"loader\"><i class=\"fa fa-circle-o-notch fa-spin\"></i></div>\n      <div class=\"the-chart\">\n        <div class=\"stat\"></div>\n        <div class=\"note\"><span class=\"efficiency-note\">* Investment Leverage for energy efficiency is low due to financing programs, for which investment leverage is not calculated.<br></span>* Residential and Agricultural projects are plotted at the center of their zip codes to ensure recipient privacy.</div>\n      </div>\n      <div class=\"nodata\">This combination of filters has no applicable projects.</div>\n    </div>\n  </div>\n</div>";
 },"usePartial":true,"useData":true});
 
 templates["table-empty"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -258,25 +242,20 @@ templates["transportation-popup"] = Handlebars.template({"1":function(depth0,hel
     + "</li>";
 },"11":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
-  return "<li><b>Other State Contributions:</b> "
-    + escapeExpression(((helper = (helper = helpers.other_agency_dollars || (depth0 != null ? depth0.other_agency_dollars : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"other_agency_dollars","hash":{},"data":data}) : helper)))
-    + "</li>";
-},"13":function(depth0,helpers,partials,data) {
-  var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<li><b>Total Project Cost:</b> "
     + escapeExpression(((helper = (helper = helpers.total_project_cost || (depth0 != null ? depth0.total_project_cost : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"total_project_cost","hash":{},"data":data}) : helper)))
     + "</li>";
-},"15":function(depth0,helpers,partials,data) {
+},"13":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<li><b>Investment Leverage:</b> "
     + escapeExpression(((helper = (helper = helpers.investment_leverage || (depth0 != null ? depth0.investment_leverage : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"investment_leverage","hash":{},"data":data}) : helper)))
     + "</li>";
-},"17":function(depth0,helpers,partials,data) {
+},"15":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<li><b>Gallons of Gasoline Equivalent Avoided:</b> "
     + escapeExpression(((helper = (helper = helpers.gallons_of_gasoline_equivalent_avoided || (depth0 != null ? depth0.gallons_of_gasoline_equivalent_avoided : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"gallons_of_gasoline_equivalent_avoided","hash":{},"data":data}) : helper)))
     + "</li>";
-},"19":function(depth0,helpers,partials,data) {
+},"17":function(depth0,helpers,partials,data) {
   var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
   return "<li><b>Notes:</b> "
     + escapeExpression(((helper = (helper = helpers.notes || (depth0 != null ? depth0.notes : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"notes","hash":{},"data":data}) : helper)))
@@ -299,19 +278,16 @@ templates["transportation-popup"] = Handlebars.template({"1":function(depth0,hel
   buffer += "\n    <li><b>MEA Contribution:</b> "
     + escapeExpression(((helper = (helper = helpers.mea_award || (depth0 != null ? depth0.mea_award : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"mea_award","hash":{},"data":data}) : helper)))
     + "</li>\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.other_agency_dollars : depth0), {"name":"if","hash":{},"fn":this.program(11, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.total_project_cost : depth0), {"name":"if","hash":{},"fn":this.program(11, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.total_project_cost : depth0), {"name":"if","hash":{},"fn":this.program(13, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.investment_leverage : depth0), {"name":"if","hash":{},"fn":this.program(13, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.investment_leverage : depth0), {"name":"if","hash":{},"fn":this.program(15, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.gallons_of_gasoline_equivalent_avoided : depth0), {"name":"if","hash":{},"fn":this.program(15, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   buffer += "\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.gallons_of_gasoline_equivalent_avoided : depth0), {"name":"if","hash":{},"fn":this.program(17, data),"inverse":this.noop,"data":data});
-  if (stack1 != null) { buffer += stack1; }
-  buffer += "\n    ";
-  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.notes : depth0), {"name":"if","hash":{},"fn":this.program(19, data),"inverse":this.noop,"data":data});
+  stack1 = helpers['if'].call(depth0, (depth0 != null ? depth0.notes : depth0), {"name":"if","hash":{},"fn":this.program(17, data),"inverse":this.noop,"data":data});
   if (stack1 != null) { buffer += stack1; }
   return buffer + "\n  </ul>\n</div>";
 },"useData":true});

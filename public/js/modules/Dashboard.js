@@ -83,10 +83,10 @@ var Dashboard = Backbone.View.extend({
         legend: true,
         dontFormat: ['Investment Leverage'],
         geo: true,
-        tools: [{value: 'MEA Contribution,Other Contributions', text: 'All Contributions', type: 'money', yLabel: 'Dollars'}, {value: 'MEA Contribution', text: 'MEA Contribution', type: 'money', yLabel: 'Dollars'}]
+        tools: [{value: 'MEA Contribution,Leveraged Investment', text: 'All Contributions', type: 'money', yLabel: 'Dollars'}, {value: 'MEA Contribution', text: 'MEA Contribution', type: 'money', yLabel: 'Dollars'}]
       },
       program: {
-        title: "Investments By Program",
+        title: "Activity By Program",
         api: 'api/getProgramName',
         key: 'Program Name',
         y: ['Contribution'],
@@ -100,7 +100,7 @@ var Dashboard = Backbone.View.extend({
         barLabelFormat: d3.format('$.2s')
       },
       sector: {
-        title: "Investments By Sector",
+        title: "Activity By Sector",
         api: 'api/getSector',
         key: 'Sector',
         y: ['Contribution'],

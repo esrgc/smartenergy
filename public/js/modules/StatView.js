@@ -19,7 +19,11 @@ var StatView = ChartView.extend({
   update: function() {
     this.resize()
     var round = d3.format('.2')
-    console.log(this.model.get('data'))
+    if (Dashboard.activetab === 'efficiency') {
+      this.$el.find('.efficiency-note').show()
+    } else {
+      this.$el.find('.efficiency-note').hide()
+    }
     if (this.model.get('data').length) {
       this.empty(false)
       var data = this.model.get('data')[0]
