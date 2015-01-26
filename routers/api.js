@@ -247,7 +247,7 @@ api.get('/getStats', function(req, res){
 
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
-      {$project: {mea_award: 1,
+      {$project: {mea_award: 1, electricity_savings_kwh: 1,
         total_project_cost: 1,
         //only count rows with total cost and mea award towards
         //Investment Levarage calculation
@@ -286,9 +286,10 @@ api.get('/getStats', function(req, res){
         project_cost: {$sum: '$total_project_cost'},
         il_project_cost: {$sum: '$il_total_project_cost'},
         contribution: {$sum: '$mea_award'},
-        il_contribution: {$sum: '$il_contribution'}
+        il_contribution: {$sum: '$il_contribution'},
+        electricity_savings_kwh: {$sum: '$electricity_savings_kwh'}
       }},
-      {$project: {_id: 0, total_projects: 1, project_cost: 1, contribution: 1, il_project_cost: 1, il_contribution: 1}},
+      {$project: {_id: 0, total_projects: 1, project_cost: 1, contribution: 1, il_project_cost: 1, il_contribution: 1, electricity_savings_kwh: 1}},
       handleData)
   } else {
     var qry = '$select=sum(mea_award)%20as%20contribution,sum(total_project_cost)%20as%20project_cost,sum(other_agency_dollars),count(id)%20as%20total_projects'

@@ -41,11 +41,17 @@ var StatView = ChartView.extend({
       } else {
         stat.project_cost = this.format(data.project_cost)
       }
+      if (data.electricity_savings_kwh) {
+        stat.electricity_savings_kwh = d3.round(data.electricity_savings_kwh, 2)
+      }
       var html = '<table class="table table-condensed statview">'
       html += '<tr><td>Total Projects</td><td>' + d3.format(',')(data.total_projects) + '</td></tr>'
       html += '<tr><td>Total Project Cost</td><td>' + stat.project_cost + '</td></tr>'
       html += '<tr><td>MEA Contribution</td><td>' + stat.contribution + '</td></tr>'
       html += '<tr><td>Investment Leverage</td><td>' + stat.investment_leverage + '</td></tr>'
+      if (Dashboard.activetab === 'efficiency') {
+        html += '<tr><td>Electricity Savings</td><td>' + d3.format(',')(stat.electricity_savings_kwh) + ' kWh</td></tr>'
+      }
       html += '</table>'
       this.$el.find('.stat').html(html)
     } else {
