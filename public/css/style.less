@@ -12,7 +12,7 @@
 html {
   position: relative;
   min-height: 100%;
-  background: url(../img/solar.jpg) no-repeat center center fixed; 
+  background: url(../img/solar_overlay.png) no-repeat center center fixed; 
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -22,6 +22,7 @@ html {
 body {
   /*background: #fff;*/
   /*font-family: 'Roboto', sans-serif;*/
+  /*background-color: rgba(0, 0, 0, 0.3);*/
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   padding-top: 50px;
   margin-bottom: 60px;
@@ -29,7 +30,7 @@ body {
 }
 
 body > .container-fluid {
-  background-color: rgba(248, 247, 216, 0.5);
+  
 /*  position: absolute;
   top: 0;
   left: 0;
@@ -47,7 +48,7 @@ body > .container-fluid {
   .navbar-brand {
     margin: 5px 0 0 0;
     color: #fff;
-    padding: 0 5px 0 0;
+    padding: 0 15px 0 0;
     a {
       text-decoration: none;
       &:hover {
@@ -74,11 +75,70 @@ body > .container-fluid {
       }
     }
   }
+  .navbar-toggle {
+    &:hover {
+      background: darken(@meagreen, 10%);
+    }
+    &:focus {
+      background: inherit;
+    }
+  }
   ul.nav {
-    li a {
-      color: #fff;
+    li.active {
+      color: #fff !important;
+      background-color: darken(@meagreen, 5%) !important;
+      svg {
+        fill: #fff;
+        fill-opacity: 1;
+      }
+      a {
+        color: #fff;
+        background-color: inherit;
+        &:hover {
+          background-color: inherit;
+          color: #fff;
+        }
+        &:focus {
+          background-color: inherit;
+          color: #fff;
+        }
+      }
+    }
+    li {
+      overflow: hidden;
+      padding: 0px 15px;
+      &.renewable svg {
+        width: 40px;
+      }
+      &.efficiency svg {
+        width: 27px;
+      }
+      &.transportation svg {
+        width: 43px;
+      }
+      svg {
+        height: 50px;
+        float: left;
+        fill: #000;
+        fill-opacity: .5;
+        padding-left: 0px;
+        padding-right: 5px;
+      }
+      a {
+        float: left;
+        padding-left: 0px;
+        padding-right: 0px;
+        /*padding: 0px;*/
+        color: #333;
+      }
       &:hover {
-        color: #eee;
+        a {
+          color: #fff;
+        }
+        svg {
+          fill: #fff;
+          fill-opacity: 1;
+        }
       }
     }
   }
@@ -159,7 +219,7 @@ body > .container-fluid {
     margin-top: 0px;
   }
   .intro {
-    font-size: 16px;
+    /*font-size: 16px;*/
     h3 {
       font-size: 18px;
     }
@@ -215,6 +275,9 @@ body > .container-fluid {
   .tab-info {
     text-align: right;
     padding-bottom: 10px;
+    a {
+      color: #fff;
+    }
   }
   &> .row {
     border-top: 1px solid @tableBorder;
@@ -285,6 +348,7 @@ body > .container-fluid {
       text-align: left;
       padding: 5px;
       font-size: 12px;
+      color: #b8b8b8;
       .efficiency-note {
         display: none;
       }
@@ -583,7 +647,8 @@ body > .container-fluid {
     }
     h3 {
       line-height: 36px;
-      font-size: 18px;
+      font-style: italic;
+      font-size: 16px;
       margin: 0;
       float: none;
       color: #333;
@@ -609,7 +674,6 @@ body > .container-fluid {
             -ms-transition: all .1s ease;
                 transition: all .1s ease;
       }
-       
       .darken img:hover {
         -webkit-filter: brightness(90%);
         filter: brightness(90%);
@@ -621,13 +685,15 @@ body > .container-fluid {
       border-right: 1px solid #a3b8c2;*/
       padding: 5px;
       font-size: 10px;
-      color: #333;
+      font-weight: 500;
+      color: #888;
       -webkit-border-bottom-right-radius: 5px;
       -webkit-border-bottom-left-radius: 5px;
       -moz-border-radius-bottomright: 5px;
       -moz-border-radius-bottomleft: 5px;
       border-bottom-right-radius: 5px;
       border-bottom-left-radius: 5px;
+      
     }
   }
 }
