@@ -42,7 +42,7 @@ var StatView = ChartView.extend({
         stat.project_cost = this.format(data.project_cost)
       }
       if (data.electricity_savings_kwh) {
-        stat.electricity_savings_kwh = d3.round(data.electricity_savings_kwh, 2)
+        stat.electricity_savings_kwh = d3.round(data.electricity_savings_kwh, 0)
       }
       var html = '<table class="table table-condensed statview">'
       html += '<tr><td>Total Projects</td><td>' + d3.format(',')(data.total_projects) + '</td></tr>'
