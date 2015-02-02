@@ -216,7 +216,7 @@ api.get('/getSector', function(req, res){
     } else {
       conditions.regional = {$eq: false}
     }
-
+    console.log(conditions)
     mongo.db.collection(req.query.tab).aggregate(
       {$match: conditions},
       {$project: {sector: 1, mea_award: 1, projcount: projcount}},

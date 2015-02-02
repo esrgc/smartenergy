@@ -133,7 +133,7 @@ var Dashboard = Backbone.View.extend({
         title: "Vehicle Technology",
         api: 'api/getVehicleTechnology',
         key: 'Technology',
-        y: 'Contribution',
+        y: 'Projects',
         chart_type: 'pie',
         units: '',
         valueFormat: d3.format('$,.0f'),
