@@ -19,10 +19,10 @@ socrataDataset.setCredentials(config.socrata.user, config.socrata.password)
 var CACHE = true
 
 var projcount = {
-  $cond: [{$ne: ['$regional', false]}, 0, 1]
+  $cond: [{ $ne: ['$regional', false] }, 0, 1]
 }
 
-function addGeoType(obj, geotype, row) {
+const addGeoType = (obj, geotype, row) => {
   if (geotype === 'state' || !geotype || typeof geotype === 'undefined') {
     obj['state'] = 'Maryland'
   } else {
@@ -31,7 +31,7 @@ function addGeoType(obj, geotype, row) {
   return obj
 }
 
-api.use(function(req, res, next) {
+api.use((req, res, next) => {
   if (CACHE) {
     console.log(req.url)
     next()
@@ -42,20 +42,21 @@ api.use(function(req, res, next) {
     } else {
       res.json({error: 'Must send tab paramater'})
     }
-    req.on('close', function() {
-      if (req.socrata_req) req.socrata_req.abort()
-    })
-  }
-})
 
-api.get('/getTechnology', function(req, res) {
-  function handleData(err, data) {
+    req.on('close', () => {
+      if (req.socrata_req) req.socrata_req.abort()
+    });
+  }
+});
+
+api.get('/getTechnology', (req, res) => {
+  const handleData = (err, data) => {
     data.toArray((err, docs) => {
       docs = _.map(docs, r => ({
         'Technology': r.technology,
         'Projects': r.projects,
         'Contribution': r.contribution
-      }))
+      }));
       returnData(req, res, docs);
     });
   }
@@ -64,12 +65,13 @@ api.get('/getTechnology', function(req, res) {
     var conditions = filter.conditions(req.query, 'technology')
     if (req.query.geotype && req.query[req.query.geotype]) {
       conditions['$or'] = [
-        {recipient_region_if_applicable: ''},
-        {regional: req.query.geotype}
+        { recipient_region_if_applicable: '' },
+        { regional: req.query.geotype }
       ]
     } else {
-      conditions.regional = {$eq: false}
+      conditions.regional = { $eq: false }
     }
+
     mongo.db.collection(req.query.tab).aggregate(
       { $match: conditions },
       { $project: { technology: 1, mea_award: 1, projcount: projcount } },
@@ -81,24 +83,24 @@ api.get('/getTechnology', function(req, res) {
     qry += filter.where(req.query, qry, 'technology')
     req.socrata_req = socrataDataset.query(qry, handleData)
   }
-})
+});
 
-api.get('/getProgramType', function(req, res) {
+api.get('/getProgramType', (req, res) => {
   var qry = '$select=program_type,count(id) as value&$group=program_type'
   qry += filter.where(req.query, qry)
-  req.socrata_req = socrataDataset.query(qry, function(err, data) {
+  req.socrata_req = socrataDataset.query(qry, (err, data) => {
     returnData(req, res, data)
-  })
-})
+  });
+});
 
-api.get('/getProgramName', function(req, res) {
-  function handleData(err, data) {
+api.get('/getProgramName', (req, res) => {
+  const handleData = (err, data) => {
     data.toArray((err, docs) => {
       docs = _.map(docs, r => ({
         'Program Name': r.program_name,
         'Projects': r.projects,
         'Contribution': r.contribution
-      }))
+      }));
       returnData(req, res, docs);
     });
   }
@@ -107,106 +109,104 @@ api.get('/getProgramName', function(req, res) {
     var conditions = filter.conditions(req.query)
     if (req.query.geotype && req.query[req.query.geotype]) {
       conditions['$or'] = [
-        {recipient_region_if_applicable: ''},
-        {regional: req.query.geotype}
+        { recipient_region_if_applicable: '' },
+        { regional: req.query.geotype }
       ]
     } else {
-      conditions.regional = {$eq: false}
+      conditions.regional = { $eq: false }
     }
+
     mongo.db.collection(req.query.tab).aggregate(
-      {$match: conditions},
-      {$project: {program_name: 1, mea_award: 1, projcount: projcount}},
-      {$group: {_id: {program_name: '$program_name'}, projects:{$sum: '$projcount'}, contribution: {$sum: '$mea_award'}}},
-      {$project: {_id: 0,program_name: "$_id.program_name", projects: 1, contribution: 1}},
-      {$sort: {projects: -1}}, handleData)
+      { $match: conditions },
+      { $project: { program_name: 1, mea_award: 1, projcount: projcount } },
+      { $group: { _id: { program_name: '$program_name' }, projects:{ $sum: '$projcount' }, contribution: { $sum: '$mea_award' } } },
+      { $project: { _id: 0,program_name: "$_id.program_name", projects: 1, contribution: 1 } },
+      { $sort: { projects: -1 } }, handleData);
   } else {
     var qry = '$select=program_name,count(id) as projects&$group=program_name'
     qry += filter.where(req.query, qry)
     req.socrata_req = socrataDataset.query(qry, handleData)
   }
-})
+});
 
-api.get('/getCapacityByArea', function(req, res) {
-  function handleData(err, data) {
+api.get('/getCapacityByArea', (req, res) => {
+  const handleData = (err, data) => {
     var d = []
-    data = _.map(data, function(r) {
+    data = _.map(data, r => {
       var obj =  {
         'Capacity': r.sum_capacity
       }
       return addGeoType(obj, req.query.geotype, r)
-    })
-    returnData(req, res, data)
+    });
+    returnData(req, res, data);
   }
 
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     var id = null
-    var project = {_id: 0, sum_capacity: 1}
+    var project = { _id: 0, sum_capacity: 1 }
     if (req.query.geotype) {
       var id = {}
       id[req.query.geotype] =  '$' + req.query.geotype
       project[req.query.geotype] = '$_id.' + req.query.geotype
       if (req.query.geotype && req.query[req.query.geotype]) {
         conditions['$or'] = [
-          {recipient_region_if_applicable: ''},
-          {regional: req.query.geotype}
+          { recipient_region_if_applicable: '' },
+          { regional: req.query.geotype }
         ]
       } else {
         conditions.regional = {$eq: false}
         conditions[req.query.geotype] = {$exists: true, $ne: ''}
       }
     }
+
     mongo.db.collection(req.query.tab).aggregate(
-      {$match: conditions},
-      {$group: {
-        _id: id,
-        sum_capacity: {$sum: '$capacity'}
-      }},
-      {$project: project},
-      handleData)
+      { $match: conditions },
+      { $group: { _id: id, sum_capacity: { $sum: '$capacity' } } },
+      { $project: project }, handleData);
   } else {
     var qry = '$select=sum(capacity)'
     qry += filter.geotype(req.query)
     qry += filter.where(req.query, qry)
     req.socrata_req = socrataDataset.query(qry, handleData)
   }
-})
+});
 
-api.get('/getCapacityBySector', function(req, res) {
-  function handleData(err, data) {
-    data = _.map(data, function(r) {
+api.get('/getCapacityBySector', (req, res) => {
+  const handleData = (err, data) => {
+    data = _.map(data, r => {
       return {
         'Sector': r.sector,
         'Capacity': r.sum_capacity
       }
-    })
-    returnData(req, res, data)
+    });
+    returnData(req, res, data);
   }
 
   if (CACHE) {
     var conditions = filter.conditions(req.query)
-    var aggregate = function (obj, prev) { prev.sum_capacity += +obj.capacity || 0; }
+    var aggregate = function (obj, prev) { prev.sum_capacity += +obj.capacity || 0 }
+
     mongo.db.collection(req.query.tab).aggregate(
-      {$match: conditions},
-      {$project: {capacity: 1, sector: 1}},
-      {$group: {_id: {sector: '$sector'}, sum_capacity: {$sum: '$capacity'}}},
-      {$project: {_id: 0,sector: "$_id.sector", sum_capacity: 1}},
-      handleData)
+      { $match: conditions },
+      { $project: { capacity: 1, sector: 1 } },
+      { $group: { _id: { sector: '$sector' }, sum_capacity: { $sum: '$capacity' } } },
+      { $project: { _id: 0, sector: "$_id.sector", sum_capacity: 1 } }, handleData);
   } else {
     var qry = '$select=sector,sum(capacity)&$group=sector'
     qry += filter.where(req.query, qry)
     req.socrata_req = socrataDataset.query(qry, handleData)
   }
-})
+});
 
-api.get('/getSector', function(req, res) {
-  function handleData(err, data) {
+api.get('/getSector', (req, res) => {
+  const handleData = (err, data) => {
     data.toArray((err, docs) => {
       docs = _.map(docs, r => ({
         'Sector': r.sector,
         'Projects': r.projects,
         'Contribution': r.contribution
-      }))
+      }));
       returnData(req, res, docs);
     });
   }
@@ -215,48 +215,47 @@ api.get('/getSector', function(req, res) {
     var conditions = filter.conditions(req.query, 'sector')
     if (req.query.geotype && req.query[req.query.geotype]) {
       conditions['$or'] = [
-        {recipient_region_if_applicable: ''},
-        {regional: req.query.geotype}
+        { recipient_region_if_applicable: '' },
+        { regional: req.query.geotype }
       ]
     } else {
       conditions.regional = {$eq: false}
     }
-    console.log(conditions)
+    
     mongo.db.collection(req.query.tab).aggregate(
-      {$match: conditions},
-      {$project: {sector: 1, mea_award: 1, projcount: projcount}},
-      {$group: {_id: {sector: '$sector'}, projects:{$sum: '$projcount'}, contribution: {$sum: '$mea_award'}}},
-      {$project: {_id: 0,sector: "$_id.sector", projects: 1, contribution: 1}},
-      {$sort: {projects: -1}}, handleData)
+      { $match: conditions },
+      { $project: { sector: 1, mea_award: 1, projcount: projcount } },
+      { $group: { _id: { sector: '$sector' }, projects:{ $sum: '$projcount' }, contribution: { $sum: '$mea_award' } } },
+      { $project: { _id: 0, sector: "$_id.sector", projects: 1, contribution: 1 } },
+      { $sort: { projects: -1 } }, handleData);
   } else {
     var qry = '$select=sector,count(id)%20as%20projects&$group=sector'
     qry += filter.where(req.query, qry)
     req.socrata_req = socrataDataset.query(qry, handleData)
   }
-})
+});
 
-api.get('/getStats', function(req, res) {
-  function handleData(err, data) {
+api.get('/getStats', (req, res) => {
+  const handleData = (err, data) => {
     data.toArray((err, docs) => {
       returnData(req, res, docs)
-    })
+    });
   }
 
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     if (req.query.geotype && req.query[req.query.geotype]) {
       conditions['$or'] = [
-        {recipient_region_if_applicable: ''},
-        {regional: req.query.geotype}
+        { recipient_region_if_applicable: '' },
+        { regional: req.query.geotype }
       ]
     } else {
-      conditions.regional = {$eq: false}
+      conditions.regional = { $eq: false }
     }
 
     mongo.db.collection(req.query.tab).aggregate(
-      {$match: conditions},
-      {$project: {mea_award: 1, electricity_savings_kwh: 1,
-        total_project_cost: 1,
+      { $match: conditions },
+      { $project: { mea_award: 1, electricity_savings_kwh: 1, total_project_cost: 1,
         //only count rows with total cost and mea award towards
         //Investment Levarage calculation
         il_total_project_cost: {
@@ -264,9 +263,9 @@ api.get('/getStats', function(req, res) {
             { 
               $and:
                 [
-                  {$ne: ['$total_project_cost', '']},
-                  {$ne: ['$total_project_cost', 0]},
-                  {$ne: ['$mea_award', '']}
+                  { $ne: ['$total_project_cost', ''] },
+                  { $ne: ['$total_project_cost', 0] },
+                  { $ne: ['$mea_award', ''] }
                 ]
             },
             '$total_project_cost', //true
@@ -278,38 +277,37 @@ api.get('/getStats', function(req, res) {
             { 
               $and:
                 [
-                  {$ne: ['$total_project_cost', '']},
-                  {$ne: ['$total_project_cost', 0]},
-                  {$ne: ['$mea_award', '']}
+                  { $ne: ['$total_project_cost', ''] },
+                  { $ne: ['$total_project_cost', 0] },
+                  { $ne: ['$mea_award', ''] }
                 ]
             },
             '$mea_award', //true
             0 //false
           ]
         }
-      }},
-      {$group: {
+      } },
+      { $group: {
         _id: null,
-        total_projects:{$sum: 1},
-        project_cost: {$sum: '$total_project_cost'},
-        il_project_cost: {$sum: '$il_total_project_cost'},
-        contribution: {$sum: '$mea_award'},
-        il_contribution: {$sum: '$il_contribution'},
-        electricity_savings_kwh: {$sum: '$electricity_savings_kwh'}
-      }},
-      {$project: {_id: 0, total_projects: 1, project_cost: 1, contribution: 1, il_project_cost: 1, il_contribution: 1, electricity_savings_kwh: 1}},
-      handleData)
+        total_projects:{ $sum: 1 },
+        project_cost: { $sum: '$total_project_cost' },
+        il_project_cost: { $sum: '$il_total_project_cost' },
+        contribution: { $sum: '$mea_award' },
+        il_contribution: { $sum: '$il_contribution' },
+        electricity_savings_kwh: { $sum: '$electricity_savings_kwh' }
+      } },
+      { $project: { _id: 0, total_projects: 1, project_cost: 1, contribution: 1, il_project_cost: 1, il_contribution: 1, electricity_savings_kwh: 1 } }, handleData);
   } else {
     var qry = '$select=sum(mea_award)%20as%20contribution,sum(total_project_cost)%20as%20project_cost,sum(other_agency_dollars),count(id)%20as%20total_projects'
     qry += filter.where(req.query, qry)
-    req.socrata_req = socrataDataset.query(qry, function(err, data) {
+    req.socrata_req = socrataDataset.query(qry, (err, data) => {
       returnData(req, res, data)
-    })
+    });
   }
 })
 
-api.get('/getContribution', function(req, res) {
-  function handleData(err, data) {
+api.get('/getContribution', (req, res) => {
+  const handleData = (err, data) => {
     data.toArray((err, docs) => {
       docs = _.map(docs, r => {
         var obj = {
@@ -322,24 +320,26 @@ api.get('/getContribution', function(req, res) {
           obj['Leverage Investment'] = 0
         }
         return addGeoType(obj, req.query.geotype, r)
-      })
+      });
       returnData(req, res, docs)
-    })
+    });
   }
   
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     var id = null
-    var project_in = {mea_award: 1,
+    var project_in = { 
+      mea_award: 1,
       total_project_cost: {
         $cond: [
-          {$ne: ['$total_project_cost', '']},
+          { $ne: ['$total_project_cost', ''] },
           '$total_project_cost',
-          {$add: ['$mea_award']}
+          { $add: ['$mea_award'] }
         ]
       }
     }
-    var project_out = {_id: 0, projects: 1, mea_contribution: 1, project_cost: 1}
+
+    var project_out = { _id: 0, projects: 1, mea_contribution: 1, project_cost: 1 }
     if (req.query.geotype) {
       var id = {}
       id[req.query.geotype] =  '$' + req.query.geotype
@@ -347,34 +347,35 @@ api.get('/getContribution', function(req, res) {
       project_out[req.query.geotype] = '$_id.' + req.query.geotype
       if (req.query.geotype && req.query[req.query.geotype]) {
         conditions['$or'] = [
-          {recipient_region_if_applicable: ''},
-          {regional: req.query.geotype}
+          { recipient_region_if_applicable: '' },
+          { regional: req.query.geotype }
         ]
       } else {
-        conditions.regional = {$eq: false}
-        conditions[req.query.geotype] = {$exists: true, $ne: ''}
+        conditions.regional = { $eq: false }
+        conditions[req.query.geotype] = { $exists: true, $ne: '' }
       }
     }
+
     mongo.db.collection(req.query.tab).aggregate(
-      {$match: conditions},
-      {$project: project_in},
-      {$group: {
+      { $match: conditions },
+      { $project: project_in },
+      { $group: {
         _id: id,
-        projects:{$sum: 1},
-        mea_contribution: {$sum: {$add: ['$mea_award']}},
-        project_cost: {$sum: '$total_project_cost'}
-      }},
-      {$project: project_out},
-      {$sort: {projects: -1}}, handleData)
+        projects:{ $sum: 1 },
+        mea_contribution: { $sum: { $add: ['$mea_award'] } },
+        project_cost: { $sum: '$total_project_cost' }
+      } },
+      { $project: project_out },
+      { $sort: { projects: -1 } }, handleData);
   } else {
     var qry = '$select=sum(mea_award)%20as%20mea_contribution,sum(other_agency_dollars) as sum_other_agency_dollars, sum(total_project_cost)%20as%20project_cost'
     qry += filter.geotype(req.query)
     qry += filter.where(req.query, qry)
     req.socrata_req = socrataDataset.query(qry, handleData)
   }
-})
+});
 
-api.get('/getPoints', function(req, res) {
+api.get('/getPoints', (req, res) => {
   var data = [], 
     limit = 10000, 
     offset = 0, 
@@ -397,14 +398,16 @@ api.get('/getPoints', function(req, res) {
         technology_fields = techs
       }
     }
+
     var conditions = filter.conditions(req.query, 'point')
     conditions.regional = {$eq: false}
     var project = {point: 1, _id: 1}
-    technology_fields.forEach(function(field) {
+    technology_fields.forEach(field => {
       project[field] = 1
-    })
+    });
+
     var cursor = mongo.db.collection(req.query.tab).find(conditions, project)
-    cursor.toArray(function(err, data) {
+    cursor.toArray((err, data) => {
       var points = _.groupBy(data, 'point')
       var response = { points: [] }
       for (var p in points) {
@@ -412,22 +415,22 @@ api.get('/getPoints', function(req, res) {
           point: p,
           projects: points[p].length
         }
-        technology_fields.forEach(function(technology_field) {
+        technology_fields.forEach(technology_field => {
           var techs = _.filter(_.uniq(_.pluck(points[p], technology_field)), null)
           var techcount = []
-          techs.forEach(function(tech) {
+          techs.forEach(tech => {
             var where = {}
             where[technology_field] = tech
-            var x = {t: tech}
+            var x = { t: tech }
             x.p = _.where(points[p], where).length
             techcount.push(x)
-          })
+          });
           obj[technology_field] = techcount
-        })
+        });
         response.points.push(obj)
       }
       returnData(req, res, response)
-    })
+    });
   } else {
     if (req.query.tab === 'renewable') {
       qry = '$select=point,technology&$order=id%20desc'
@@ -462,14 +465,14 @@ api.get('/getPoints', function(req, res) {
       }
     )
   }
-})
+});
 
-api.get('/getProject', function(req, res) {
+api.get('/getProject', (req, res) => {
   var qry = ''
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     conditions._id = new ObjectID(conditions._id)
-    mongo.db.collection(req.query.tab).find(conditions).toArray(function(err, data) {
+    mongo.db.collection(req.query.tab).find(conditions).toArray((err, data) => {
       returnData(req, res, data)
     })
   } else {
@@ -482,15 +485,14 @@ api.get('/getProject', function(req, res) {
     }
     qry += '&$order=id&$limit=10000'
     qry += filter.where(req.query, qry)
-    req.socrata_req = socrataDataset.query(qry, function(err, data) {
+    req.socrata_req = socrataDataset.query(qry, (err, data) => {
       returnData(req, res, data)
-    })
+    });
   }
-})
+});
 
-api.get('/getProjectsByPoint', function(req, res) {
+api.get('/getProjectsByPoint', (req, res) => {
   var qry = ''
-
   if (CACHE) {
     var tech_field = req.query.tech_field
     var tech = req.query.tech
@@ -499,9 +501,9 @@ api.get('/getProjectsByPoint', function(req, res) {
     var conditions = filter.conditions(req.query)
     conditions[tech_field] = tech
     conditions.regional = false
-    mongo.db.collection(req.query.tab).find(conditions).toArray(function(err, data) {
+    mongo.db.collection(req.query.tab).find(conditions).toArray((err, data) => {
       returnData(req, res, data)
-    })
+    });
   } else {
     if (req.query.tab === 'renewable') {
       qry = '$select=point,program_name,project_name,other_agency_dollars,total_project_cost,capacity,capacity_units,notes,link,mea_award,technology'
@@ -512,22 +514,22 @@ api.get('/getProjectsByPoint', function(req, res) {
     }
     qry += '&$order=id&$limit=10000'
     qry += filter.where(req.query, qry)
-    req.socrata_req = socrataDataset.query(qry, function(err, data) {
+    req.socrata_req = socrataDataset.query(qry, (err, data) => {
       returnData(req, res, data)
-    })
+    });
   }
-})
+});
 
-api.get('/getStationTechnology', function(req, res) {
-  function handleData(err, data) {
+api.get('/getStationTechnology', (req, res) => {
+  const handleData = (err, data) => {
     data.toArray((err, docs) => {
       docs = _.map(docs, r => ({
         'Technology': r.charging_fueling_station_technology,
         'Stations': r.projects,
         'Contribution': r.contribution
-      }))
+      }));
       returnData(req, res, docs)
-    })
+    });
   }
   
   if (CACHE) {
@@ -540,160 +542,157 @@ api.get('/getStationTechnology', function(req, res) {
     } else {
       conditions.regional = {$eq: false}
     }
+
     mongo.db.collection(req.query.tab).aggregate(
-      {$match: conditions},
-      {$project: {charging_fueling_station_technology: 1, projcount: projcount, mea_award: 1}},
-      {$group: {_id: {charging_fueling_station_technology: '$charging_fueling_station_technology'}, projects: {$sum: '$projcount'}, contribution: {$sum: '$mea_award'}}},
-      {$project: {_id: 0,charging_fueling_station_technology: "$_id.charging_fueling_station_technology", projects: 1, contribution: 1}},
-      handleData)
+      { $match: conditions },
+      { $project: { charging_fueling_station_technology: 1, projcount: projcount, mea_award: 1 } },
+      { $group: { _id: { charging_fueling_station_technology: '$charging_fueling_station_technology'}, projects: { $sum: '$projcount' }, contribution: { $sum: '$mea_award' } } },
+      { $project: { _id: 0,charging_fueling_station_technology: "$_id.charging_fueling_station_technology", projects: 1, contribution: 1 } }, handleData);
   } else {
     var qry = '$select=charging_fueling_station_technology,count(id) as projects&$group=charging_fueling_station_technology'
     qry += filter.where(req.query, qry, 'charging_fueling_station_technology')
     req.socrata_req = socrataDataset.query(qry, handleData)
   }
-})
+});
 
-api.get('/getVehicleTechnology', function(req, res) {
-  function handleData(err, data) {
+api.get('/getVehicleTechnology', (req, res) => {
+  const handleData = (err, data) => {
     data.toArray((err, docs) => {
       docs = _.map(docs, r => ({
         'Technology': r.vehicle_technology,
         'Projects': r.projects,
         'Contribution': r.contribution
-      }))
+      }));
       returnData(req, res, docs)
-    })
+    });
   }
   
   if (CACHE) {
     var conditions = filter.conditions(req.query, 'vehicle_technology')
     if (req.query.geotype && req.query[req.query.geotype]) {
       conditions['$or'] = [
-        {recipient_region_if_applicable: ''},
-        {regional: req.query.geotype}
+        { recipient_region_if_applicable: '' },
+        { regional: req.query.geotype }
       ]
     } else {
-      conditions.regional = {$eq: false}
+      conditions.regional = { $eq: false }
     }
     mongo.db.collection(req.query.tab).aggregate(
-      {$match: conditions},
-      {$project: {vehicle_technology: 1, projcount: projcount, mea_award: 1}},
-      {$group: {_id: {vehicle_technology: '$vehicle_technology'}, projects: {$sum: '$projcount'}, contribution: {$sum: '$mea_award'}}},
-      {$project: {_id: 0,vehicle_technology: "$_id.vehicle_technology", projects: 1, contribution: 1}},
-      handleData)
+      { $match: conditions },
+      { $project: { vehicle_technology: 1, projcount: projcount, mea_award: 1 } },
+      { $group: { _id: { vehicle_technology: '$vehicle_technology' }, projects: { $sum: '$projcount' }, contribution: { $sum: '$mea_award' } } },
+      { $project: { _id: 0,vehicle_technology: "$_id.vehicle_technology", projects: 1, contribution: 1 } }, handleData);
   } else {
     var qry = '$select=vehicle_technology,count(id) as value&$group=vehicle_technology'
     qry += filter.where(req.query, qry, 'vehicle_technology')
-    req.socrata_req = socrataDataset.query(qry, function(err, data) {
+    req.socrata_req = socrataDataset.query(qry, (err, data) => {
       returnData(req, res, data)
-    })
+    });
   }
-})
+});
 
-api.get('/getReductions', function(req, res) {
-  function handleData(err, data) {
+api.get('/getReductions', (req, res) => {
+  const handleData = (err, data) => {
     data.toArray((err, docs) => {
       docs = _.map(docs, r => {
         var obj = {
           'Reduction': r.reduction
         }
         return addGeoType(obj, req.query.geotype, r)
-      })
+      });
       returnData(req, res, docs)
-    })
+    });
   }
 
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     if (req.query.geotype && req.query[req.query.geotype]) {
       conditions['$or'] = [
-        {recipient_region_if_applicable: ''},
-        {regional: req.query.geotype}
+        { recipient_region_if_applicable: '' },
+        { regional: req.query.geotype }
       ]
     } else {
-      conditions.regional = {$eq: false}
+      conditions.regional = { $eq: false }
     }
+
     var id = null
-    var project = {_id: 0, reduction: 1}
+    var project = { _id: 0, reduction: 1 };
     if (req.query.geotype) {
       var id = {}
       id[req.query.geotype] =  '$' + req.query.geotype
       project[req.query.geotype] = '$_id.' + req.query.geotype
       if (!req.query[req.query.geotype]) {
-        conditions[req.query.geotype] = {$exists: true, $ne: ''}
+        conditions[req.query.geotype] = { $exists: true, $ne: '' }
       }
     }
     mongo.db.collection(req.query.tab).aggregate(
-      {$match: conditions},
-      {$group: {_id: id, reduction: {$sum: '$co2_emissions_reductions_tons'}}},
-      {$project: project}, handleData)
+      { $match: conditions },
+      { $group: { _id: id, reduction: { $sum: '$co2_emissions_reductions_tons' } } },
+      { $project: project }, handleData);
   } else {
     var qry = '$select=sum(co2_emissions_reductions_tons) as reduction'
     qry += filter.geotype(req.query)
     qry += filter.where(req.query, qry)
     req.socrata_req = socrataDataset.query(qry, handleData)
   }
-})
+});
 
-api.get('/getSavings', function(req, res) {
-  function handleData(err, data) {
+api.get('/getSavings', (req, res) => {
+  const handleData = (err, data) => {
     data.toArray((err, docs) => {
       docs = _.map(docs, r => {
         var obj = {
           'Savings': r.savings
         }
         return addGeoType(obj, req.query.geotype, r)
-      })
+      });
       returnData(req, res, docs)
-    })
+    });
   }
 
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     if (req.query.geotype && req.query[req.query.geotype]) {
       conditions['$or'] = [
-        {recipient_region_if_applicable: ''},
-        {regional: req.query.geotype}
-      ]
+        { recipient_region_if_applicable: '' },
+        { regional: req.query.geotype }
+      ];
     } else {
-      conditions.regional = {$eq: false}
+      conditions.regional = { $eq: false }
     }
+
     var id = null
-    var project = {_id: 0, savings: 1}
+    var project = { _id: 0, savings: 1 }
     if (req.query.geotype) {
       var id = {}
       id[req.query.geotype] =  '$' + req.query.geotype
       project[req.query.geotype] = '$_id.' + req.query.geotype      
       if (!req.query[req.query.geotype]) {
-        conditions[req.query.geotype] = {$exists: true, $ne: ''}
+        conditions[req.query.geotype] = { $exists: true, $ne: '' }
       }
     }
+
     mongo.db.collection(req.query.tab).aggregate(
-      {$match: conditions},
-      {$group: {
-        _id: id,
-        savings: {$sum: '$electricity_savings_kwh'}
-      }},
-      {$project: project},
-      handleData)
+      { $match: conditions },
+      { $group: { _id: id, savings: { $sum: '$electricity_savings_kwh' } } },
+      { $project: project }, handleData);
   } else {
     var qry = '$select=sum(electricity_savings_kwh) as savings'
     qry += filter.geotype(req.query)
     qry += filter.where(req.query, qry)
     req.socrata_req = socrataDataset.query(qry, handleData)
   }
-})
+});
 
-api.get('/getCapacityOverTime', function(req, res) {
-
-  function handleData(err, results) {
+api.get('/getCapacityOverTime', (req, res) => {
+  const handleData = (err, results) => {
     var data = _.flatten(results)
-    data = _.map(data, function(r) {
+    data = _.map(data, r => {
       return {
         'Date': r.date,
         'Capacity': r.sum_capacity
       }
-    })
+    });
     returnData(req, res, data)
   }
 
@@ -701,16 +700,17 @@ api.get('/getCapacityOverTime', function(req, res) {
     var conditions = filter.conditions(req.query)
     if (req.query.geotype && req.query[req.query.geotype]) {
       conditions['$or'] = [
-        {recipient_region_if_applicable: ''},
-        {regional: req.query.geotype}
-      ]
+        { recipient_region_if_applicable: '' },
+        { regional: req.query.geotype }
+      ];
     } else {
-      conditions.regional = {$eq: false}
+      conditions.regional = { $eq: false }
     }
-    conditions.date = {$gt: new Date('2008-01-01T12:00:00'), $lt: new Date('2015-01-01T12:00:00')}
+
+    conditions.date = { $gt: new Date('2008-01-01T12:00:00'), $lt: new Date('2015-01-01T12:00:00') };
     mongo.db.collection(req.query.tab).aggregate(
-      {$match: conditions},
-      {$project: {
+      { $match: conditions },
+      { $project: {
         yrmonth: {
           $concat: [
             { '$substr': [ { '$month': '$date' }, 0, 2 ] },
@@ -719,12 +719,11 @@ api.get('/getCapacityOverTime', function(req, res) {
           ]
         },
         month: { $month: '$date' },
-        year: {$year: '$date'},
+        year: { $year: '$date' },
         capacity: 1
-      }},
-      {$group: {_id: {yrmonth: '$yrmonth'}, sum_capacity:{$sum: '$capacity'}}},
-      {$project: {date: '$_id.yrmonth', sum_capacity: 1}},
-      handleData)
+      } },
+      { $group: { _id: { yrmonth: '$yrmonth' }, sum_capacity:{ $sum: '$capacity' } } },
+      { $project: { date: '$_id.yrmonth', sum_capacity: 1 } }, handleData);
     // var getPerYear = function(year, callback) {
     //   var conditions = filter.conditions(req.query)
     //   conditions.date = {$gt: new Date(year + '-01-01T12:00:00'), $lt: new Date(year+1 + '-01-01T12:00:00')}
@@ -759,32 +758,33 @@ api.get('/getCapacityOverTime', function(req, res) {
   // ], handleData)
 })
 
-api.get('/getReductionOverTime', function(req, res) {
-  function handleData(err, results) {
+api.get('/getReductionOverTime', (req, res) => {
+  const handleData = (err, results) => {
     var data = _.flatten(results)
-    data = _.map(data, function(r) {
+    data = _.map(data, r => {
       return {
         'Date': r.date,
         'Reduction': r.reduction,
       }
-    })
+    });
     returnData(req, res, data)
   }
-  
+
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     if (req.query.geotype && req.query[req.query.geotype]) {
       conditions['$or'] = [
-        {recipient_region_if_applicable: ''},
-        {regional: req.query.geotype}
+        { recipient_region_if_applicable: '' },
+        { regional: req.query.geotype }
       ]
     } else {
-      conditions.regional = {$eq: false}
+      conditions.regional = { $eq: false }
     }
-    conditions.date = {$gt: new Date('2008-01-01T12:00:00'), $lt: new Date('2015-01-01T12:00:00')}
+
+    conditions.date = { $gt: new Date('2008-01-01T12:00:00'), $lt: new Date('2015-01-01T12:00:00') };
     mongo.db.collection(req.query.tab).aggregate(
-      {$match: conditions},
-      {$project: {
+      { $match: conditions },
+      { $project: {
         yrmonth: {
           $concat: [
             { '$substr': [ { '$month': '$date' }, 0, 2 ] },
@@ -793,12 +793,11 @@ api.get('/getReductionOverTime', function(req, res) {
           ]
         },
         month: { $month: '$date' },
-        year: {$year: '$date'},
+        year: { $year: '$date' },
         co2_emissions_reductions_tons: 1
-      }},
-      {$group: {_id: {yrmonth: '$yrmonth'}, reduction:{$sum: '$co2_emissions_reductions_tons'}}},
-      {$project: {date: '$_id.yrmonth', reduction: 1}},
-      handleData)
+      } },
+      { $group: { _id: { yrmonth: '$yrmonth' }, reduction:{ $sum: '$co2_emissions_reductions_tons' } } },
+      { $project: { date: '$_id.yrmonth', reduction: 1 } }, handleData);
     // var getPerYear = function(year, callback) {
     //   var conditions = filter.conditions(req.query)
     //   conditions.date = {$gt: new Date(year + '-01-01T12:00:00'), $lt: new Date(year+1 + '-01-01T12:00:00')}
@@ -812,13 +811,13 @@ api.get('/getReductionOverTime', function(req, res) {
     //   })
     // }
   } else {
-    var _getPerYear = function(year, callback) {
-      var nextyear = year+1
+    var _getPerYear = (year, callback) => {
+      var nextyear = year + 1;
       var qry = '$select=sum(co2_emissions_reductions_tons) as reduction, \'' + year + '\' as year&$where=date>%27' + year + '-01-01T12:00:00%27  and date<%27' + nextyear + '-01-01T12:00:00%27 '
       qry += filter.where(req.query, qry)
-      socrataDataset.query(qry, function(err, data) {
+      socrataDataset.query(qry, (err, data) => {
         callback(null, data)
-      })
+      });
     }
 
     var getPerYear = async.memoize(_getPerYear)
@@ -832,6 +831,6 @@ api.get('/getReductionOverTime', function(req, res) {
   //   function(callback) { getPerYear(2013, callback) },
   //   function(callback) { getPerYear(2014, callback) }
   // ], handleData)
-})
+});
 
 module.exports = api
