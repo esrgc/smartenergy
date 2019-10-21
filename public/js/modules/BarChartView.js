@@ -1,6 +1,6 @@
-var ChartView = require('./ChartView')
+const ChartView = require('./ChartView')
 
-var BarChartView = ChartView.extend({
+const BarChartView = ChartView.extend({
   render: function() {
     var self = this
     this.$el.html(this.template(this.model.toJSON()))

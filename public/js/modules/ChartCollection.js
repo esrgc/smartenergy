@@ -1,6 +1,6 @@
-var ChartModel = require('./ChartModel')
+const ChartModel = require('./ChartModel')
 
-var ChartCollection = Backbone.Collection.extend({
+const ChartCollection = Backbone.Collection.extend({
   model: ChartModel
 })
 

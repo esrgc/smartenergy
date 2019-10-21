@@ -1,6 +1,6 @@
-var FilterModel = require('./FilterModel')
+const FilterModel = require('./FilterModel')
 
-var FilterCollection = Backbone.Collection.extend({
+const FilterCollection = Backbone.Collection.extend({
   model: FilterModel
 })
 

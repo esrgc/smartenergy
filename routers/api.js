@@ -1,12 +1,14 @@
-var express = require('express')
-  , returnData = require('../lib/return-data')
-  , filter = require('../lib/filter')
-  , Socrata = require('../lib/Socrata')
-  , async = require('async')
-  , _ = require('lodash')
-  , config = require('../config/config')
-  , mongo = require('../lib/mongo')
-  , ObjectID = require('mongodb').ObjectID
+const { Router } = require('express');
+const returnData = require('../lib/return-data');
+const filter = require('../lib/filter');
+const Socrata = require('../lib/Socrata');
+const async = require('async');
+const _ = require('lodash');
+const config = require('../config/config');
+const mongo = require('../lib/mongo');
+const ObjectID = require('mongodb').ObjectID;
+
+const api = Router();
 
 var socrataDataset = new Socrata.Dataset()
 socrataDataset.setHost('https://data.maryland.gov')
@@ -28,8 +30,6 @@ function addGeoType(obj, geotype, row) {
   }
   return obj
 }
-
-var api = new express.Router()
 
 api.use(function(req, res, next) {
   if (CACHE) {

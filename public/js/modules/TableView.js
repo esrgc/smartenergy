@@ -1,7 +1,7 @@
-var ChartView = require('./ChartView')
-  , templates = require('./templates')(Handlebars)
+const ChartView = require('./ChartView')
+const templates = require('./templates')(Handlebars)
 
-var TableView = ChartView.extend({
+const TableView = ChartView.extend({
   template: templates['table-empty'],
   events: function(){
     return _.extend({},ChartView.prototype.events,{

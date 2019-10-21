@@ -1,7 +1,7 @@
-var ChartView = require('./ChartView')
-  , templates = require('./templates')(Handlebars)
+const ChartView = require('./ChartView')
+const templates = require('./templates')(Handlebars)
 
-var StatView = ChartView.extend({
+const StatView = ChartView.extend({
   template: templates.stat,
   format: d3.format('$,.0f'),
   events: function(){

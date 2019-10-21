@@ -1,7 +1,7 @@
-var BarChartView = require('./BarChartView')
+const BarChartView = require('./BarChartView')
 
 
-var LineChartView = BarChartView.extend({
+const LineChartView = BarChartView.extend({
   drawChart: function() {
     if (this.model.get('colors')) {
       this.colors = this.model.get('colors')

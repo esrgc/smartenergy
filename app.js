@@ -23,13 +23,25 @@ app.use(cors())
 app.use(bodyParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
-var env = process.env.NODE_ENV || 'development';
-if ('development' == env) {
-   app.use(errorhandler())
-}
+// // Initialize DB connections
+// app.init = (next) => {
+  mongo.init((err) => {
+    if (err) {
+      throw err;
+    }
+    //next()
+    var env = process.env.NODE_ENV || 'development';
+    if ('development' == env) {
+      app.use(errorhandler())
+    }
 
-app.use('/',    require('./routers/index'))
-app.use('/api', require('./routers/api'))
+    app.use('/',    require('./routers/index'))
+    app.use('/api', require('./routers/api'))
+
+  })
+// }
+
+app.listen(config.server.port, () => console.log('Listening on port ' + config.server.port));
 // app.use('/update', function(req, res) { 
 //   admin.update(req.query.p, req.query.tab, function(err) {
 //     if (err) res.send('error updating')
@@ -37,12 +49,4 @@ app.use('/api', require('./routers/api'))
 //   })
 // })
 
-// Initialize DB connections
-app.init = function(next) {
-  mongo.init(function(err) {
-    if (err) throw err;
-    next()
-  })
-}
-
-module.exports = app
+// module.exports = app

@@ -1,7 +1,7 @@
-var FilterLabelView = require('./FilterLabelView')
-  , templates = require('./templates')(Handlebars)
+const FilterLabelView = require('./FilterLabelView')
+const templates = require('./templates')(Handlebars)
 
-var TechnologyFilter = FilterLabelView.extend({
+const TechnologyFilter = FilterLabelView.extend({
   template: templates['project-type']
 })
 

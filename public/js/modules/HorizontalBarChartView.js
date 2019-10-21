@@ -1,6 +1,6 @@
-var BarChartView = require('./BarChartView')
+const BarChartView = require('./BarChartView')
 
-var HorizontalBarChartView = BarChartView.extend({
+const HorizontalBarChartView = BarChartView.extend({
   drawChart: function() {
     var chartel = this.$el.find('.chart-inner').get(0)
     this.chart = new GeoDash.BarChartHorizontal(chartel, {

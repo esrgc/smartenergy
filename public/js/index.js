@@ -1,5 +1,5 @@
-var Dashboard = require('./modules/Dashboard')
-  , Router = require('./modules/Router')
+const Dashboard = require('./modules/Dashboard');
+const Router = require('./modules/Router');
 
 $(function(){
   window.Dashboard = new Dashboard()

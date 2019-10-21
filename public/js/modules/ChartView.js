@@ -1,7 +1,7 @@
-var chromath = require('chromath')
-  , templates = require('./templates')(Handlebars)
+const chromath = require('chromath')
+const templates = require('./templates')(Handlebars)
 
-var ChartView = Backbone.View.extend({
+const ChartView = Backbone.View.extend({
   template: templates.chart,
   dataLimit: 30,
   events: {

@@ -1,4 +1,4 @@
-var Router = Backbone.Router.extend({
+const Router = Backbone.Router.extend({
   routes: {
     ':tab': 'renewable'
   },

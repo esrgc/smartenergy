@@ -1,9 +1,9 @@
-var ChartView = require('./ChartView')
-  , FilterLabelView = require('./FilterLabelView')
-  , TechnologyFilter = require('./TechnologyFilter')
-  , templates = require('./templates')(Handlebars)  
+const ChartView = require('./ChartView')
+const FilterLabelView = require('./FilterLabelView')
+const TechnologyFilter = require('./TechnologyFilter')
+const templates = require('./templates')(Handlebars)  
 
-var FilterMenuView = ChartView.extend({
+const FilterMenuView = ChartView.extend({
   template: templates['filter-menu'],
   description: {
     renewable: 'Select filters to view Maryland Energy Administration contributions to the growth of affordable and reliable renewable energy in our state.',

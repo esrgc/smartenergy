@@ -1,6 +1,6 @@
-var templates = require('./templates')(Handlebars)
+const templates = require('./templates')(Handlebars)
 
-var FilterLabelView = Backbone.View.extend({
+const FilterLabelView = Backbone.View.extend({
   template: templates['filter-label'],
   tagName: 'div',
   className: 'filter-label',

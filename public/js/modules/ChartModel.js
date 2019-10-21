@@ -1,5 +1,4 @@
-
-var ChartModel = Backbone.Model.extend({
+const ChartModel = Backbone.Model.extend({
   defaults: function() {
     return {
       api: '/',

@@ -1,6 +1,6 @@
-var createcss = require('createcss')
+const createcss = require('createcss')
 
-var FilterModel = Backbone.Model.extend({
+const FilterModel = Backbone.Model.extend({
   defaults: function() {
     return {
       active: false,

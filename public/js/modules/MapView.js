@@ -1,8 +1,8 @@
-var ChartModel = require('./ChartModel')
-  , FilterModel = require('./FilterModel')
-  , templates = require('./templates')(Handlebars)
+const ChartModel = require('./ChartModel')
+const FilterModel = require('./FilterModel')
+const templates = require('./templates')(Handlebars)
 
-var MapView = Backbone.View.extend({
+const MapView = Backbone.View.extend({
   template: templates.map,
   layers_template: templates.layers,
   templates: {

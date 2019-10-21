@@ -1,6 +1,6 @@
-var BarChartView = require('./BarChartView')
+const BarChartView = require('./BarChartView')
 
-var PieChartView = BarChartView.extend({
+const PieChartView = BarChartView.extend({
   changeKey: function() {
     if (this.chart) {
       this.chart.options.label = this.model.get('key')

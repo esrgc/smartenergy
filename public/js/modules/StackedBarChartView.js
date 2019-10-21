@@ -1,6 +1,6 @@
-var BarChartView = require('./BarChartView')
+const BarChartView = require('./BarChartView')
 
-var StackedBarChartView = BarChartView.extend({
+const StackedBarChartView = BarChartView.extend({
   prepData: function(data){
     var self = this
     var row = data[0]
