@@ -416,13 +416,13 @@ api.get('/getPoints', (req, res) => {
           projects: points[p].length
         }
         technology_fields.forEach(technology_field => {
-          var techs = _.filter(_.uniq(_.pluck(points[p], technology_field)), null)
+          var techs = _.filter(_.uniq(_.map(points[p], technology_field)), null)
           var techcount = []
           techs.forEach(tech => {
             var where = {}
             where[technology_field] = tech
             var x = { t: tech }
-            x.p = _.where(points[p], where).length
+            x.p = _.filter(points[p], where).length
             techcount.push(x)
           });
           obj[technology_field] = techcount
@@ -458,7 +458,7 @@ api.get('/getPoints', (req, res) => {
         for (var p in points) {
           response.points.push({
             point: p,
-            projects: _.pluck(points[p], 'technology')
+            projects: _.map(points[p], 'technology')
           })
         }
         returnData(req, res, response)

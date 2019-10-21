@@ -19,7 +19,8 @@ app.set('port', process.env.PORT || 3000)
 app.set('view engine', 'hbs')
 app.set('views', __dirname + '/views')
 app.use(cors())
-app.use(bodyParser())
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')))
 
 // // Initialize DB connections
