@@ -48,17 +48,18 @@ api.use(function(req, res, next) {
   }
 })
 
-api.get('/getTechnology', function(req, res){
+api.get('/getTechnology', function(req, res) {
   function handleData(err, data) {
-    data = _.map(data, function(r) {
-      return {
+    data.toArray((err, docs) => {
+      docs = _.map(docs, r => ({
         'Technology': r.technology,
         'Projects': r.projects,
         'Contribution': r.contribution
-      }
-    })
-    returnData(req, res, data)
+      }))
+      returnData(req, res, docs);
+    });
   }
+
   if (CACHE) {
     var conditions = filter.conditions(req.query, 'technology')
     if (req.query.geotype && req.query[req.query.geotype]) {
@@ -70,11 +71,11 @@ api.get('/getTechnology', function(req, res){
       conditions.regional = {$eq: false}
     }
     mongo.db.collection(req.query.tab).aggregate(
-      {$match: conditions},
-      {$project: {technology: 1, mea_award: 1, projcount: projcount}},
-      {$group: {_id: {technology: '$technology'}, projects:{$sum: '$projcount'}, contribution: {$sum: '$mea_award'}}},
-      {$project: {_id: 0,technology: "$_id.technology", projects: 1, contribution: 1}},
-      {$sort: {projects: -1}}, handleData)
+      { $match: conditions },
+      { $project: { technology: 1, mea_award: 1, projcount: projcount } },
+      { $group: { _id: { technology: '$technology' }, projects:{ $sum: '$projcount' }, contribution: { $sum: '$mea_award' } } },
+      { $project: { _id: 0,technology: "$_id.technology", projects: 1, contribution: 1 } },
+      { $sort: { projects: -1 } }, handleData);
   } else {
     var qry = '$select=technology,count(id) as projects&$group=technology'
     qry += filter.where(req.query, qry, 'technology')
@@ -82,7 +83,7 @@ api.get('/getTechnology', function(req, res){
   }
 })
 
-api.get('/getProgramType', function(req, res){
+api.get('/getProgramType', function(req, res) {
   var qry = '$select=program_type,count(id) as value&$group=program_type'
   qry += filter.where(req.query, qry)
   req.socrata_req = socrataDataset.query(qry, function(err, data) {
@@ -90,17 +91,18 @@ api.get('/getProgramType', function(req, res){
   })
 })
 
-api.get('/getProgramName', function(req, res){
+api.get('/getProgramName', function(req, res) {
   function handleData(err, data) {
-    data = _.map(data, function(r) {
-      return {
+    data.toArray((err, docs) => {
+      docs = _.map(docs, r => ({
         'Program Name': r.program_name,
         'Projects': r.projects,
         'Contribution': r.contribution
-      }
-    })
-    returnData(req, res, data)
+      }))
+      returnData(req, res, docs);
+    });
   }
+
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     if (req.query.geotype && req.query[req.query.geotype]) {
@@ -124,7 +126,7 @@ api.get('/getProgramName', function(req, res){
   }
 })
 
-api.get('/getCapacityByArea', function(req, res){
+api.get('/getCapacityByArea', function(req, res) {
   function handleData(err, data) {
     var d = []
     data = _.map(data, function(r) {
@@ -135,6 +137,7 @@ api.get('/getCapacityByArea', function(req, res){
     })
     returnData(req, res, data)
   }
+
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     var id = null
@@ -169,7 +172,7 @@ api.get('/getCapacityByArea', function(req, res){
   }
 })
 
-api.get('/getCapacityBySector', function(req, res){
+api.get('/getCapacityBySector', function(req, res) {
   function handleData(err, data) {
     data = _.map(data, function(r) {
       return {
@@ -179,6 +182,7 @@ api.get('/getCapacityBySector', function(req, res){
     })
     returnData(req, res, data)
   }
+
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     var aggregate = function (obj, prev) { prev.sum_capacity += +obj.capacity || 0; }
@@ -195,17 +199,18 @@ api.get('/getCapacityBySector', function(req, res){
   }
 })
 
-api.get('/getSector', function(req, res){
+api.get('/getSector', function(req, res) {
   function handleData(err, data) {
-    data = _.map(data, function(r) {
-      return {
+    data.toArray((err, docs) => {
+      docs = _.map(docs, r => ({
         'Sector': r.sector,
         'Projects': r.projects,
         'Contribution': r.contribution
-      }
-    })
-    returnData(req, res, data)
+      }))
+      returnData(req, res, docs);
+    });
   }
+
   if (CACHE) {
     var conditions = filter.conditions(req.query, 'sector')
     if (req.query.geotype && req.query[req.query.geotype]) {
@@ -230,10 +235,13 @@ api.get('/getSector', function(req, res){
   }
 })
 
-api.get('/getStats', function(req, res){
+api.get('/getStats', function(req, res) {
   function handleData(err, data) {
-    returnData(req, res, data)
+    data.toArray((err, docs) => {
+      returnData(req, res, docs)
+    })
   }
+
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     if (req.query.geotype && req.query[req.query.geotype]) {
@@ -300,22 +308,25 @@ api.get('/getStats', function(req, res){
   }
 })
 
-api.get('/getContribution', function(req, res){
+api.get('/getContribution', function(req, res) {
   function handleData(err, data) {
-    data = _.map(data, function(r) {
-      var obj = {
-        'MEA Contribution': r.mea_contribution,
-        'Total Project Cost': r.project_cost
-      }
-      if (r.project_cost > 0) {
-        obj['Leveraged Investment'] = r.project_cost - r.mea_contribution
-      } else {
-        obj['Leverage Investment'] = 0
-      }
-      return addGeoType(obj, req.query.geotype, r)
+    data.toArray((err, docs) => {
+      docs = _.map(docs, r => {
+        var obj = {
+          'MEA Contribution': r.mea_contribution,
+          'Total Project Cost': r.project_cost
+        }
+        if (r.project_cost > 0) {
+          obj['Leveraged Investment'] = r.project_cost - r.mea_contribution
+        } else {
+          obj['Leverage Investment'] = 0
+        }
+        return addGeoType(obj, req.query.geotype, r)
+      })
+      returnData(req, res, docs)
     })
-    returnData(req, res, data)
   }
+  
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     var id = null
@@ -363,11 +374,12 @@ api.get('/getContribution', function(req, res){
   }
 })
 
-api.get('/getPoints', function(req, res){
-  var data = []
-    , limit = 10000
-    , offset = 0
-    , qry = ''
+api.get('/getPoints', function(req, res) {
+  var data = [], 
+    limit = 10000, 
+    offset = 0, 
+    qry = '';
+
   if (CACHE) {
     var technology_fields = []
     if (req.query.tab === 'renewable') {
@@ -452,7 +464,7 @@ api.get('/getPoints', function(req, res){
   }
 })
 
-api.get('/getProject', function(req, res){
+api.get('/getProject', function(req, res) {
   var qry = ''
   if (CACHE) {
     var conditions = filter.conditions(req.query)
@@ -476,7 +488,7 @@ api.get('/getProject', function(req, res){
   }
 })
 
-api.get('/getProjectsByPoint', function(req, res){
+api.get('/getProjectsByPoint', function(req, res) {
   var qry = ''
 
   if (CACHE) {
@@ -506,17 +518,18 @@ api.get('/getProjectsByPoint', function(req, res){
   }
 })
 
-api.get('/getStationTechnology', function(req, res){
+api.get('/getStationTechnology', function(req, res) {
   function handleData(err, data) {
-    data = _.map(data, function(r) {
-      return {
+    data.toArray((err, docs) => {
+      docs = _.map(docs, r => ({
         'Technology': r.charging_fueling_station_technology,
         'Stations': r.projects,
         'Contribution': r.contribution
-      }
+      }))
+      returnData(req, res, docs)
     })
-    returnData(req, res, data)
   }
+  
   if (CACHE) {
     var conditions = filter.conditions(req.query, 'charging_fueling_station_technology')
     if (req.query.geotype && req.query[req.query.geotype]) {
@@ -540,17 +553,18 @@ api.get('/getStationTechnology', function(req, res){
   }
 })
 
-api.get('/getVehicleTechnology', function(req, res){
+api.get('/getVehicleTechnology', function(req, res) {
   function handleData(err, data) {
-    data = _.map(data, function(r) {
-      return {
+    data.toArray((err, docs) => {
+      docs = _.map(docs, r => ({
         'Technology': r.vehicle_technology,
         'Projects': r.projects,
         'Contribution': r.contribution
-      }
+      }))
+      returnData(req, res, docs)
     })
-    returnData(req, res, data)
   }
+  
   if (CACHE) {
     var conditions = filter.conditions(req.query, 'vehicle_technology')
     if (req.query.geotype && req.query[req.query.geotype]) {
@@ -576,15 +590,17 @@ api.get('/getVehicleTechnology', function(req, res){
   }
 })
 
-api.get('/getReductions', function(req, res){
+api.get('/getReductions', function(req, res) {
   function handleData(err, data) {
-    data = _.map(data, function(r) {
-      var obj = {
-        'Reduction': r.reduction
-      }
-      return addGeoType(obj, req.query.geotype, r)
+    data.toArray((err, docs) => {
+      docs = _.map(docs, r => {
+        var obj = {
+          'Reduction': r.reduction
+        }
+        return addGeoType(obj, req.query.geotype, r)
+      })
+      returnData(req, res, docs)
     })
-    returnData(req, res, data)
   }
 
   if (CACHE) {
@@ -619,16 +635,18 @@ api.get('/getReductions', function(req, res){
   }
 })
 
-api.get('/getSavings', function(req, res){
+api.get('/getSavings', function(req, res) {
   function handleData(err, data) {
-      data = _.map(data, function(r) {
+    data.toArray((err, docs) => {
+      docs = _.map(docs, r => {
         var obj = {
           'Savings': r.savings
         }
         return addGeoType(obj, req.query.geotype, r)
       })
-      returnData(req, res, data)
-    }
+      returnData(req, res, docs)
+    })
+  }
 
   if (CACHE) {
     var conditions = filter.conditions(req.query)
@@ -666,7 +684,7 @@ api.get('/getSavings', function(req, res){
   }
 })
 
-api.get('/getCapacityOverTime', function(req, res){
+api.get('/getCapacityOverTime', function(req, res) {
 
   function handleData(err, results) {
     var data = _.flatten(results)
@@ -741,7 +759,7 @@ api.get('/getCapacityOverTime', function(req, res){
   // ], handleData)
 })
 
-api.get('/getReductionOverTime', function(req, res){
+api.get('/getReductionOverTime', function(req, res) {
   function handleData(err, results) {
     var data = _.flatten(results)
     data = _.map(data, function(r) {
@@ -752,6 +770,7 @@ api.get('/getReductionOverTime', function(req, res){
     })
     returnData(req, res, data)
   }
+  
   if (CACHE) {
     var conditions = filter.conditions(req.query)
     if (req.query.geotype && req.query[req.query.geotype]) {
