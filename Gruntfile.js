@@ -38,7 +38,7 @@ module.exports = function(grunt) {
     },
     browserify: {
       options: {
-        bundleOptions: { debug: true }
+        browserifyOptions: { debug: true }
       },
       dev: {
         src: 'public/js/index.js',
