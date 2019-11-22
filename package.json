@@ -31,7 +31,7 @@
     "mdimapgeocoder": "^0.1.6",
     "mongodb": "^3.3.3",
     "morgan": "^1.9.1",
-    "mustache": "0.8.1",
+    "mustache": "2.2.1",
     "request": "^2.47.0",
     "tedious": "~0.1.5",
     "turf": "^1.3.0"
