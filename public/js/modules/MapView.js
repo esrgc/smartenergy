@@ -68,7 +68,7 @@ const MapView = Backbone.View.extend({
       projects: 1
     }
 
-    var mapbox = L.tileLayer('http://{s}.tiles.mapbox.com/v3/esrgc.map-y9awf40v/{z}/{x}/{y}.png')
+    var mapbox = L.tileLayer('https://{s}.tiles.mapbox.com/v3/esrgc.map-y9awf40v/{z}/{x}/{y}.png')
     mapbox.addTo(self.map)
 
     this.projects = L.markerClusterGroup({
