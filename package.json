@@ -27,7 +27,7 @@
     "express": "^4.17.1",
     "geojson-area": "^0.1.0",
     "hbs": "^2.7.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mdimapgeocoder": "^0.1.6",
     "mongodb": "^3.3.3",
     "morgan": "^1.9.1",
