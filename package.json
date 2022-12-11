@@ -24,7 +24,7 @@
     "csv": "^0.4.1",
     "ejs": "~2.5.5",
     "errorhandler": "1.0.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "geojson-area": "^0.1.0",
     "hbs": "^2.7.0",
     "lodash": "^4.17.21",
